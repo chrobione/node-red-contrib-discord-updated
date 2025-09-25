@@ -1,6 +1,6 @@
 <script type="text/javascript">
   RED.nodes.registerType('discordInteraction', {
-    category: 'discord 1 - events',
+    category: 'discord · event intake',
     color: '#7289da',
     defaults: {
       name: {
@@ -152,30 +152,29 @@
     </div>     
 </script>
 <script type="text/x-red" data-help-name="discordInteraction">
-  <p>Node to recieve discord interactions</p>
+  <p><strong>What it does</strong> — Captures every interactive action your bot receives: slash commands, context-menu clicks, button presses, select menus, autocomplete requests, and modal submissions.</p>
+  <p><strong>When to use it</strong> — Any time you expect the user to click something or run a command. Pair it with <code>discordInteractionManager</code> to send the reply back.</p>
 
-  <h3>Outputs</h3>
-  <dl class="message-properties">      
-      <dt>payload <span class="property-type">Object</span></dt>
-      <dd>an Object containing general info of the interaction</dd>
-      <dt>payload.user <span class="property-type">Object</span></dt>
-      <dd>an Object containing info of discord interaction user</dd>
-      <dt>payload.member <span class="property-type">Object</span></dt>
-      <dd>an Object containing info of the guild member, user related</dd>
-      <dt>payload.message <span class="property-type">Object</span></dt>      
-      <dd>an Object containing info of the original message</dd>      
-      <dt>payload.options <span class="property-type">Array</span></dt>      
-      <dd>an Object containing info about the selected options in the command</dd>
-      <dt>interactionObject<span class="property-type">Object</span></dt>      
-      <dd>an Original Interaction Object</dd>         
+  <h3>Output structure</h3>
+  <dl class="message-properties">
+      <dt>payload <span class="property-type">object</span></dt>
+      <dd>General interaction details such as id, type, guild, channel, and command data.</dd>
+      <dt>payload.user <span class="property-type">object</span></dt>
+      <dd>Information about the user who triggered the interaction.</dd>
+      <dt>payload.member <span class="property-type">object</span></dt>
+      <dd>Guild-specific user data (roles, nicknames). Present when the interaction happens inside a server.</dd>
+      <dt>payload.message <span class="property-type">object</span></dt>
+      <dd>The original message that held the button or select menu (only for those interaction types).</dd>
+      <dt>payload.options <span class="property-type">array</span></dt>
+      <dd>Slash-command or context-menu options the user chose.</dd>
+      <dt>interactionObject <span class="property-type">object</span></dt>
+      <dd>The raw Discord.js interaction (only sent if you tick “Inject interaction object”). Use it when you need low-level access.</dd>
   </dl>
-  
-  <h3>Details</h3>
-  <p>Triggers whenever a interaction was created on Discord.</p>
-  <p><code>msg.payload</code> will be set to the interaction info</p>
-  <p><code>msg.payload.user</code> will be set to an Object containing info on the <a href="https://discord.js.org/#/docs/main/stable/class/User" target="_blank">user</a> that sent the interaction (does not contain any discord.js functions)</p>
-  <p><code>msg.payload.member</code> will be set to an Object containing info on the <a href="https://discord.js.org/#/docs/discord.js/stable/class/GuildMember" target="_blank">guildmember</a> that sent the interaction, guild related data (does not contain any discord.js functions)</p>
-  <p><code>msg.payload.message</code> will be set to the original message when type of interaction is Button or MenuSelected</p>
-  <p><code>msg.payload.options</code> will be set to an Array containing the options selected on a Slash Command</p>
-  <p><code>msg.interactionObject</code> will be set to the original interaction object, only when option in the editor is checked.</p>
+
+  <h3>Tips</h3>
+  <ul>
+    <li>Filter by interaction type or custom ids in the editor so your flow only catches the buttons or commands you care about.</li>
+    <li>If you defer a reply (the default), finish the response with <code>discordInteractionManager</code> within 15 minutes.</li>
+    <li>Autocomplete requests arrive very quickly; keep the logic after this node fast to avoid timeouts.</li>
+  </ul>
 </script>

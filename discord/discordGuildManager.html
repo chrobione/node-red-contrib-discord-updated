@@ -1,6 +1,6 @@
 a<script type="text/javascript">
   RED.nodes.registerType('discordGuildManager', {
-    category: 'discord 3 - administration',
+    category: 'discord · guild control',
     color: '#7289da',
     defaults: {
       name: {
@@ -41,35 +41,28 @@ a<script type="text/javascript">
     </div>
 </script>
 <script type="text/x-red" data-help-name="discordGuildManager">
-  <p>Node to retrieve info from a guild, as well as an action to rename the guild.</p>
+  <p><strong>What it does</strong> — Fetches details about a guild (server) or renames it.</p>
+  <p><strong>When to use it</strong> — Build dashboards that show live guild stats, or automate temporary renames (for seasonal events, etc.).</p>
 
   <h3>Inputs</h3>
   <dl class="message-properties">
-    <dt>action
-      <span class="property-type">string</span>
-    </dt>
-    <dd>The action to do, can be: name, info. If not set, node will default to info.</dd>
-    <dt>guild
-      <span class="property-type">Object or string</span>
-    </dt>
-    <dd>The guild object or ID.</dd>
-    <dt>name 
-      <span class="property-type">string</span>
-    </dt>
-    <dd>The new name of the guild if performing the name operation.</dd>
+    <dt>action <span class="property-type">string</span></dt>
+    <dd><code>info</code> (default) to fetch guild data, or <code>name</code> to rename the guild.</dd>
+    <dt>guild <span class="property-type">object | string</span></dt>
+    <dd>The guild id or object you want to work with.</dd>
+    <dt>name <span class="property-type">string</span></dt>
+    <dd>Only for the <code>name</code> action: the new guild name.</dd>
   </dl>
 
-  <h3>Outputs</h3>
+  <h3>Output</h3>
   <dl class="message-properties">
-    <dt>payload
-      <span class="property-type">Object</span>
-    <dt>
-    <dd>The guild object containing all of the information listed in discord JS guild class</dd>
+    <dt>payload <span class="property-type">object</span></dt>
+    <dd>The guild information returned by Discord (id, name, owner id, counts, features, etc.). After a rename it reflects the updated name.</dd>
   </dl>
 
-  <h3>Details</h3>
-  <p>This node provides information on a given guild, it can also rename the guild.<p>
-
-  <h4>Renaming the guild<h4>
-  <p>To rename the guild you must set <code>msg.name</code> as the name you desire to set the guild to as a string.</p>
+  <h3>Tips</h3>
+  <ul>
+    <li>Combine with <code>discordEventManager</code> or dashboards to present guild stats to admins.</li>
+    <li>Renaming a guild requires the bot to have <em>Manage Guild</em> permission.</li>
+  </ul>
 </script>

@@ -94,7 +94,11 @@
 
 ### Node Icon & Categorisation Improvements
 - [ ] Deliver distinct icons/categories for Discord nodes in the palette; log docs/assets update.
-  - Action plan: **Categories regrouped via `discord 1-4` palette sections.** Next steps: design refreshed icons, update palette definitions if further tweaks needed, adjust documentation/screenshots, and log change.
+  - Action plan: **Categories regrouped via `discord: listen/respond/manage/utilities`.** Next steps: design refreshed icons, update palette definitions if further tweaks needed, adjust documentation/screenshots, and log change.
+
+### discordClient Safety Net
+- [ ] Refactor `discordClient` so it fails safely (no Node-RED crashes) when flows misuse the raw client.
+  - Action plan: Wrap client injection in protective checks, enforce single-use semantics, surface errors via `node.error`, document the safe usage pattern, and add tests that simulate misuse.
 
 ### Discovery & Documentation Tasks
 - [ ] Research discord.js auto-moderation APIs, outline potential nodes/changes, and document findings + next steps in changelog.

@@ -35,13 +35,13 @@ As of this update, a lot of under-the-hood work has landed to stabilise the fork
 - Drop a **discord-token** configuration node into the editor, paste your bot token, and share it with the runtime nodes below.
 - Start with a **discordMessage** node wired to a debug node so you can see inbound activity, then add the action nodes you need.
 - Use **discordMessageManager** or **discordInteractionManager** as your primary “send a response back” nodes once you have confirmed connectivity.
-- The palette now lists groups as `discord 1 - events` through `discord 4 - utilities`; start in the events section, then wire responses, administration, and utility nodes as your flow grows.
+- The palette now lists groups as `discord · event intake`, `discord · responses`, `discord · guild control`, and `discord · advanced tools`; start in Event Intake, then wire Responses, Guild Control, and Advanced Tools nodes as your flow grows.
 
 ## Node groups at a glance (palette labels)
-- **discord 1 - events** – `discordMessage`, `discordMember`, `discordReactionManager`, `discordInteraction`: entry points that emit flow messages when Discord activity happens.
-- **discord 2 - responses** – `discordMessageManager`, `discordInteractionManager`, `discordTyping`: nodes that send, edit, or acknowledge activity back to Discord.
-- **discord 3 - administration** – `discordCommandManager`, `discordChannelName`, `discordGuildManager`, `discordEventManager`, `discordPermissions`: management tooling for commands, guilds, channels, events, and roles.
-- **discord 4 - utilities** – `discordActivity`, `discordClient`: status updates and advanced access to the underlying Discord.js client.
+- **discord · event intake** – `discordMessage`, `discordMember`, `discordReactionManager`, `discordInteraction`: entry points that emit flow messages when Discord activity happens.
+- **discord · responses** – `discordMessageManager`, `discordInteractionManager`, `discordTyping`: nodes that send, edit, or acknowledge activity back to Discord. Use `discordInteractionManager` for slash-command/button/select replies; keep `discordMessageManager` for channel/DM messages and follow-up edits.
+- **discord · guild control** – `discordCommandManager`, `discordChannelName`, `discordGuildManager`, `discordEventManager`, `discordPermissions`: management tooling for commands, guilds, channels, events, and roles.
+- **discord · advanced tools** – `discordActivity`, `discordClient`: status updates and advanced access to the underlying Discord.js client.
 
 ## Installation and documentation
 
@@ -123,7 +123,7 @@ When a command is sent by an user, discord displays messages like "Bot is thinki
 From 3.5.0, this library always defers replies and updates, keeping in memory the reference to the interaction in order to interact moments later within the flow with the new node discordInteractionManager.
 
 ### Replacing discordMessageManager for discordInteractionManager
-Now all interactions are replied with discordInteractionManager node, so there are several scenarios for having in mind. This is a breaking change. It's mandatory to take a look on examples to prevent broken flows.
+Interactions (slash commands, buttons, selects, modals) must be answered with `discordInteractionManager` so the interaction token stays valid. `discordMessageManager` remains available for regular channel messages, DMs, and follow-up edits, but should not be wired directly to interaction events.
 
 [Examples](https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki/Interaction-Examples)
 

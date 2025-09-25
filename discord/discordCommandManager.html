@@ -1,6 +1,6 @@
 a<script type="text/javascript">
   RED.nodes.registerType('discordCommandManager', {
-    category: 'discord 3 - administration',
+    category: 'discord · guild control',
     color: '#7289da',
     defaults: {
       name: {
@@ -41,35 +41,31 @@ a<script type="text/javascript">
     </div>
 </script>
 <script type="text/x-red" data-help-name="discordCommandManager">
-  <p>Node to set the application commands for the bot, as well as delete specific commands or all commands, by guild or globally.</p>
+  <p><strong>What it does</strong> — Creates, overwrites, or deletes your slash commands, context menu commands, and other application commands.</p>
+  <p><strong>When to use it</strong> — Run during deployment or admin flows to keep command definitions in sync between Discord and your Node-RED project.</p>
 
-  <h3>Inputs</h3>
+  <h3>Key inputs</h3>
   <dl class="message-properties">
-    <dt>action
-      <span class="property-type">string</span>
-    </dt>
-    <dd>The action to do, can be: set, or delete.</dd>
-    <dt>guild
-      <span class="property-type">Object or string</span>
-    </dt>
-    <dd>The guild object or ID.</dd>
+    <dt>action <span class="property-type">string</span></dt>
+    <dd><code>set</code> to upload commands, <code>delete</code> to remove one or all commands.</dd>
+    <dt>commands <span class="property-type">array</span></dt>
+    <dd>For <code>set</code>: an array of command definitions that match the Discord REST shape. Slash command builder output works perfectly.</dd>
+    <dt>commandId <span class="property-type">string</span></dt>
+    <dd>For <code>delete</code>: the id of the command to remove. Leave blank to delete everything in the selected scope.</dd>
+    <dt>guild <span class="property-type">object | string</span></dt>
+    <dd>Optional. Supply a guild id/object to target one server; leave empty for global commands.</dd>
   </dl>
 
-  <h3>Outputs</h3>
+  <h3>Output</h3>
   <dl class="message-properties">
-    <dt>payload
-      <span class="property-type">Object</span>
-    <dt>
-    <dd>When setting the commands it will return an array of the commands created. It will be the type of the application command (https://discord.js.org/docs/packages/discord.js/14.15.3/ApplicationCommand:Class) or guild command if the guildId is set.</dd>
+    <dt>payload <span class="property-type">array | object</span></dt>
+    <dd>Discord’s response. For <code>set</code> you receive the created command objects; for deletes you receive confirmation data.</dd>
   </dl>
 
-  <h3>Details</h3>
-  <p>This node can set and delete application commands.<p>
-
-  <h4>Setting commands<h4>
-  <p>To set commands simply set msg.commands to an array of the commands you'd like to set for the bot. The array objects must be of the slash command form. An example can be found using the slash command builder (https://discordjs.guide/creating-your-bot/slash-commands.html#individual-command-files). If the guild is not set then it will be applied globally, if guild is set then its applied only to that guild.</p>
-
-  <h4>Setting commands<h4>
-  <p>To delete a specific command set commandId to the id of the command you wish to be deleted (which can be found by remembering the output of the add command, or by going into server and checking the intergration, right clicking will get the application command id (https://discordjs.guide/slash-commands/deleting-commands.html#deleting-specific-commands)). Note the command Id must be in the form of a string, e.g. '123534523423423'. To delete all commands do not set msg.commandId. Similiarly to the set command, you can set a guild to delete a command in a specific guild, or by not setting guild the command will be deleted across all guilds.</p>
-
+  <h3>Tips</h3>
+  <ul>
+    <li>Global command changes can take up to an hour to appear. Guild-scoped commands update almost instantly.</li>
+    <li>Keep your command definitions in a change node or function so you can version them alongside your flows.</li>
+    <li>You can fetch existing command ids via the Discord Developer Portal (Integrations → Commands) if you need to delete a single entry.</li>
+  </ul>
 </script>

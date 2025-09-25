@@ -1,6 +1,6 @@
 <script type="text/javascript">
   RED.nodes.registerType('discordActivity', {
-    category: 'discord 4 - utilities',
+    category: 'discord · advanced tools',
     color: '#7289da',
     defaults: {
       name: { value: "", required: false },
@@ -63,36 +63,24 @@
 
 </script>
 <script type="text/x-red" data-help-name="discordActivity">
+  <p><strong>What it does</strong> — Changes the bot’s presence: the “Playing…/Listening…” text and online status badge that users see.</p>
+  <p><strong>When to use it</strong> — Show that your bot is running, advertise the command prefix, or hint at new features.</p>
 
   <h3>Inputs</h3>
   <dl class="message-properties">
-    <dt>text
-      <span class="property-type">string</span>
-    </dt>
-    <dd>The Status Text of the Bot</dd>
-    <dt>status
-      <span class="property-type">string</span>
-    </dt>
-    <dd>The Online Status can be set to: online,idle,invisible,dnd</dd>
-
-    <dt>type
-      <span class="property-type">enum</span>
-    </dt>
-    <dd>
-Playing: 0 <br>
-Streaming: 1<br>
-Listening: 2 <br>
-Watching: 3 <br>
-Custom: 4 (ATM Not Work on Bot)<br>
-Competing: 5<br>
-Reset Activities: 6<br>
-</dd>
-    <dt>url
-      <span class="property-type">string</span>
-    </dt>
-    <dd>The url of Twitch or Youtube</dd>
+    <dt>text <span class="property-type">string</span></dt>
+    <dd>The activity line (for example “Watching the logs”).</dd>
+    <dt>type <span class="property-type">number</span></dt>
+    <dd>0=Playing, 1=Streaming, 2=Listening, 3=Watching, 5=Competing, 6=Reset. (Discord does not allow custom statuses via bots.)</dd>
+    <dt>status <span class="property-type">string</span></dt>
+    <dd>Overall presence: <code>online</code>, <code>idle</code>, <code>dnd</code>, or <code>invisible</code>.</dd>
+    <dt>url <span class="property-type">string</span></dt>
+    <dd>Required when type = Streaming. Must be a valid Twitch or YouTube stream link.</dd>
   </dl>
 
-
-
+  <h3>Tips</h3>
+  <ul>
+    <li>Set the fields directly on the node for static text, or feed them via <code>msg.text</code>, <code>msg.status</code>, etc., for dynamic updates.</li>
+    <li>Use the “Reset” type (6) to clear any previous activity and show only the status badge.</li>
+  </ul>
 </script>

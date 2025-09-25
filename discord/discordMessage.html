@@ -1,6 +1,6 @@
 <script type="text/javascript">
   RED.nodes.registerType('discordMessage', {
-    category: 'discord 1 - events',
+    category: 'discord · event intake',
     color: '#7289da',
     defaults: {
       name: {
@@ -40,30 +40,29 @@
     </div>
 </script>
 <script type="text/x-red" data-help-name="discordMessage">
-  <p>Node to recieve discord messages</p>
+  <p><strong>What it does</strong> — Listens for every message your bot can see in the selected servers and passes the details into your flow. Think of it as your Discord inbox inside Node-RED.</p>
+  <p><strong>When to use it</strong> — Start here if you want to react to chat activity: auto-reply to keywords, log conversations, trigger automations when a moderator posts, and so on. Add a channel ID filter when you only care about one room.</p>
 
-  <h3>Outputs</h3>
+  <h3>Message output</h3>
   <dl class="message-properties">
       <dt>payload <span class="property-type">string</span></dt>
-      <dd>the textual content of the message</dd>
-      <dt>channel <span class="property-type">Object</span></dt>
-      <dd>an Object containing info on the channel the message was sent in</dd>
-      <dt>author <span class="property-type">Object</span></dt>
-      <dd>an Object containing info on the author of the message</dd>
-      <dt>memberRoleNames <span class="property-type">Array</span></dt>
-      <dd>an array of all the roles names the author has</dd>
-      <dt>memberRoleIDs <span class="property-type">Array</span></dt>
-      <dd>an array of all the roles IDs the author has</dd>
-      <dt>data <span class="property-type">Object</span></dt>
-      <dd>the full message Object sent by discord</dd>
+      <dd>The plain-text body of the Discord message.</dd>
+      <dt>channel <span class="property-type">object</span></dt>
+      <dd>Basic info about where the message arrived (id, name, type) so you can route replies.</dd>
+      <dt>author <span class="property-type">object</span></dt>
+      <dd>Details about who sent the message (id, username, discriminator, bot flag).</dd>
+      <dt>memberRoleNames <span class="property-type">array</span></dt>
+      <dd>Role names the author currently has in the guild (handy for permission checks).</dd>
+      <dt>memberRoleIDs <span class="property-type">array</span></dt>
+      <dd>The same roles as raw Discord snowflakes if you need to compare ids.</dd>
+      <dt>data <span class="property-type">object</span></dt>
+      <dd>The full message payload (without live discord.js functions) so advanced flows can dig deeper.</dd>
   </dl>
-  
-  <h3>Details</h3>
-  <p>Triggers whenever a message was received on Discord.</p>
-  <p><code>msg.payload</code> will be set to the textual content of the message.</p>
-  <p><code>msg.channel</code> will be set to an Object containing info on the <a href="https://discord.js.org/#/docs/main/stable/class/TextChannel" target="_blank">channel</a> the message was received from (does not contain any discord.js functions)</p>
-  <p><code>msg.author</code> will be set to an Object containing info on the <a href="https://discord.js.org/#/docs/main/stable/class/User" target="_blank">user</a> that sent the message (does not contain any discord.js functions)</p>
-  <p><code>msg.memberRoleIDs</code> will be set to an Array of all the ID's of the roles the author has</p>
-  <p><code>msg.memberRoleNames</code> will be set to an Array of all the names of the roles the author has</p>
-  <p><code>msg.data</code> <em>may</em> be set to an Object containing info on the <a href="https://discord.js.org/#/docs/main/stable/class/Message" target="_blank">message</a> that was received, but again without any of the discord.js functions.</p>
+
+  <h3>Tips</h3>
+  <ul>
+    <li>Wire this node into a debug node first to see the structure that comes through before building logic.</li>
+    <li>Combine it with a switch node to react only when <code>msg.payload</code> contains certain words.</li>
+    <li>If your bot is in large servers, use the channel filter to avoid flooding your flow with extra traffic.</li>
+  </ul>
 </script>

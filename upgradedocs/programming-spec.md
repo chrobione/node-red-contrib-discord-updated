@@ -10,6 +10,7 @@
 - Record every user-facing or behavioural change in `CHANGELOG.md` as work progresses.
 - Rebrand the package to `node-red-contrib-discord-advanced` across metadata, documentation, and release assets while maintaining upgrade guidance for existing users.
 - Improve onboarding documentation so new Node-RED users understand where to start and how each Discord node fits common workflows.
+- Harden the legacy `discordClient` node so misuse cannot crash Node-RED; sandbox direct client access behind guardrails and fail gracefully.
 
 ## Key Dependencies & Version Targets
 - **discord.js**: Bump from `^14.11.0` to the latest release. Confirm the exact version with `npm show discord.js version` during implementation. Review upstream changelog between 14.11.0 and the target version for breaking changes (notable items: stricter `AttachmentBuilder` validation, interaction response behaviour changes, REST response typings).
@@ -103,7 +104,7 @@
 ### Phase 2 – Feature Upgrades
 10. Implement entity select menu, stage event, localisation, attachment metadata, message flag, bulk delete/search, custom emoji management, role membership queries, voice event handling, and ephemeral interaction reply enhancements once the stabilisation tests pass.
 11. Conduct discovery work for auto-moderation and guild onboarding APIs, documenting findings and scoping follow-up tasks.
-12. Deliver node icon/categorisation improvements for better palette usability, grouping nodes into onboarding, messaging, administration, and utility categories inside the Node-RED palette (category split done via `discord 1-4` labels; icon refresh still pending).
+12. Deliver node icon/categorisation improvements for better palette usability, grouping nodes into onboarding, messaging, administration, and utility categories inside the Node-RED palette (category split now published as `discord: listen/respond/manage/utilities`; icon refresh still pending).
 13. Extend automated and manual tests to cover the new feature behaviour.
 14. Update documentation and changelog with newly supported features, usage examples (including channel ID guidance), and Node-RED best practice notes.
 15. Finalise release notes summarising breaking changes, the package rename, and new feature support; confirm `npm pack`/publish flow succeeds.

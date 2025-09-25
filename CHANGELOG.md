@@ -6,7 +6,9 @@
 - Maintenance - Stewardship moved to `chrobione/node-red-contrib-discord-updated`, keeping the history from `node-red-contrib-discord` and `node-red-contrib-discord-advanced` intact.
 - Docs - README and changelog updated to reflect the new home of the project and outline the Discord.js parity roadmap for the community.
 - Docs - Added onboarding quick start and node grouping guidance to help new Node-RED users find the right nodes.
-- Enhancement - Discord palette regrouped into numbered categories so related nodes sit together for newcomers.
+- Docs - Clarified that `discordInteractionManager` owns interaction replies and `discordMessageManager` is reserved for channel/DM/follow-up messages.
+- Docs - Rewrote every node help panel with clearer descriptions, inputs, and tips for new users.
+- Enhancement - Discord palette regrouped into descriptive categories (`discord · event intake`, `discord · responses`, `discord · guild control`, `discord · advanced tools`) so related nodes sit together for newcomers.
 - Planning - Established Phase 1 scope to stabilise the fork, preserve previous contributors' credit, and prepare for broader Discord.js feature coverage.
 
 ### Advancedplus plan carry-over

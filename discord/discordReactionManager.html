@@ -1,6 +1,6 @@
 <script type="text/javascript">
   RED.nodes.registerType('discordReactionManager', {
-    category: 'discord 1 - events',
+    category: 'discord · event intake',
     color: '#7289da',
     defaults: {
       name: {
@@ -32,53 +32,37 @@
     </div>
 </script>
 <script type="text/x-red" data-help-name="discordReactionManager">
-  <p>Node that collects reactions (emoji's) on a specific message.</p>
-  <p>More support can be found <a href="https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki#support">here</a>.</p>
+  <p><strong>What it does</strong> — Watches a single Discord message and reports every emoji reaction that people add or remove. Treat it like a live poll reader for that message.</p>
+  <p><strong>When to use it</strong> — Great for reaction-role systems, quick votes, or keeping track of how many 👍 your announcement collects.</p>
 
-  <h3>Inputs</h3>
+  <h3>Inputs you send</h3>
   <dl class="message-properties">
-    <dt>message 
-      <span class="property-type">Object or string</span>
-    </dt>
-    <dd>The message Object or id of the message that you want to collect reactions on.</dd>
-    <dt>channel
-      <span class="property-type">Object or string</span>
-    </dt>
-    <dd>The channel Object or channel id the message is in.</dd>
-    <dt class="optional">time
-      <span class="property-type">number</span>
-    </dt>
-    <dd>The time in milliseconds to listen for reactions. Default is 10 minutes.</dd>
+    <dt>message <span class="property-type">object | string</span></dt>
+    <dd>The target message. Pass the full message object (for best results) or just its id.</dd>
+    <dt>channel <span class="property-type">object | string</span></dt>
+    <dd>The channel that holds the message. Needed so the node can look the message up again.</dd>
+    <dt class="optional">time <span class="property-type">number</span></dt>
+    <dd>How long to keep listening, in milliseconds. Leave blank to use the 10 minute default.</dd>
   </dl>
 
-  <h3>Outputs</h3>
+  <h3>What comes out</h3>
   <dl class="message-properties">
-    <dt>payload
-      <span class="property-type">string</span>
-    </dt>
-    <dd>The payload contains the emoji that was reacted with.</dd>
-    <dt>count
-      <span class="property-type">number</span>
-    </dt>
-    <dd>The count how many times that emoji was reacted.</dd>
-    <dt>message
-      <span class="property-type">object</span>
-    </dt>
-    <dd>The message the reaction was created on.</dd>
-    <dt>user
-      <span class="property-type">object</span>
-    </dt>
-    <dd>The user that reacted.</dd>
-    <dt>_originalFlowMessage
-      <span class="property-type">object</span>
-    </dt>
-    <dd>The original input object of the node</dd>
+    <dt>payload <span class="property-type">string</span></dt>
+    <dd>The emoji that was pressed (Unicode or custom emoji name).</dd>
+    <dt>count <span class="property-type">number</span></dt>
+    <dd>How many people have used that emoji so far.</dd>
+    <dt>message <span class="property-type">object</span></dt>
+    <dd>The message we are monitoring, so you can reference it later.</dd>
+    <dt>user <span class="property-type">object</span></dt>
+    <dd>The user who just reacted.</dd>
+    <dt>_originalFlowMessage <span class="property-type">object</span></dt>
+    <dd>Whatever you originally injected into this node (handy if you need extra context).</dd>
   </dl>
 
-  <h3>Details</h3>
-  <p>This node will listen for reactions to a specified message.<p>
-  <p>To start the process you will have to supply the <code>msg.message</code> and <code>msg.channel</code> for the message you want to listen on.
-  Optionally you can set <code>msg.time</code> with the time in milliseconds to keep on listening for reactions.
-  The node will output data for every individual reaction made on the message that was supplied. Keep in mind that after a node-red restart
-  you will have to resend the message data.</p>
+  <h3>Tips</h3>
+  <ul>
+    <li>After Node-RED restarts you must send the message/channel info again so the watcher can reattach.</li>
+    <li>Wire the output into a switch node keyed on <code>msg.payload</code> to handle different emoji choices.</li>
+    <li>Combine the <code>count</code> value with dashboard nodes to build a quick poll leaderboard.</li>
+  </ul>
 </script>

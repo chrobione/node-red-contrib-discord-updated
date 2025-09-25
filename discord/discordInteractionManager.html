@@ -1,6 +1,6 @@
 <script type="text/javascript">
   RED.nodes.registerType('discordInteractionManager', {
-    category: 'discord 2 - responses',
+    category: 'discord · responses',
     color: '#7289da',
     defaults: {
       name: { value: "", required: false },
@@ -25,29 +25,35 @@
     </div>
 </script>
 <script type="text/x-red" data-help-name="discordInteractionManager">
+  <p><strong>What it does</strong> — Sends the official reply back to Discord for slash commands, buttons, select menus, modals, and autocomplete prompts. It keeps the interaction token valid and prevents the dreaded “This interaction failed” banner.</p>
+  <p><strong>When to use it</strong> — Immediately after a <code>discordInteraction</code> node. Use it for the initial defer/update/reply and for follow-up edits to the same interaction.</p>
 
-  <h3>Inputs</h3>
-  <dl class="message-properties"> 
-	<dt>action<span class="property-type">string</span></dt>
-	<dd>The action you wish to perform. When not set edit is default.</dd>
-	
-    <dt>interactionId<span class="property-type">number</span></dt>
-    <dd>Interaction identificator number.</dd>
-	
-    <dt>payload<span class="property-type">string</span></dt>
-    <dd>The string you wish to send or the new content of a message when editing.</dd>
-	
-    <dt>embeds<span class="property-type">Object/Array</span></dt>
-    <dd>An embed object or an array of embed objects.</dd>
-	
-    <dt>attachments<span class="property-type">String/Object/Array</span></dt>
-    <dd>A location to an attachment. Can be online by URL, an object with a buffer payload or a file in the local filesystem.</dd>
-	
-    <dt>autoCompleteChoices<span class="property-type">Array</span></dt>
-    <dd>Optional. In autocomplete interactions, the filtered or non-filtered options to respond.</dd>
-	
-    <dt>components<span class="property-type">Array</span></dt>
-    <dd>An array of component objects.</dd>
+  <h3>Key inputs</h3>
+  <dl class="message-properties">
+    <dt>action <span class="property-type">string</span></dt>
+    <dd>How to respond (<code>reply</code>, <code>update</code>, <code>edit</code>, <code>delete</code>, <code>followup</code>, etc.). Defaults to <code>edit</code> so you can modify a deferred reply.</dd>
+    <dt>interactionId <span class="property-type">string | number</span></dt>
+    <dd>The id from <code>discordInteraction</code>. Pass the whole <code>msg</code> forward and it is filled in for you.</dd>
+    <dt>payload <span class="property-type">string</span></dt>
+    <dd>The text body of your reply.</dd>
+    <dt>embeds / components <span class="property-type">object | array</span></dt>
+    <dd>Optional embed or component definitions to include with the response.</dd>
+    <dt>attachments <span class="property-type">string | object | array</span></dt>
+    <dd>Files to upload with the interaction response.</dd>
+    <dt>autoCompleteChoices <span class="property-type">array</span></dt>
+    <dd>Only for autocomplete requests: an array of choices Discord should show the user.</dd>
   </dl>
-  
+
+  <h3>What comes out</h3>
+  <dl class="message-properties">
+    <dt>payload <span class="property-type">object</span></dt>
+    <dd>The message returned by Discord (for updates and replies). Autocomplete responses resolve with basic status info.</dd>
+  </dl>
+
+  <h3>Tips</h3>
+  <ul>
+    <li>Always send this node within 3 seconds for initial replies (or defer first) to avoid timeouts.</li>
+    <li>Set the “Ephemeral” checkbox in <code>discordInteraction</code> if you want the response visible only to the user.</li>
+    <li>Need multiple follow-ups? Use the <code>followup</code> action here; each call returns the created message so you can edit or delete it later.</li>
+  </ul>
 </script>

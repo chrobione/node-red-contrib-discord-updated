@@ -19,6 +19,7 @@ Target version: **4.0.0** (to reflect Node 20 baseline & feature upgrades)
   - Attachment metadata controls.
   - Ephemeral interaction replies.
   - Node icon/categorisation improvements.
+  - `discordClient` guard rails to prevent Node-RED crashes during misuse.
 - **Fixes**
   - Interaction cache leak resolved.
   - Implicit global variable bugs.

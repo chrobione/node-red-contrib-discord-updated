@@ -1,6 +1,6 @@
 a<script type="text/javascript">
   RED.nodes.registerType('discordTyping', {
-    category: 'discord 2 - responses',
+    category: 'discord · responses',
     color: '#7289da',
     defaults: {
       name: {
@@ -41,17 +41,18 @@ a<script type="text/javascript">
     </div>
 </script>
 <script type="text/x-red" data-help-name="discordTyping">
-  <p>Node to start bot is typing message in channel.</p>
+  <p><strong>What it does</strong> — Tells Discord to show the “bot is typing...” indicator in a channel.</p>
+  <p><strong>When to use it</strong> — Fire this before you send a longer reply so users know the bot is working on their request.</p>
 
-  <h3>Inputs</h3>
+  <h3>Input</h3>
   <dl class="message-properties">
-    <dt>channel
-      <span class="property-type">Object or string</span>
-    </dt>
-    <dd>The channel Object or channel id for creating, editing and deleting messages.</dd>
+    <dt>channel <span class="property-type">object | string</span></dt>
+    <dd>The channel object or id. You can set it on the node or pass <code>msg.channel</code>.</dd>
   </dl>
 
-  <h3>Details</h3>
-  <p>This node allows the user to send the discordJS sendTyping function. This creates a 'bot is typing...' message in the corrosponding channel. It will continue to do so for 10 seconds or until a message is sent in said channel.<p>
-
+  <h3>Tips</h3>
+  <ul>
+    <li>The typing indicator lasts about 10 seconds. Trigger it again if your flow takes longer.</li>
+    <li>Chain this node directly before <code>discordMessageManager</code> or <code>discordInteractionManager</code> when doing API calls or heavy processing.</li>
+  </ul>
 </script>

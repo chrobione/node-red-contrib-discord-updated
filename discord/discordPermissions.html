@@ -1,6 +1,6 @@
 a<script type="text/javascript">
   RED.nodes.registerType('discordPermissions', {
-    category: 'discord 3 - administration',
+    category: 'discord · guild control',
     color: '#7289da',
     defaults: {
       name: {
@@ -32,43 +32,32 @@ a<script type="text/javascript">
     </div>
 </script>
 <script type="text/x-red" data-help-name="discordPermissions">
-  <p>Node to check user permissions in Discord.</p>
-  <p>More support can be found <a href="https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki#support">here</a>.</p>
+  <p><strong>What it does</strong> — Looks up which roles a member has and can also add or remove a single role.</p>
+  <p><strong>When to use it</strong> — Build moderation tools, auto-assign onboarding roles, or check if someone has permission before running a command.</p>
 
   <h3>Inputs</h3>
   <dl class="message-properties">
-    <dt>action
-      <span class="property-type">string</span>
-    </dt>
-    <dd>The action to do, can be: get, set, remove. If not set, node will default to get.</dd>
-    <dt>user 
-      <span class="property-type">string</span>
-    </dt>
-    <dd>The user ID (Discord snowflake) or an object containing <code>id</code> whose roles you want to check.</dd>
-  <dt>role 
-      <span class="property-type">string</span>
-    </dt>
-    <dd>The role ID (Discord snowflake) or an object containing <code>id</code> if you set <code>msg.action</code> to set or remove.</dd>
-    <dt>guild
-      <span class="property-type">string</span>
-    <dd>The guild ID (Discord snowflake) or an object containing <code>id</code> for the guild where you want to check the roles.</dd>
+    <dt>action <span class="property-type">string</span></dt>
+    <dd><code>get</code> (default) to list roles, <code>set</code> to add a role, <code>remove</code> to take one away.</dd>
+    <dt>user <span class="property-type">string | object</span></dt>
+    <dd>The user id or object.</dd>
+    <dt>guild <span class="property-type">string | object</span></dt>
+    <dd>The guild to check against.</dd>
+    <dt>role <span class="property-type">string | object</span></dt>
+    <dd>Required for <code>set</code> or <code>remove</code>: the role to add/remove.</dd>
   </dl>
 
-  <h3>Outputs</h3>
+  <h3>Output</h3>
   <dl class="message-properties">
-    <dt>payload
-      <span class="property-type">Array</span>
-    </dt>
-    <dd>The payload contains an array with all roles the user has in the specified guild.</dd>
-    <dt>user
-      <span class="property-type">Object</span>
-    </dt>
-    <dd>The full user Object of the user that was specified.</dd>
+    <dt>payload <span class="property-type">array</span></dt>
+    <dd>Role names the user currently has.</dd>
+    <dt>user <span class="property-type">object</span></dt>
+    <dd>The member information returned by Discord.</dd>
   </dl>
 
-  <h3>Details</h3>
-  <p>This node is able to output all roles a user has in a specific guild. Additionally it can add (set) and remove singular roles from a user in a specific guild.<p>
-  <p>To get the roles a user has in a guild send <code>msg.user</code> and <code>msg.guild</code> and it will return the roles the user has.</p>
-  <p>To remove a role send <code>msg.user</code>, <code>msg.guild</code>, <code>msg.action = "remove"</code> and <code>msg.role</code>. It will remove the role the user has.</p>
-  <p>To add a role send <code>msg.user</code>, <code>msg.guild</code>, <code>msg.action = "set"</code> and <code>msg.role</code>. It add the role to the user.</p>
+  <h3>Tips</h3>
+  <ul>
+    <li>Roles cascade—ensure your bot’s role is higher than the role you try to grant or remove.</li>
+    <li>After changing roles, feed the result into <code>discordMessageManager</code> to notify the user or log channel.</li>
+  </ul>
 </script>

@@ -1,6 +1,6 @@
 <script type="text/javascript">
     RED.nodes.registerType('discordClient',{
-        category: 'discord 4 - utilities',
+        category: 'discord · advanced tools',
         color: '#7289da',
         defaults: {
             name: {value: "", required: false},
@@ -25,6 +25,12 @@
     </div>
 </script>
 <script type="text/x-red" data-help-name="discordClient">
-    <div class="alert alert-danger"><strong>DEPRECATED!</strong> THIS NODE IS DANGEROUS AND CAN CAUSE NODE-RED TO CRASH. USE AT YOUR OWN RISK!</div>
-    <p>Sets <code>msg.discord</code> to the Discord.js <a href="https://discord.js.org/#/docs/main/stable/class/Client" target="_blank">Client</a> associated with the configured token. Use this node to inject a Discord client into a message, which you can then perform actions on manually in nodes that follow.</p>
+    <div class="alert alert-danger"><strong>ADVANCED ONLY.</strong> This exposes the raw Discord.js client. Mistakes can crash Node-RED or leak memory.</div>
+    <p><strong>What it does</strong> — Attaches <code>msg.discord</code> to the message, giving you full access to the underlying Discord.js client.</p>
+    <p><strong>When to use it</strong> — Only if the other nodes cannot do what you need (for example, experimental APIs). You must write JavaScript in a Function node afterwards to call the client safely.</p>
+    <h3>Tips</h3>
+    <ul>
+      <li>Never fork the message (send it to multiple outputs) while the client reference is attached. Instead, use a single Function node and call <code>delete msg.discord</code> before wiring to other nodes.</li>
+      <li>Wrap your client calls in try/catch blocks and call <code>done(err)</code> to avoid hanging flows.</li>
+    </ul>
 </script>

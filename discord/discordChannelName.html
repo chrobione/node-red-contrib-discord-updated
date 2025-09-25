@@ -1,6 +1,6 @@
 <script type="text/javascript">
     RED.nodes.registerType('discordChannelName',{
-        category: 'discord 3 - administration',
+        category: 'discord · guild control',
         color: '#7289da',
         defaults: {
             name: {value: "", required: false},
@@ -32,25 +32,26 @@
     </div>
 </script>
 <script type="text/x-red" data-help-name="discordChannelName">
+  <p><strong>What it does</strong> — Renames a text or voice channel.</p>
+  <p><strong>When to use it</strong> — Rotate event channels (e.g., “🎉 party-night”), mark channels as closed, or tidy temporary rooms created by automations.</p>
 
-  <h3>Inputs</h3>
+  <h3>Required input</h3>
   <dl class="message-properties">
-    <dt>channel
-      <span class="property-type">string | object</span>
-    </dt>
-    <dd>The channel ID (Discord snowflake) or an object containing <code>id</code> for the channel to rename.</dd>
-    <dt>name
-      <span class="property-type">string</span>
-    </dt>
-    <dd>The new channel name. Must be a non-empty string.</dd>
+    <dt>channel <span class="property-type">string | object</span></dt>
+    <dd>The channel id or an object containing <code>id</code>.</dd>
+    <dt>name <span class="property-type">string</span></dt>
+    <dd>The new channel name. Discord limits names to lowercase letters, numbers, and hyphens.</dd>
   </dl>
 
-  <h3>Outputs</h3>
+  <h3>Output</h3>
   <dl class="message-properties">
     <dt>payload <span class="property-type">object</span></dt>
-    <dd>A summary containing the channel ID and the name that was applied.</dd>
+    <dd>Confirms the channel id and name applied.</dd>
   </dl>
 
-
-
+  <h3>Tips</h3>
+  <ul>
+    <li>Send the channel object from <code>discordMessage</code> or <code>discordGuildManager</code> straight into this node to avoid manual ids.</li>
+    <li>Remember that frequent rename spam can annoy users—throttle with a delay node if necessary.</li>
+  </ul>
 </script>

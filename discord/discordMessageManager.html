@@ -1,6 +1,6 @@
 a<script type="text/javascript">
   RED.nodes.registerType('discordMessageManager', {
-    category: 'discord 2 - responses',
+    category: 'discord · responses',
     color: '#7289da',
     defaults: {
       name: {
@@ -41,92 +41,40 @@ a<script type="text/javascript">
     </div>
 </script>
 <script type="text/x-red" data-help-name="discordMessageManager">
-  <p>Node to send, edit, reply, react, crosspost, obtain info, search, or delete messages in Discord</p>
-  <p>More support can be found <a href="https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki/discordMessageManager">here</a>.</p>
+  <p><strong>What it does</strong> — Sends or edits regular Discord messages (text, embeds, attachments) in channels or DMs. It can also delete, react to, or look up existing messages.</p>
+  <p><strong>When to use it</strong> — Any message that is not a direct interaction reply. For slash-command responses use <code>discordInteractionManager</code> first, then this node for follow-up messages if you need them.</p>
 
-  <h3>Inputs</h3>
+  <h3>Key inputs</h3>
   <dl class="message-properties">
-    <dt>payload
-      <span class="property-type">string</span>
-    </dt>
-    <dd>The text content for the message.</dd>
-    <dt>action
-      <span class="property-type">string</span>
-    </dt>
-    <dd>The action to do, can be: create, edit, delete, reply, react, crosspost, search, or info. If not set, node will default to create.</dd>
-    <dt>channel
-      <span class="property-type">Object or string</span>
-    </dt>
-    <dd>The channel Object or channel id for creating, editing and deleting messages.</dd>
-    <dt>user 
-      <span class="property-type">Object or string</span>
-    </dt>
-    <dd>The user Object or id if you want to send a private message.</dd>
-    <dt>message 
-      <span class="property-type">Object or string</span>
-    </dt>
-    <dd>The message Object or id of the message that should be edited or deleted, if this is desired</dd>
-    <dt>embeds
-      <span class="property-type">Object or Array</span>
-    </dt>
-    <dd>Either an array of, or an Embed Object.</dd>    
-    <dt>components
-      <span class="property-type">Object or Array</span>
-    </dt>
-    <dd>Either an array of, or an Component Object.</dd>
-    <dt class="optional">attachments 
-      <span class="property-type">string or Array</span>
-    </dt>
-    <dd>The url or local path to an attachment, or an array of urls.</dd>
+    <dt>action <span class="property-type">string</span></dt>
+    <dd>What to do: <code>create</code>, <code>edit</code>, <code>delete</code>, <code>reply</code>, <code>react</code>, <code>crosspost</code>, <code>search</code>, or <code>info</code>. Defaults to <code>create</code>.</dd>
+    <dt>payload <span class="property-type">string</span></dt>
+    <dd>The text body of the message. Required for create/edit/reply.</dd>
+    <dt>channel <span class="property-type">object | string</span></dt>
+    <dd>The target channel (object or id). Needed for channel posts, edits, deletes, search, and info.</dd>
+    <dt>user <span class="property-type">object | string</span></dt>
+    <dd>Use instead of <code>channel</code> when you want to DM the user.</dd>
+    <dt>message <span class="property-type">object | string</span></dt>
+    <dd>The message you want to edit, delete, react to, or inspect.</dd>
+    <dt>embeds / components <span class="property-type">object | array</span></dt>
+    <dd>Embed or component payloads that accompany the message.</dd>
+    <dt>attachments <span class="property-type">string | object | array</span></dt>
+    <dd>File URLs or buffer objects to upload alongside the message.</dd>
   </dl>
 
-  <h3>Outputs</h3>
+  <h3>What comes out</h3>
   <dl class="message-properties">
-    <dt>payload
-      <span class="property-type">Object</span>
-    <dt>
-    <dd>The message that was created, edited or deleted. In the case of a search, payload will be an array of messages.</dd>
-
-    <dt>request
-      <span class="property-type">Object</span>
-    <dt>
-    <dd>The msg object that was input.</dd>
+    <dt>payload <span class="property-type">object | array</span></dt>
+    <dd>The message Discord returned. For searches this becomes an array of messages.</dd>
+    <dt>request <span class="property-type">object</span></dt>
+    <dd>Your original input message so you can continue the flow.</dd>
   </dl>
 
-  <h3>Details</h3>
-  <p>This node provides a way to send messages to a discord channel or a user. It also allows messages to be edited and deleted. It also returns the Object of the message that was created, edited or deleted.<p>
-
-  <h4>Sending messages to a Discord channel</h4>
-  <p>When sending a message to a channel, both <code>msg.payload</code> and <code>msg.channel</code> are required.<p>
-
-  <h4>Sending private messages<h4>
-  <p>When sending a private message <code>msg.user</code> and <code>msg.payload</code> are required.</p>
-
-  <h4>Sending embeds<h4>
-  <p>To send an embed message you'll have to set <code>msg.embeds</code> as either an Embed Object or an Array of Embed Objects. 
-    How the embed object can be created and what options it has can be found <a href="https://v12.discordjs.guide/popular-topics/embeds.html#using-an-embed-object">here</a>.</p>
-
-  <h4>Editing messages</h4>
-  <p>Editing messages is only possible in channels. Set <code>msg.action</code> to 'edit'. Also <code>msg.channel</code>, <code>msg.message</code> and <code>msg.payload</code> are required.<p>
-
-  <h4>Editing embeds</h4>
-  <p>To edit an embed message or turn a regular message into an embed message you'll have to do the same actions as with editing normal messages. 
-    However, <code>msg.embed</code> needs to be either an Embed Object or an Array of Embed Objects. </p>
-
-  <h4>Deleting messages</h4>
-  <p>To delete messages set <code>msg.action</code> to 'delete'. Also <code>msg.channel</code> and <code>msg.message</code> are required.</p>
-
-  <h4>Obtaining messages</h4>
-  <p>To obtain a message object given its message ID set <code>msg.action</code> to 'info'. Also <code>msg.channel</code> and <code>msg.message</code> are required. The node will then return the message if it exists.</p>
-    
-  <h4>Searching messages</h4>
-  <p>It is possible to search for messages given a channel. To search for messages set <code>msg.action</code> to 'search'. It will retrieve the last 64 messages unless overriden by <code>msg.searchLimit</code>. The search can also be filtered setting <code>msg.author</code>. Note that the search limit is applied before the filtering, e.g. in the default scenario it will not search for the last 64 messages by the user, but rather the last 64 messages and return an array containing the messages by the author.</p>
-    
-    
-  <h4>Attachments</h4>
-  <p>It's possible to add an attachment by url but this node does not check if that url is valid. Discord might bounce invalid urls. This doesn't work for editing messages.</p>
-
-  <h4>Sending components<h4>
-  <p>To send an component you'll have to set <code>msg.components</code> as an Array of Component Objects. 
-    How the component object can be created and what options it has can be found <a href="https://discord.com/developers/docs/interactions/message-components">here</a>.</p>
+  <h3>Tips</h3>
+  <ul>
+    <li><code>create</code> needs <code>msg.payload</code> plus either <code>msg.channel</code> or <code>msg.user</code>.</li>
+    <li>For edits or deletes, set <code>msg.message</code> to the original message object/id and include the channel.</li>
+    <li>Use <code>react</code> with <code>msg.payload</code> set to an emoji name such as <code>👍</code> or <code>my_custom:123456</code>.</li>
+    <li>Attachments from URLs are not validated; make sure the link is reachable or Discord will refuse it.</li>
+  </ul>
 </script>

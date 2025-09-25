@@ -1,6 +1,6 @@
 <script type="text/javascript">
     RED.nodes.registerType('discordMember',{
-        category: 'discord 1 - events',
+        category: 'discord · event intake',
         color: '#7289da',
         defaults: {
             name: {value: "", required: false},
@@ -26,17 +26,23 @@
     </div>
 </script>
 <script type="text/x-red" data-help-name="discordMember">
+  <p><strong>What it does</strong> — Alerts your flow whenever someone joins or leaves a guild that uses this bot.</p>
+  <p><strong>When to use it</strong> — Welcome new members, track departures, hand out starter roles, or log activity in an audit channel.</p>
 
-<h3>Inputs</h3>
+  <h3>Output</h3>
   <dl class="message-properties">
-    non  </dl>
-
-
-  <h3>Inputs</h3>
-  <dl class="message-properties">
-    Alle Mammber Information On Join And Leave event
+    <dt>payload.event <span class="property-type">string</span></dt>
+    <dd>Either <code>join</code> or <code>leave</code> so you know what happened.</dd>
+    <dt>payload.member <span class="property-type">object</span></dt>
+    <dd>Key details about the guild member (id, username, discriminator, roles, joined timestamps).</dd>
+    <dt>payload.guild <span class="property-type">object</span></dt>
+    <dd>Basic information about the server where the event occurred.</dd>
   </dl>
 
-
-
+  <h3>Tips</h3>
+  <ul>
+    <li>Wire the output into a switch node checking <code>msg.payload.event</code> to handle joins and leaves differently.</li>
+    <li>Combine with <code>discordMessageManager</code> to send an automatic welcome message in a general channel.</li>
+    <li>Role information is included, so you can notify staff when someone leaves with a key role.</li>
+  </ul>
 </script>
