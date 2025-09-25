@@ -32,6 +32,54 @@ This repository builds on [node-red-contrib-discord](https://github.com/jorisvdd
 
 The [Wiki](https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki) is still being written when it comes to documentation but you can find a guide on how to install and setup the nodes [here](https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki/Installation-and-setup).
 
+### Developing outside of `.node-red`
+
+If you are contributing to the nodes or testing local changes, you do not have to clone the repository inside your live `~/.node-red` directory. A typical workflow is:
+
+1. Clone this repository anywhere you prefer, for example:
+
+   ```bash
+   git clone https://github.com/Markoudstaal/node-red-contrib-discord-advanced.git ~/dev/node-red-contrib-discord-advanced
+   cd ~/dev/node-red-contrib-discord-advanced
+   ```
+
+2. Install dependencies from the project root:
+
+   ```bash
+   npm install
+   ```
+
+3. To use the development version inside a Node-RED user directory, either
+
+   - run `npm install <path-to-clone>` from your Node-RED user directory (for example `~/.node-red`), or
+   - use `npm link`:
+
+     ```bash
+     # from the cloned project root
+     npm link
+
+     # from your Node-RED user directory
+     cd ~/.node-red
+     npm link node-red-contrib-discord-advanced
+     ```
+
+4. Restart Node-RED so it picks up the linked package. You can now edit code in your development directory and restart Node-RED to test changes.
+
+Remember to remove the link (`npm uninstall node-red-contrib-discord-advanced`) when you want to return to the published version from npm.
+
+### Publishing to the Node-RED library
+
+Publishing a Node-RED node to the public flow library is essentially publishing an npm package, with a few extra metadata requirements. Once the rename to `node-red-contrib-discord-advancedplus` is complete, the steps will be:
+
+1. Ensure the package name in `package.json` starts with `node-red-contrib-` (in this project it will become `node-red-contrib-discord-advancedplus`).
+2. Verify the `node-red` section in `package.json` correctly lists all nodes, icons, and categories.
+3. Update the changelog and README to reflect the release notes.
+4. Run tests and lint checks, then build any assets required by your nodes.
+5. Authenticate with npm using an account that has publish rights to the package scope.
+6. From the project root, publish with `npm publish` (or `npm publish --access public` for the initial release).
+
+Within an hour or so, the Node-RED flow library will automatically index the new version based on the npm publish event. For more details, see the [official Node-RED publishing guide](https://nodered.org/docs/creating-nodes/packaging#publishing-your-node).
+
 ## Nodes
 
 node-red-contrib-discord-advanced gives you access to 13 nodes:
