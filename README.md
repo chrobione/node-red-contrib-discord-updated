@@ -27,7 +27,7 @@ This project began as [node-red-contrib-discord](https://github.com/jorisvddonk/
 
 The repository now lives at [chrobione/node-red-contrib-discord-updated](https://github.com/chrobione/node-red-contrib-discord-updated) so the community, myself included, can push toward the remaining Discord.js functionality without losing any of the prior work.
 
-As of this update, a lot of under-the-hood work has landed to stabilise the fork; you can review the living plans and notes under [`upgradedocs/`](upgradedocs/) alongside the latest changes captured in [`CHANGELOG.md`](CHANGELOG.md).
+As of this update, a lot of under-the-hood work has landed to stabilise the fork; you can review the living plans and notes under [`upgradedocs/`](upgradedocs/) alongside the latest changes captured in [`CHANGELOG.md`](CHANGELOG.md). The current major release is **4.0.0**, reflecting the breaking changes introduced by the palette regrouping, help rewrites, and Node 20 baseline.
 
 ## Quick start
 - Create a Discord application with a bot token and invite it to a test guild.
@@ -117,13 +117,14 @@ node-red-contrib-discord-updated gives you access to 13 nodes:
 
 See `CHANGELOG.md` for more info, including information regarding breaking changes per version.
 
-## Key migration points from 3.4.x to 3.5.0
-### Native behavior of discord interactions
-When a command is sent by an user, discord displays messages like "Bot is thinking...". Versions < 3.4 of this project (previously named `node-red-contrib-discord-advanced`) managed this interaction by replying with a default text message.
-From 3.5.0, this library always defers replies and updates, keeping in memory the reference to the interaction in order to interact moments later within the flow with the new node discordInteractionManager.
+## Key migration points for 4.0.0
+- **Palette regrouping** – Nodes now appear under `discord · event intake`, `discord · responses`, `discord · guild control`, and `discord · advanced tools`. Update any screenshots or onboarding guides and look for the new names in editor search.
+- **Node help refresh** – Every node panel documents inputs/outputs and recommended usage. Spend a minute skimming the help for nodes you rely on if you need a refresher.
+- **Node.js baseline** – 4.0.0 requires Node.js 20 or newer and Node-RED 4.x, matching the new engine constraints in `package.json`.
+- **Interaction replies** – Interactions (slash commands, buttons, selects, modals) must be answered with `discordInteractionManager` so the interaction token stays valid. `discordMessageManager` remains available for regular channel messages, DMs, and follow-up edits, but should not be wired directly to interaction events.
 
-### Replacing discordMessageManager for discordInteractionManager
-Interactions (slash commands, buttons, selects, modals) must be answered with `discordInteractionManager` so the interaction token stays valid. `discordMessageManager` remains available for regular channel messages, DMs, and follow-up edits, but should not be wired directly to interaction events.
+### Carryover from 3.5.x
+Older migration notes still apply: the project always defers interaction replies before responding, and flows that pre-date 3.5.0 should review the [interaction examples](https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki/Interaction-Examples) to avoid broken responses.
 
 [Examples](https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki/Interaction-Examples)
 
