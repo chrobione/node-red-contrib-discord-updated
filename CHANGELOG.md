@@ -1,17 +1,25 @@
 # Changelog\
 
 ## 4.0.0 (unreleased)
-* Breaking - Package renamed to `node-red-contrib-discord-advancedplus` and repository/docs updated accordingly.
-* Breaking - Raised minimum Node.js version to 20 and updated core dependencies (`discord.js` 14.15.3, `node-red` 4.0.2, test stack).
-* Maintenance - `node-red-node-test-helper` remains at ^0.2.7 pending a 4.x compatible release from the upstream project.
-* Fix - Replaced the global BigInt JSON patch with a scoped helper (`discord/lib/json-utils.js`) and migrated all nodes to use it for safe cloning.
-* Fix - Interaction cache now uses an auto-evicting `Map` to prevent memory leaks between flows.
-* Fix - `discord/lib/discordFramework.js` no longer leaks implicit globals when resolving scheduled event managers.
-* Fix - Command manager guarantees application ID resolution, handles REST responses without payloads, and surfaces richer errors via Node-RED status/error APIs.
-* Fix - Message/event/permissions/channel-name/member/typing/activity/client nodes now follow Node-RED async best practices (`send/done`, status clearing, credential safety) and provide clearer error messages.
-* Enhancement - Attachments and components are validated against the latest discord.js builders with improved error reporting.
-* Tests - Updated mocha specs to align with the new error-handling pattern and attachment validation changes.
-* Docs - README, help text, and examples updated for the new package name, Node 20 baseline, installation workflow, and ID (snowflake) requirements.
+
+### Phase 1 - Takeover refresh
+- Maintenance - Stewardship moved to `chrobione/node-red-contrib-discord-updated`, keeping the history from `node-red-contrib-discord` and `node-red-contrib-discord-advanced` intact.
+- Docs - README and changelog updated to reflect the new home of the project and outline the Discord.js parity roadmap for the community.
+- Docs - Added onboarding quick start and node grouping guidance to help new Node-RED users find the right nodes.
+- Enhancement - Discord palette regrouped into numbered categories so related nodes sit together for newcomers.
+- Planning - Established Phase 1 scope to stabilise the fork, preserve previous contributors' credit, and prepare for broader Discord.js feature coverage.
+
+### Advancedplus plan carry-over
+- Breaking - Raised minimum Node.js version to 20 and updated core dependencies (`discord.js` 14.15.3, `node-red` 4.0.2, test stack).
+- Maintenance - `node-red-node-test-helper` remains at ^0.2.7 pending a 4.x compatible release from the upstream project.
+- Fix - Replaced the global BigInt JSON patch with a scoped helper (`discord/lib/json-utils.js`) and migrated all nodes to use it for safe cloning.
+- Fix - Interaction cache now uses an auto-evicting `Map` to prevent memory leaks between flows.
+- Fix - `discord/lib/discordFramework.js` no longer leaks implicit globals when resolving scheduled event managers.
+- Fix - Command manager guarantees application ID resolution, handles REST responses without payloads, and surfaces richer errors via Node-RED status/error APIs.
+- Fix - Message/event/permissions/channel-name/member/typing/activity/client nodes now follow Node-RED async best practices (`send/done`, status clearing, credential safety) and provide clearer error messages.
+- Enhancement - Attachments and components are validated against the latest discord.js builders with improved error reporting.
+- Tests - Updated mocha specs to align with the new error-handling pattern and attachment validation changes.
+- Docs - README, help text, and examples updated for the Node 20 baseline and ID (snowflake) requirements.
 
 ## 3.6.0
 * Feature - Added DiscordCommandManager

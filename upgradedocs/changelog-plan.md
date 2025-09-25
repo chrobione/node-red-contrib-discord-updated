@@ -6,7 +6,7 @@ Target version: **4.0.0** (to reflect Node 20 baseline & feature upgrades)
 - **Breaking Changes**
   - Node.js 20+ requirement; Node 16 support removed.
   - Any API adjustments (e.g., default behaviour changes in commanders/formatters).
-  - Package renamed to `node-red-contrib-discord-advancedplus`; document migration steps.
+  - Package renamed to `node-red-contrib-discord-advanced`; document migration steps.
 - **Features**
   - Entity select menu support.
   - Stage event enhancements.
@@ -29,6 +29,7 @@ Target version: **4.0.0** (to reflect Node 20 baseline & feature upgrades)
 - **Maintenance**
   - Dependency upgrades (discord.js, Node-RED, mocha/sinon, flatted).
   - CI workflow and README badge updates.
+  - Onboarding documentation refresh that groups nodes by task and provides a first-flow walkthrough.
   - Auto-moderation/guild onboarding research notes (if no feature implementation yet).
 
 ## Logging Approach

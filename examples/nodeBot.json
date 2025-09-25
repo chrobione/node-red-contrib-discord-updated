@@ -78,7 +78,7 @@
         "t": "set",
         "p": "payload",
         "pt": "msg",
-        "to": "If you need help and haven't found your question answered on the Wiki (https://github.com/Markoudstaal/node-red-contrib-discord-advancedplus/wiki). Go over to the <#866697606356140064> channel and ask your question there.",
+        "to": "If you need help and haven't found your question answered on the Wiki (https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki). Go over to the <#866697606356140064> channel and ask your question there.",
         "tot": "str"
       },
       {
@@ -111,7 +111,7 @@
         "t": "set",
         "p": "payload",
         "pt": "msg",
-        "to": "https://github.com/Markoudstaal/node-red-contrib-discord-advancedplus/wiki",
+        "to": "https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki",
         "tot": "str"
       },
       {
@@ -193,7 +193,7 @@
     "type": "function",
     "z": "feb8391b4e5866c6",
     "name": "Edit the embed message",
-    "func": "const newMsg = {};\nnewMsg.payload = \"\";\nnewMsg.embed = {\n    \"title\": \"This channel gives you access to the node test bot.\",\n    \"description\": \"This flow is also published here: https://github.com/Markoudstaal/node-red-contrib-discord-advancedplus/wiki/nodeBot.json \\n You can try out the following commands:\",\n    \"url\": \"https://discordapp.com\",\n    \"color\": 5747094,\n    \"thumbnail\": {\n        \"url\": \"https://cdn.discordapp.com/embed/avatars/0.png\"\n    },\n    \"fields\": [\n        {\n            \"name\": \"!help\",\n            \"value\": \"This will give you the link to the Wiki and also a link to the text-support channel.\"\n        },\n        {\n            \"name\": \"!docs\",\n            \"value\": \"This will also give you a link to the Wiki\"\n        },\n        {\n            \"name\": \"!embed\",\n            \"value\": \"This will edit this message to set your username below.\"\n        },\n        {\n            \"name\": \"Last editor:\",\n            \"value\": msg.author.username\n        }\n    ]\n}\n\nnewMsg.channel = \"880128397605482497\";\nnewMsg.message = \"880133015110557767\";\nnewMsg.action = \"edit\";\n\nreturn newMsg;",
+    "func": "const newMsg = {};\nnewMsg.payload = \"\";\nnewMsg.embed = {\n    \"title\": \"This channel gives you access to the node test bot.\",\n    \"description\": \"This flow is also published here: https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki/nodeBot.json \\n You can try out the following commands:\",\n    \"url\": \"https://discordapp.com\",\n    \"color\": 5747094,\n    \"thumbnail\": {\n        \"url\": \"https://cdn.discordapp.com/embed/avatars/0.png\"\n    },\n    \"fields\": [\n        {\n            \"name\": \"!help\",\n            \"value\": \"This will give you the link to the Wiki and also a link to the text-support channel.\"\n        },\n        {\n            \"name\": \"!docs\",\n            \"value\": \"This will also give you a link to the Wiki\"\n        },\n        {\n            \"name\": \"!embed\",\n            \"value\": \"This will edit this message to set your username below.\"\n        },\n        {\n            \"name\": \"Last editor:\",\n            \"value\": msg.author.username\n        }\n    ]\n}\n\nnewMsg.channel = \"880128397605482497\";\nnewMsg.message = \"880133015110557767\";\nnewMsg.action = \"edit\";\n\nreturn newMsg;",
     "outputs": 1,
     "noerr": 0,
     "initialize": "",

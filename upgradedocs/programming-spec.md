@@ -8,7 +8,8 @@
 - Ensure the upgraded stack remains functional across all nodes, with automated tests covering critical flows and regressions.
 - Align node implementation with Node-RED best practices (naming, status updates, error handling, resource cleanup, credential handling, test coverage) as part of the stabilisation work.
 - Record every user-facing or behavioural change in `CHANGELOG.md` as work progresses.
-- Rebrand the package to `node-red-contrib-discord-advancedplus` across metadata, documentation, and release assets while maintaining upgrade guidance for existing users.
+- Rebrand the package to `node-red-contrib-discord-advanced` across metadata, documentation, and release assets while maintaining upgrade guidance for existing users.
+- Improve onboarding documentation so new Node-RED users understand where to start and how each Discord node fits common workflows.
 
 ## Key Dependencies & Version Targets
 - **discord.js**: Bump from `^14.11.0` to the latest release. Confirm the exact version with `npm show discord.js version` during implementation. Review upstream changelog between 14.11.0 and the target version for breaking changes (notable items: stricter `AttachmentBuilder` validation, interaction response behaviour changes, REST response typings).
@@ -43,7 +44,7 @@
 - Document configuration expectations (e.g., channel must be a Snowflake ID) directly in node help/labels.
 - Update GitHub Actions workflow to use `actions/setup-node@v4`, Node 20 (plus optional Node 18 matrix), and enable npm caching.
 - Refresh documentation (`README.md`, `CHANGELOG.md`, node help) to reflect the new Node baseline, upgraded discord.js version, and clarified configuration guidance.
-- Rename package metadata from `node-red-contrib-discord-advanced` to `node-red-contrib-discord-advancedplus`, including `package.json`, npm publish configuration, README badges, and install instructions; provide migration notes for downstream flows.
+- Rename package metadata from `node-red-contrib-discord-advanced` to `node-red-contrib-discord-advanced`, including `package.json`, npm publish configuration, README badges, and install instructions; provide migration notes for downstream flows.
 
 ## Feature Upgrades (Post-Stabilisation)
 - **Entity select menus (types 5-9)**: Extend `messagesFormatter.formatComponents` to support the builders `UserSelectMenuBuilder`, `RoleSelectMenuBuilder`, `MentionableSelectMenuBuilder`, `ChannelSelectMenuBuilder`, and `AttachmentSelectMenuBuilder`, and surface configuration from Node-RED messages.
@@ -93,7 +94,7 @@
 2. Update `package.json` dependencies/devDependencies and regenerate `package-lock.json` using Node 20/npm 9.
 3. Implement the core code changes (interaction cache, globals, BigInt serialization, command manager application ID handling, REST response handling, formatter validation, Node-RED best practice adjustments, documentation clarifications).
 4. Update CI workflow, README, badges, and other docs to reflect the new Node baseline.
-5. Rename project assets to `node-red-contrib-discord-advancedplus` (package metadata, badges, npm scripts, install docs, GitHub workflow names) and provide guidance for consumers upgrading from the previous package name.
+5. Rename project assets to `node-red-contrib-discord-advanced` (package metadata, badges, npm scripts, install docs, GitHub workflow names) and provide guidance for consumers upgrading from the previous package name.
 6. Update or create tests needed to confirm existing functionality still passes under Node 18/20 and the upgraded `discord.js`/Node-RED 4.0.2 stack.
 7. Run the full automated suite on Node 18 and 20; resolve any regressions uncovered.
 8. Perform manual Node-RED smoke testing to ensure the product is back to a stable state before adding new features.
@@ -102,7 +103,7 @@
 ### Phase 2 – Feature Upgrades
 10. Implement entity select menu, stage event, localisation, attachment metadata, message flag, bulk delete/search, custom emoji management, role membership queries, voice event handling, and ephemeral interaction reply enhancements once the stabilisation tests pass.
 11. Conduct discovery work for auto-moderation and guild onboarding APIs, documenting findings and scoping follow-up tasks.
-12. Deliver node icon/categorisation improvements for better palette usability.
+12. Deliver node icon/categorisation improvements for better palette usability, grouping nodes into onboarding, messaging, administration, and utility categories inside the Node-RED palette (category split done via `discord 1-4` labels; icon refresh still pending).
 13. Extend automated and manual tests to cover the new feature behaviour.
 14. Update documentation and changelog with newly supported features, usage examples (including channel ID guidance), and Node-RED best practice notes.
 15. Finalise release notes summarising breaking changes, the package rename, and new feature support; confirm `npm pack`/publish flow succeeds.

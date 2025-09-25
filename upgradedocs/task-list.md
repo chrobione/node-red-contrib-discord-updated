@@ -22,7 +22,7 @@
   - Action plan: Modify workflow YAML, run `act` or dry-run if possible, and record updates once validated.
 - [x] Refresh README badges and supported-version text for Node 20/discord.js; log change in changelog.
   - Action plan: Update badges and narrative text, cross-check for accuracy, capture screenshots if needed, and note change in changelog.
-- [x] Rename package metadata to `node-red-contrib-discord-advancedplus` (package.json name, README badges, npm scripts, npm publish settings); log change in changelog.
+- [x] Rename package metadata to `node-red-contrib-discord-advanced` (package.json name, README badges, npm scripts, npm publish settings); log change in changelog.
   - Action plan: Update `package.json` name/description, adjust README references, revise CI/job names if required, ensure npm install instructions use the new name, and add migration guidance.
 
 ### Core Code Fixes & Best-Practice Alignment
@@ -94,7 +94,7 @@
 
 ### Node Icon & Categorisation Improvements
 - [ ] Deliver distinct icons/categories for Discord nodes in the palette; log docs/assets update.
-  - Action plan: Design icons, update palette definitions, adjust documentation/screenshots, and log change.
+  - Action plan: **Categories regrouped via `discord 1-4` palette sections.** Next steps: design refreshed icons, update palette definitions if further tweaks needed, adjust documentation/screenshots, and log change.
 
 ### Discovery & Documentation Tasks
 - [ ] Research discord.js auto-moderation APIs, outline potential nodes/changes, and document findings + next steps in changelog.

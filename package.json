@@ -1,5 +1,5 @@
 {
-  "name": "node-red-contrib-discord-advancedplus",
+  "name": "node-red-contrib-discord-updated",
   "version": "4.0.0",
   "description": "Receive, send, edit, reply, react to and delete Discord messages, handle interactions and much more in Node-RED.",
   "main": "discord/discord.js",
@@ -22,9 +22,9 @@
     "flatted": "^3.2.9"
   },
   "bugs": {
-    "url": "https://github.com/Markoudstaal/node-red-contrib-discord-advancedplus/issues"
+    "url": "https://github.com/chrobione/node-red-contrib-discord-updated/issues"
   },
-  "repository": "Markoudstaal/node-red-contrib-discord-advancedplus",
+  "repository": "chrobione/node-red-contrib-discord-updated",
   "keywords": [
     "node-red"
   ],
