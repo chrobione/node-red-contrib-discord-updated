@@ -1,6 +1,3 @@
-
-const { GuildScheduledEventManager } = require('discord.js');
-
 const checkIdOrObject = (check) => {
     try {
         if (typeof check !== 'string') {
@@ -27,9 +24,11 @@ const getGuild = async (bot, id) => {
 }
 
 const getEventManager = async (bot, id) => {
-
-    guild = await getGuild(bot,id)
-    return new GuildScheduledEventManager(guild);
+    const guild = await getGuild(bot, id);
+    if (!guild || !guild.scheduledEvents) {
+        throw new Error(`Unable to obtain scheduled events for guild '${guild?.id || id}'`);
+    }
+    return guild.scheduledEvents;
 }
 
 const getChannel = async (bot, id) => {

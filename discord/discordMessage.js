@@ -1,4 +1,4 @@
-const Flatted = require('flatted');
+const { clone } = require('./lib/json-utils.js');
 module.exports = function (RED) {
   var discordBotManager = require('./lib/discordBotManager.js');
 
@@ -30,8 +30,8 @@ module.exports = function (RED) {
             _msgid: msgid
           }
           msg.payload = message.content;
-          msg.channel = Flatted.parse(Flatted.stringify(message.channel));
-          msg.member = Flatted.parse(Flatted.stringify(message.member));
+          msg.channel = clone(message.channel);
+          msg.member = clone(message.member);
           msg.memberRoleNames = message.member ? message.member.roles.cache.each(function (item) {
             return item.name
           }) : null;
@@ -40,8 +40,8 @@ module.exports = function (RED) {
           }) : null;
 
           try {            
-            msg.data = Flatted.parse(Flatted.stringify(message));
-            msg.data.attachments = Flatted.parse(Flatted.stringify(message.attachments));
+            msg.data = clone(message);
+            msg.data.attachments = clone(message.attachments);
             msg.data.reference = message.reference;
           } catch (e) {
             node.warn("Could not set `msg.data`: JSON serialization failed");
@@ -64,7 +64,7 @@ module.exports = function (RED) {
             node.send(msg);
           } else {
             message.author.fetch(true).then(author => {
-              msg.author = Flatted.parse(Flatted.stringify(author));
+              msg.author = clone(author);
               node.send(msg);
             }).catch(error => {
               node.error(error);

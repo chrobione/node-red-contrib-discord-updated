@@ -1,4 +1,4 @@
-const Flatted = require('flatted');
+const { clone } = require('./lib/json-utils.js');
 module.exports = function (RED) {
   var discordBotManager = require('./lib/discordBotManager.js');
 
@@ -33,12 +33,17 @@ module.exports = function (RED) {
       }
 
       const setError = (error, done) => {
+        const message = typeof error === 'string' ? error : (error && error.message) ? error.message : 'Unexpected error';
+        const errObj = error instanceof Error ? error : new Error(message);
         node.status({
           fill: "red",
           shape: "dot",
-          text: error
+          text: message
         })
-        done(error);
+        node.error(errObj);
+        if (typeof done === 'function') {
+          done(errObj);
+        }
       }
 
       const getMessage = async (message, channel) => {
@@ -47,6 +52,8 @@ module.exports = function (RED) {
       }
 
       node.on('input', async function (msg, send, done) {
+        send = send || node.send.bind(node);
+        done = done || function (err) { if (err) { node.error(err, msg); } };
         const message = checkIdOrObject(msg.message);
         const channel = checkIdOrObject(msg.channel);
         const collectionTime = msg.time || 600000;
@@ -64,12 +71,7 @@ module.exports = function (RED) {
         try {
           messageObject = await getMessage(message, channel);
         } catch (error) {
-          node.error(error);
-          node.status({
-            fill: "red",
-            shape: "dot",
-            text: "channel or message missing?"
-          });
+          setError("channel or message missing?", done);
           return;
         }
 
@@ -95,11 +97,11 @@ module.exports = function (RED) {
               payload: reaction._emoji.name,
               count: reaction.count,
               type: "remove",
-              message: Flatted.parse(Flatted.stringify(reaction.message)),
-              user: Flatted.parse(Flatted.stringify(reactor)),
+              message: clone(reaction.message),
+              user: clone(reactor),
               _originalFlowMessage: msg
             }
-            newMsg.message.user = Flatted.parse(Flatted.stringify(messageUser));
+            newMsg.message.user = clone(messageUser);
 
             send(newMsg);
             node.status({
@@ -122,11 +124,11 @@ module.exports = function (RED) {
               payload: reaction._emoji.name,
               count: reaction.count,
               type: "set",
-              message: Flatted.parse(Flatted.stringify(reaction.message)),
-              user: Flatted.parse(Flatted.stringify(reactor)),
+              message: clone(reaction.message),
+              user: clone(reactor),
               _originalFlowMessage: msg
             }
-            newMsg.message.user = Flatted.parse(Flatted.stringify(messageUser));
+            newMsg.message.user = clone(messageUser);
 
             send(newMsg);
             node.status({

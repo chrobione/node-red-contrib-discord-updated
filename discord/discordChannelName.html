@@ -9,7 +9,7 @@
 
         },
         inputs: 1,
-        outputs: 0,
+        outputs: 1,
         icon: "discord.png",
         label: function() {
             return this.name||"discordChannelName";
@@ -36,13 +36,19 @@
   <h3>Inputs</h3>
   <dl class="message-properties">
     <dt>channel
-      <span class="property-type">string</span>
+      <span class="property-type">string | object</span>
     </dt>
-    <dd>The Channel id of the channel to change the name of</dd>
+    <dd>The channel ID (Discord snowflake) or an object containing <code>id</code> for the channel to rename.</dd>
     <dt>name
       <span class="property-type">string</span>
     </dt>
-    <dd>The name you Whant give The channel</dd>
+    <dd>The new channel name. Must be a non-empty string.</dd>
+  </dl>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+    <dt>payload <span class="property-type">object</span></dt>
+    <dd>A summary containing the channel ID and the name that was applied.</dd>
   </dl>
 
 

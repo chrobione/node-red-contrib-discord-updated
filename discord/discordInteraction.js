@@ -1,4 +1,4 @@
-const Flatted = require('flatted');
+const { clone } = require('./lib/json-utils.js');
 module.exports = function (RED) {
   var discordBotManager = require('./lib/discordBotManager.js');
   var discordInterationManager = require('./lib/interactionManager.js');
@@ -88,12 +88,12 @@ module.exports = function (RED) {
           // -- Building response for each type --
 
           let message = {};
-          message.payload = Flatted.parse(Flatted.stringify(interaction));
-          message.payload.user = Flatted.parse(Flatted.stringify(interaction.user));
+          message.payload = clone(interaction);
+          message.payload.user = clone(interaction.user);
 
           if(interaction.member !== null) {
-            message.payload.member = Flatted.parse(Flatted.stringify(interaction.member));
-            message.payload.member.guild = Flatted.parse(Flatted.stringify(interaction.member.guild));
+            message.payload.member = clone(interaction.member);
+            message.payload.member.guild = clone(interaction.member.guild);
           }
           else {
             message.payload.member = null;
@@ -103,7 +103,7 @@ module.exports = function (RED) {
             message.interactionObject = interaction;
 
           if (interaction.isCommand() || interaction.isMessageContextMenuCommand()) {
-            message.payload.options = Flatted.parse(Flatted.stringify(interaction.options));            
+            message.payload.options = clone(interaction.options);            
           }
           else if(interaction.isAutocomplete())
           {
@@ -114,8 +114,8 @@ module.exports = function (RED) {
             // nothing to do
           }
           else {            
-            message.payload.message = Flatted.parse(Flatted.stringify(interaction.message));
-            message.payload.message.author = Flatted.parse(Flatted.stringify(interaction.message.author));
+            message.payload.message = clone(interaction.message);
+            message.payload.message.author = clone(interaction.message.author);
           }
 
           node.send(message);

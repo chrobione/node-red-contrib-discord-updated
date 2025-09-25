@@ -1,7 +1,7 @@
 {
-  "name": "node-red-contrib-discord-advanced",
-  "version": "3.6.0",
-  "description": "Recieve, send, edit, reply, react to and delete Discord messages, handle interactions and much more in Node-RED.",
+  "name": "node-red-contrib-discord-advancedplus",
+  "version": "4.0.0",
+  "description": "Receive, send, edit, reply, react to and delete Discord messages, handle interactions and much more in Node-RED.",
   "main": "discord/discord.js",
   "scripts": {
     "test": "mocha \"test/**/*_spec.js\""
@@ -15,16 +15,16 @@
   ],
   "license": "MIT",
   "engines": {
-    "node": ">=16.9.0"
+    "node": ">=20.0.0"
   },
   "dependencies": {
-    "discord.js": "^14.11.0",
-    "flatted": "^3.2.5"
+    "discord.js": "^14.15.3",
+    "flatted": "^3.2.9"
   },
   "bugs": {
-    "url": "https://github.com/Markoudstaal/node-red-contrib-discord-advanced/issues"
+    "url": "https://github.com/Markoudstaal/node-red-contrib-discord-advancedplus/issues"
   },
-  "repository": "Markoudstaal/node-red-contrib-discord-advanced",
+  "repository": "Markoudstaal/node-red-contrib-discord-advancedplus",
   "keywords": [
     "node-red"
   ],
@@ -48,11 +48,11 @@
     }
   },
   "devDependencies": {
-    "mocha": "^9.2.2",
-    "node-red": "^2.2.2",
+    "mocha": "^10.4.0",
+    "node-red": "^4.0.2",
     "node-red-node-test-helper": "^0.2.7",
     "should": "^13.2.3",
     "should-sinon": "^0.0.6",
-    "sinon": "^13.0.2"
+    "sinon": "^17.0.1"
   }
 }

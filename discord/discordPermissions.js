@@ -1,5 +1,6 @@
 module.exports = function (RED) {
   var discordBotManager = require('./lib/discordBotManager.js');
+  const { clone } = require('./lib/json-utils.js');
 
   function discordPermissions(config) {
     RED.nodes.createNode(this, config);
@@ -7,18 +8,23 @@ module.exports = function (RED) {
     var configNode = RED.nodes.getNode(config.token);
     discordBotManager.getBot(configNode).then(function (bot) {
       node.on('input', async function (msg, send, done) {
+        send = send || node.send.bind(node);
+        done = done || function (err) { if (err) { node.error(err, msg); } };
         const action = msg.action || 'get';
         const user = msg.user || null;
         const guild = msg.guild || null;
         const role = msg.role || null;
 
         const setError = (error) => {
+          const statusText = typeof error === 'string' ? error : (error && error.message) ? error.message : 'Unexpected error';
+          const errObj = error instanceof Error ? error : new Error(statusText);
           node.status({
             fill: "red",
             shape: "dot",
-            text: error
+            text: statusText
           })
-          done(error);
+          node.error(errObj, msg);
+          done(errObj);
         }
 
         const setSuccess = (succesMessage) => {
@@ -60,12 +66,12 @@ module.exports = function (RED) {
               const guildObject = await bot.guilds.fetch(guildID);
               const userObject = await guildObject.members.fetch(userID);
 
-              let roles = [];
+              const roles = [];
               userObject.roles.cache.each(role => {
-                roles.push(role);
+                roles.push(clone(role));
               });
               msg.payload = roles;
-              msg.user = userObject;
+              msg.discordUser = clone(userObject);
               send(msg);
               setSuccess(`roles sent`);
             } catch (error) {
@@ -95,7 +101,6 @@ module.exports = function (RED) {
               send(msg);
               setSuccess(`role set`);
             } catch (error) {
-              console.log(error);
               setError(error);
             }
           }
@@ -146,11 +151,11 @@ module.exports = function (RED) {
         discordBotManager.closeBot(bot);
       });
     }).catch(err => {
-      console.log(err);
+      node.error(err);
       node.status({
         fill: "red",
         shape: "dot",
-        text: err
+        text: err && err.message ? err.message : err
       });
     });
   }

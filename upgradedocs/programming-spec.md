@@ -14,7 +14,7 @@
 - **discord.js**: Bump from `^14.11.0` to the latest release. Confirm the exact version with `npm show discord.js version` during implementation. Review upstream changelog between 14.11.0 and the target version for breaking changes (notable items: stricter `AttachmentBuilder` validation, interaction response behaviour changes, REST response typings).
 - **flatted**: Update to the latest patch (>= 3.2.9) to align with upstream serialization fixes.
 - **node-red**: Lift from `^2.2.2` to `^4.0.2` (requires Node >= 18). Ensure flows and test helper APIs remain compatible under Node 20.
-- **Testing stack**: `mocha` >= 10, `sinon` >= 17, `should` latest 13.x, `node-red-node-test-helper` >= 0.4 to support Node-RED 4.x. Update test bootstrap code if helper APIs have changed.
+- **Testing stack**: `mocha` >= 10, `sinon` >= 17, `should` latest 13.x, `node-red-node-test-helper` (currently pinned to ^0.2.7 until a 4.x-compatible release is available). Update test bootstrap code if helper APIs change when a newer helper is published.
 - **Node.js baseline**: Update `engines.node` to `>=20` in `package.json`, adjust `.npmrc` (engine-strict) accordingly, refresh README badges, and update GitHub Actions workflow Node versions (consider a matrix for Node 18 and 20).
 
 ## Compatibility Risks & Mitigations

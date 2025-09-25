@@ -33,7 +33,7 @@ a<script type="text/javascript">
 </script>
 <script type="text/x-red" data-help-name="discordPermissions">
   <p>Node to check user permissions in Discord.</p>
-  <p>More support can be found <a href="https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki#support">here</a>.</p>
+  <p>More support can be found <a href="https://github.com/Markoudstaal/node-red-contrib-discord-advancedplus/wiki#support">here</a>.</p>
 
   <h3>Inputs</h3>
   <dl class="message-properties">
@@ -44,14 +44,14 @@ a<script type="text/javascript">
     <dt>user 
       <span class="property-type">string</span>
     </dt>
-    <dd>The user ID whose roles you want to check.</dd>
+    <dd>The user ID (Discord snowflake) or an object containing <code>id</code> whose roles you want to check.</dd>
   <dt>role 
       <span class="property-type">string</span>
     </dt>
-    <dd>The role ID if you set <code>msg.action</code> to set or remove.</dd>
+    <dd>The role ID (Discord snowflake) or an object containing <code>id</code> if you set <code>msg.action</code> to set or remove.</dd>
     <dt>guild
       <span class="property-type">string</span>
-    <dd>The Guild ID the user is in and where you want to check the roles.</dd>
+    <dd>The guild ID (Discord snowflake) or an object containing <code>id</code> for the guild where you want to check the roles.</dd>
   </dl>
 
   <h3>Outputs</h3>

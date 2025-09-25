@@ -1,7 +1,7 @@
-# node-red-contrib-discord-advanced
+# node-red-contrib-discord-advancedplus
 
-[![npm version](https://badge.fury.io/js/node-red-contrib-discord-advanced.svg)](https://badge.fury.io/js/node-red-contrib-discord-advanced) ![](https://img.shields.io/static/v1?label=discord.js&message=14.11.0&color=brightgreen)
- ![](https://img.shields.io/static/v1?label=node&message=%3E=16.9.0&color=brightgreen) 
+[![npm version](https://badge.fury.io/js/node-red-contrib-discord-advancedplus.svg)](https://badge.fury.io/js/node-red-contrib-discord-advancedplus) ![](https://img.shields.io/static/v1?label=discord.js&message=14.15.3&color=brightgreen)
+ ![](https://img.shields.io/static/v1?label=node&message=%3E=20&color=brightgreen) 
 
 Node-red nodes that allow you to interact with Discord, via [Discord.js](https://discord.js.org).
 
@@ -26,11 +26,11 @@ Currently the following actions are supported:
 * Create, delete and get events.
 * Obtain info and change name of a guild.
 
-This repository builds on [node-red-contrib-discord](https://github.com/jorisvddonk/node-red-contrib-discord) by Joris vd Donk . The main intention is to add more features and keep the repository updated.
+This repository builds on [node-red-contrib-discord](https://github.com/jorisvddonk/node-red-contrib-discord) by Joris vd Donk. The main intention is to add more features and keep the repository updated.
 
 ## Installation and documentation
 
-The [Wiki](https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki) is still being written when it comes to documentation but you can find a guide on how to install and setup the nodes [here](https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki/Installation-and-setup).
+The [Wiki](https://github.com/Markoudstaal/node-red-contrib-discord-advancedplus/wiki) is still being written when it comes to documentation but you can find a guide on how to install and setup the nodes [here](https://github.com/Markoudstaal/node-red-contrib-discord-advancedplus/wiki/Installation-and-setup).
 
 ### Developing outside of `.node-red`
 
@@ -39,8 +39,8 @@ If you are contributing to the nodes or testing local changes, you do not have t
 1. Clone this repository anywhere you prefer, for example:
 
    ```bash
-   git clone https://github.com/Markoudstaal/node-red-contrib-discord-advanced.git ~/dev/node-red-contrib-discord-advanced
-   cd ~/dev/node-red-contrib-discord-advanced
+   git clone https://github.com/Markoudstaal/node-red-contrib-discord-advancedplus.git ~/dev/node-red-contrib-discord-advancedplus
+   cd ~/dev/node-red-contrib-discord-advancedplus
    ```
 
 2. Install dependencies from the project root:
@@ -60,18 +60,18 @@ If you are contributing to the nodes or testing local changes, you do not have t
 
      # from your Node-RED user directory
      cd ~/.node-red
-     npm link node-red-contrib-discord-advanced
+     npm link node-red-contrib-discord-advancedplus
      ```
 
 4. Restart Node-RED so it picks up the linked package. You can now edit code in your development directory and restart Node-RED to test changes.
 
-Remember to remove the link (`npm uninstall node-red-contrib-discord-advanced`) when you want to return to the published version from npm.
+Remember to remove the link (`npm uninstall node-red-contrib-discord-advancedplus`) when you want to return to the published version from npm.
 
 ### Publishing to the Node-RED library
 
-Publishing a Node-RED node to the public flow library is essentially publishing an npm package, with a few extra metadata requirements. Once the rename to `node-red-contrib-discord-advancedplus` is complete, the steps will be:
+Publishing a Node-RED node to the public flow library is essentially publishing an npm package, with a few extra metadata requirements. The checklist for `node-red-contrib-discord-advancedplus` is:
 
-1. Ensure the package name in `package.json` starts with `node-red-contrib-` (in this project it will become `node-red-contrib-discord-advancedplus`).
+1. Ensure the package name in `package.json` starts with `node-red-contrib-` (in this project it is `node-red-contrib-discord-advancedplus`).
 2. Verify the `node-red` section in `package.json` correctly lists all nodes, icons, and categories.
 3. Update the changelog and README to reflect the release notes.
 4. Run tests and lint checks, then build any assets required by your nodes.
@@ -82,7 +82,7 @@ Within an hour or so, the Node-RED flow library will automatically index the new
 
 ## Nodes
 
-node-red-contrib-discord-advanced gives you access to 13 nodes:
+node-red-contrib-discord-advancedplus gives you access to 13 nodes:
 
 * **discordMessage** is a node with no inputs and one output allowing you to receive notifications of incoming messages.
 * **discordMessageManager** allows (embed) messages to be sent to either channels or privatly to user. It also allows for editing and deleting of (embed) messages.
@@ -104,18 +104,18 @@ See `CHANGELOG.md` for more info, including information regarding breaking chang
 
 ## Key migration points from 3.4.x to 3.5.0
 ### Native behavior of discord interactions
-When a command is sent by an user, discord displays messages like "Bot is thinking...". Versions < 3.4 of node-red-contrib-discord-advanced manage this interaction by replying with a default text message.
+When a command is sent by an user, discord displays messages like "Bot is thinking...". Versions < 3.4 of this project (previously named `node-red-contrib-discord-advanced`) managed this interaction by replying with a default text message.
 From 3.5.0, this library always defers replies and updates, keeping in memory the reference to the interaction in order to interact moments later within the flow with the new node discordInteractionManager.
 
 ### Replacing discordMessageManager for discordInteractionManager
 Now all interactions are replied with discordInteractionManager node, so there are several scenarios for having in mind. This is a breaking change. It's mandatory to take a look on examples to prevent broken flows.
 
-[Examples](https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki/Interaction-Examples)
+[Examples](https://github.com/Markoudstaal/node-red-contrib-discord-advancedplus/wiki/Interaction-Examples)
 
 
 ## Privileged Intents for correct functioning
 
-![](https://raw.githubusercontent.com/Markoudstaal/node-red-contrib-discord-advanced/main/assets/privileged_intents.png)
+![](https://raw.githubusercontent.com/Markoudstaal/node-red-contrib-discord-advancedplus/main/assets/privileged_intents.png)
 
 ## Support, issues and feature requests
 

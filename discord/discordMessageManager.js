@@ -2,7 +2,7 @@ module.exports = function (RED) {
   var discordBotManager = require('./lib/discordBotManager.js');
   var messagesFormatter = require('./lib/messagesFormatter.js');
   var discordFramework = require('./lib/discordFramework.js');
-  const Flatted = require('flatted');
+  const { clone } = require('./lib/json-utils.js');
   const {
     ChannelType
   } = require('discord.js');
@@ -16,6 +16,8 @@ module.exports = function (RED) {
 
     discordBotManager.getBot(configNode).then(function (bot) {
       node.on('input', async function (msg, send, done) {
+        send = send || node.send.bind(node);
+        done = done || function (err) { if (err) { node.error(err, msg); } };
         const channel = config.channel || msg.channel || null;
         const action = msg.action || 'create';
         const user = msg.user || null;
@@ -29,12 +31,15 @@ module.exports = function (RED) {
         const _searchLimit = msg.searchLimit || 64;
 
         const setError = (error) => {
+          const message = typeof error === 'string' ? error : (error && error.message) ? error.message : 'Unexpected error';
+          const errObj = error instanceof Error ? error : new Error(message);
           node.status({
             fill: "red",
             shape: "dot",
-            text: error
+            text: message
           })
-          done(error);
+          node.error(errObj, msg);
+          done(errObj);
         }
 
         const setSuccess = (succesMessage, data) => {
@@ -44,7 +49,7 @@ module.exports = function (RED) {
             text: succesMessage
           });
 
-          msg.payload = Flatted.parse(Flatted.stringify(data));
+          msg.payload = data === undefined ? null : clone(data);
           send(msg);
           done();
         }
@@ -205,7 +210,7 @@ module.exports = function (RED) {
               emoji: reaction._emoji.name,
               animated: reaction.emoji.animated,
               count: reaction.count,
-              message: Flatted.parse(Flatted.stringify(message))
+              message: clone(message)
             };
 
             setSuccess(`message ${message.id} reacted`, newMsg);
@@ -223,7 +228,7 @@ module.exports = function (RED) {
               throw "It's not a Announcement channel";
 
             const newMsg = {
-              message: Flatted.parse(Flatted.stringify(message))
+              message: clone(message)
             };
 
             setSuccess(`message ${message.id} crossposted`, newMsg);
@@ -271,16 +276,17 @@ module.exports = function (RED) {
             setError(`msg.action has an incorrect value`)
         }
 
-        node.on('close', function () {
-          discordBotManager.closeBot(bot);
-        });
+      });
+
+      node.on('close', function () {
+        discordBotManager.closeBot(bot);
       });
     }).catch(err => {
-      console.log(err);
+      node.error(err);
       node.status({
         fill: "red",
         shape: "dot",
-        text: err
+        text: err && err.message ? err.message : err
       });
     });
   }

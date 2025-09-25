@@ -49,9 +49,17 @@ describe('Discord Message Manager Node', function () {
             const nodeRedMsg = { payload: {}, _msgid: 'dd3be2d56799887c' };
 
             n1.receive(nodeRedMsg);
-            n1.on('call:error', call => {
-                call.should.be.calledWithExactly('to send messages either msg.channel or msg.user needs to be set', nodeRedMsg);
-                done();
+            setImmediate(() => {
+                try {
+                    n1.error.should.be.called();
+                    const args = n1.error.firstCall.args;
+                    args[0].should.be.instanceOf(Error);
+                    args[0].message.should.equal('to send messages either msg.channel or msg.user needs to be set');
+                    args[1].should.equal(nodeRedMsg);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             });
         });
     });
@@ -65,9 +73,17 @@ describe('Discord Message Manager Node', function () {
             let nodeRedMsg = { payload: {}, _msgid: 'dd3be2d56799887c', action: "actionx" };
             
             n1.receive(nodeRedMsg);
-            n1.on('call:error', call => {
-                call.should.be.calledWithExactly('msg.action has an incorrect value', nodeRedMsg);
-                done();
+            setImmediate(() => {
+                try {
+                    n1.error.should.be.called();
+                    const args = n1.error.firstCall.args;
+                    args[0].should.be.instanceOf(Error);
+                    args[0].message.should.equal('msg.action has an incorrect value');
+                    args[1].should.equal(nodeRedMsg);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             });
         });
     });
@@ -130,10 +146,16 @@ describe('Discord Message Manager Node', function () {
             let n1 = helper.getNode("n1");
             let n2 = helper.getNode("n2");
 
-            n1.receive(inputNodeRedMsg);
             n1.on('call:error', call => {
-                done(call);
+                done(call.args[0][0] || new Error('unexpected error'));
             });
+            n1.on('call:done', call => {
+                const err = call.args[0][0];
+                if (err) {
+                    done(err);
+                }
+            });
+            n1.receive(inputNodeRedMsg);
             n2.on("input", () => done());
         });
     });
@@ -161,10 +183,16 @@ describe('Discord Message Manager Node', function () {
             let n1 = helper.getNode("n1");
             let n2 = helper.getNode("n2");
 
-            n1.receive(inputNodeRedMsg);
             n1.on('call:error', call => {
-                done(call);
+                done(call.args[0][0] || new Error('unexpected error'));
             });
+            n1.on('call:done', call => {
+                const err = call.args[0][0];
+                if (err) {
+                    done(err);
+                }
+            });
+            n1.receive(inputNodeRedMsg);
             n2.on("input", () => done());
         });
     });
@@ -275,7 +303,7 @@ describe('Discord Message Manager Node', function () {
     it('Take attachment content from msg.payload.attachment', function (done) {
         stubDiscord.channels = sinon.createStubInstance(discord.ChannelManager);
         const outputPayload = { message: "Hello there", channel: "1111111111" };
-        const attachments = [{ title: 'Some title', url: 'https://discord.js.org' }];
+        const attachments = [{ attachment: Buffer.from('file'), name: 'file.txt' }];
         const inputNodeRedMsg = { _msgid: 'dd3be2d56799887c', payload: { content: "hi", attachments: attachments }, channel: "1111111111", topic: "10" };
         stubDiscord.channels.fetch.resolves({
             send: (obj) => new Promise((resolve, reject) => {
@@ -295,10 +323,16 @@ describe('Discord Message Manager Node', function () {
             let n1 = helper.getNode("n1");
             let n2 = helper.getNode("n2");
 
-            n1.receive(inputNodeRedMsg);
             n1.on('call:error', call => {
-                done(call);
+                done(call.args[0][0] || new Error('unexpected error'));
             });
+            n1.on('call:done', call => {
+                const err = call.args[0][0];
+                if (err) {
+                    done(err);
+                }
+            });
+            n1.receive(inputNodeRedMsg);
             n2.on("input", () => done());
         });
     });
@@ -306,7 +340,7 @@ describe('Discord Message Manager Node', function () {
     it('Take attachment content from msg.attachment and keep msg.attachment on ouput', function (done) {
         stubDiscord.channels = sinon.createStubInstance(discord.ChannelManager);
         const outputPayload = { message: "Hello there", channel: "1111111111" };
-        const attachments = [{ color: 0x0099ff, title: 'Some title', url: 'https://discord.js.org' }];
+        const attachments = [{ attachment: Buffer.from('file'), name: 'file.txt' }];
         const inputNodeRedMsg = { _msgid: 'dd3be2d56799887c', payload: "Hi", attachments: attachments, channel: "1111111111", topic: "10" };
         stubDiscord.channels.fetch.resolves({
             send: (obj) => new Promise((resolve, reject) => {
@@ -326,11 +360,16 @@ describe('Discord Message Manager Node', function () {
             let n1 = helper.getNode("n1");
             let n2 = helper.getNode("n2");
 
-            n1.receive(inputNodeRedMsg);
             n1.on('call:error', call => {
-                call.should.be.calledWithExactly(noError);
-                done();
+                done(call.args[0][0] || new Error('unexpected error'));
             });
+            n1.on('call:done', call => {
+                const err = call.args[0][0];
+                if (err) {
+                    done(err);
+                }
+            });
+            n1.receive(inputNodeRedMsg);
             n2.on("input", (msg) => {
                 try {
                     msg.should.have.property('payload', outputPayload);

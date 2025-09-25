@@ -1,7 +1,7 @@
 module.exports = function (RED) {
   var discordBotManager = require('./lib/discordBotManager.js');
   var discordFramework = require('./lib/discordFramework.js');
-  const Flatted = require('flatted');
+  const { clone } = require('./lib/json-utils.js');
   const {
     GuildScheduledEventEntityType,
     GuildScheduledEventPrivacyLevel,
@@ -15,6 +15,8 @@ module.exports = function (RED) {
 
     discordBotManager.getBot(configNode).then(function (bot) {
       node.on('input', async function (msg, send, done) {
+        send = send || node.send.bind(node);
+        done = done || function (err) { if (err) { node.error(err, msg); } };
         
         const _guildID = config.guild || msg.guild || null;
         const _eventID = config.event || msg.event || null;
@@ -31,11 +33,13 @@ module.exports = function (RED) {
         const _eventLocation = msg.eventLocation || null;
 
         const setError = (error) => {
+          const message = typeof error === 'string' ? error : (error && error.message) ? error.message : 'Unexpected error';
           node.status({
             fill: "red",
             shape: "dot",
-            text: error
+            text: message
           })
+          node.error(error, msg);
           done(error);
         }
 
@@ -46,7 +50,7 @@ module.exports = function (RED) {
             text: succesMessage
           });
 
-          msg.payload = Flatted.parse(Flatted.stringify(data));
+          msg.payload = data === undefined ? null : clone(data);
           send(msg);
           done();
         }
@@ -55,7 +59,7 @@ module.exports = function (RED) {
 
         const infoEvent = async () => {
           try {
-            let eventManager = await discordFramework.getEventManager(bot, _guildID)
+            let eventManager = await discordFramework.getEventManager(bot, _guildID);
 
             const eventID = discordFramework.checkIdOrObject(_eventID);
 
@@ -69,7 +73,7 @@ module.exports = function (RED) {
 
         const getEvents = async () => {
           try {
-            let eventManager = await discordFramework.getEventManager(bot, _guildID)
+            let eventManager = await discordFramework.getEventManager(bot, _guildID);
 
             let events = await eventManager.fetch()
 
@@ -81,7 +85,7 @@ module.exports = function (RED) {
 
         const deleteEvent = async () => {
           try {
-            let eventManager = await discordFramework.getEventManager(bot, _guildID)
+            let eventManager = await discordFramework.getEventManager(bot, _guildID);
 
             const eventID = discordFramework.checkIdOrObject(_eventID);
 
@@ -98,9 +102,9 @@ module.exports = function (RED) {
 
           try {
 
-            let eventManager = await discordFramework.getEventManager(bot, _guildID)
-            const eventName = discordFramework.checkIdOrObject(_eventName)
-            const eventChannel = discordFramework.checkIdOrObject(_eventChannel)
+            let eventManager = await discordFramework.getEventManager(bot, _guildID);
+            const eventName = discordFramework.checkIdOrObject(_eventName);
+            const eventChannel = discordFramework.checkIdOrObject(_eventChannel);
             
 
             if (!eventName) {
@@ -145,12 +149,10 @@ module.exports = function (RED) {
               location: _eventLocation
             };
             
-            eventScheduledEndTime = new Date(_eventScheduledEndTime) || null 
-
-            let event = await eventManager.create({
+            const eventScheduledEndTime = _eventScheduledEndTime ? new Date(_eventScheduledEndTime) : null;
+            const eventPayload = {
               name: eventName,
               scheduledStartTime: new Date(_eventScheduledStartTime),
-              scheduledEndTime: new Date(eventScheduledEndTime),
               privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
               entityType: _eventEventType == "voice" ? GuildScheduledEventEntityType.Voice : GuildScheduledEventEntityType.External,
               description: _eventDescription,
@@ -158,7 +160,13 @@ module.exports = function (RED) {
               image: null,
               reason: _eventReason,
               entityMetadata: eventMetadata
-            });
+            };
+
+            if (eventScheduledEndTime) {
+              eventPayload.scheduledEndTime = eventScheduledEndTime;
+            }
+
+            let event = await eventManager.create(eventPayload);
 
             setSuccess(`event ${event.id} created`, event);
           } catch (err) {
@@ -185,16 +193,17 @@ module.exports = function (RED) {
             setError(`msg.action has an incorrect value`)
         }
 
-        node.on('close', function () {
-          discordBotManager.closeBot(bot);
-        });
+      });
+
+      node.on('close', function () {
+        discordBotManager.closeBot(bot);
       });
     }).catch(err => {
-      console.log(err);
+      node.error(err);
       node.status({
         fill: "red",
         shape: "dot",
-        text: err
+        text: err && err.message ? err.message : err
       });
     });
   }

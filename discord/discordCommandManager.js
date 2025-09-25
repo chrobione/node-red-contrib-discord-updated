@@ -1,7 +1,7 @@
 module.exports = function (RED) {
-  var discordBotManager = require('node-red-contrib-discord-advanced/discord/lib/discordBotManager.js');
+  var discordBotManager = require('./lib/discordBotManager.js');
   const { checkIdOrObject } = require('./lib/discordFramework.js');
-  const Flatted = require('flatted');
+  const { clone } = require('./lib/json-utils.js');
   const { REST, Routes } = require('discord.js');
   
 
@@ -12,19 +12,47 @@ module.exports = function (RED) {
 
     var bot = discordBotManager.getBot(configNode)
 
-    bot.then(function (bot) {
+    bot.then(function (botInstance) {
       node.on('input', async function (msg, send, done) {
+        send = send || node.send.bind(node);
+        done = done || function (err) { if (err) { node.error(err, msg); } };
+
+        const ensureApplicationId = async () => {
+          if (!botInstance || !botInstance.application) {
+            throw new Error('Discord client is not initialised');
+          }
+
+          if (!botInstance.id) {
+            try {
+              const application = await botInstance.application.fetch();
+              if (application && application.id) {
+                botInstance.id = application.id;
+              }
+            } catch (err) {
+              throw new Error(`Unable to resolve application id: ${err.message || err}`);
+            }
+          }
+
+          if (!botInstance.id) {
+            throw new Error('Unable to resolve application id for the Discord bot');
+          }
+
+          return botInstance.id;
+        };
+
         const _guildId = config.guild || msg.guild || msg.guildId || null;
         const _action = msg.action || null;
         const _commands = msg.commands || msg.command || msg.commandId || null;
         const _commandID = msg.commandId || null;
 
         const setError = (error) => {
+          const message = typeof error === 'string' ? error : (error && error.message) ? error.message : 'Unexpected error';
           node.status({
             fill: "red",
             shape: "dot",
-            text: error
+            text: message
           })
+          node.error(error, msg);
           done(error);
         }
 
@@ -35,33 +63,31 @@ module.exports = function (RED) {
             text: succesMessage
           });
 
-          msg.payload = Flatted.parse(Flatted.stringify(data));
+          msg.payload = data === undefined ? null : clone(data);
           send(msg);
           done();
         }
 
         const deleteCommand = async () => {
           try {
-
-            let commandId = _commandID;
-            const rest = new REST().setToken(bot.token);
+            const commandId = _commandID;
+            const rest = new REST({ version: '10' }).setToken(botInstance.token);
             const guildId = checkIdOrObject(_guildId);
+            const applicationId = await ensureApplicationId();
 
-            let data = null;
+            if (!commandId) {
+              setError(`msg.commandId wasn't set correctly`);
+              return;
+            }
 
             if (guildId) {
-              data = await rest.delete(Routes.applicationGuildCommand(bot.id, guildId, commandId));
-            }
-            else {
-              data = await rest.delete(Routes.applicationCommand(bot.id, commandId))
+              await rest.delete(Routes.applicationGuildCommand(applicationId, guildId, commandId));
+              setSuccess(`Successfully deleted application (/) command '${commandId}'.`);
+              return;
             }
 
-            if (data == null) {
-              setError(`Could not delete application (/) command '${commandId}'.`);
-            }
-            else {
-              setSuccess(`Successfully deleted application (/) command '${commandId}'.`, data);
-            }
+            await rest.delete(Routes.applicationCommand(applicationId, commandId));
+            setSuccess(`Successfully deleted application (/) command '${commandId}'.`);
           } catch (err) {
             setError(err);
           }
@@ -69,36 +95,28 @@ module.exports = function (RED) {
 
         const getCommands = async () => {
           try {
-
-            const rest = new REST().setToken(bot.token);
+            const rest = new REST({ version: '10' }).setToken(botInstance.token);
             const commandId = checkIdOrObject(_commandID);
             const guildId = checkIdOrObject(_guildId);
-
-            let data = null;
+            const applicationId = await ensureApplicationId();
 
             if (guildId) {
-              if(commandId){                
-                data = await rest.get(Routes.applicationGuildCommand(bot.id, guildId, commandId));
+              if (commandId) {
+                const data = await rest.get(Routes.applicationGuildCommand(applicationId, guildId, commandId));
+                setSuccess(`Successfully retrieved application (/) command '${commandId}'.`, data);
+              } else {
+                const data = await rest.get(Routes.applicationGuildCommands(applicationId, guildId));
+                setSuccess(`Successfully retrieved application (/) commands for guild '${guildId}'.`, data);
               }
-              else{                
-                data = await rest.get(Routes.applicationGuildCommands(bot.id, guildId));
-              }
-            }
-            else {
-              if (commandId)
-              {                
-                data = await rest.get(Routes.applicationCommand(bot.id, commandId));
-              }
-              else{                
-                data = await rest.get(Routes.applicationCommands(bot.id));
-              }
+              return;
             }
 
-            if (data == null) {
-              setError(`Could not get application (/) command '${commandId}'.`);
-            }
-            else {
-              setSuccess(`Successfully get application (/) command '${commandId}'.`, data);
+            if (commandId) {
+              const data = await rest.get(Routes.applicationCommand(applicationId, commandId));
+              setSuccess(`Successfully retrieved application (/) command '${commandId}'.`, data);
+            } else {
+              const data = await rest.get(Routes.applicationCommands(applicationId));
+              setSuccess(`Successfully retrieved global application (/) commands.`, data);
             }
           } catch (err) {
             setError(err);
@@ -107,24 +125,18 @@ module.exports = function (RED) {
 
         const deleteAllCommand = async () => {
           try {
-            const rest = new REST().setToken(bot.token);
+            const rest = new REST({ version: '10' }).setToken(botInstance.token);
             const guildId = checkIdOrObject(_guildId);
-
-            let data = null;
+            const applicationId = await ensureApplicationId();
 
             if (guildId) {
-              data = await rest.put(Routes.applicationGuildCommands(bot.id, guildId), { body: [] })
-            }
-            else {
-              data = await rest.put(Routes.applicationCommands(bot.id), { body: [] })
+              await rest.put(Routes.applicationGuildCommands(applicationId, guildId), { body: [] });
+              setSuccess(`Successfully deleted guild application (/) commands for '${guildId}'.`);
+              return;
             }
 
-            if (data == null) {
-              setError(`Could not delete all application (/) commands.`);
-            }
-            else {
-              setSuccess(`Successfully deleted all application (/) commands.`, data);
-            }
+            await rest.put(Routes.applicationCommands(applicationId), { body: [] });
+            setSuccess(`Successfully deleted all global application (/) commands.`);
           } catch (err) {
             setError(err);
           }
@@ -140,30 +152,28 @@ module.exports = function (RED) {
               return;
             }
 
-            const rest = new REST().setToken(bot.token);
-            const guildId = checkIdOrObject(_guildId);
+            if (!Array.isArray(commands)) {
+              commands = [commands];
+            }
 
-            let data = null;
+            const rest = new REST({ version: '10' }).setToken(botInstance.token);
+            const guildId = checkIdOrObject(_guildId);
+            const applicationId = await ensureApplicationId();
 
             if (guildId) {
-              data = await rest.post(
-                Routes.applicationGuildCommands(bot.id, guildId),
+              const data = await rest.post(
+                Routes.applicationGuildCommands(applicationId, guildId),
                 { body: commands },
               );
-            }
-            else {
-              data = await rest.post(
-                Routes.applicationCommands(bot.id),
-                { body: commands },
-              );
+              setSuccess(`Successfully reloaded ${data.length} guild application (/) commands.`, data);
+              return;
             }
 
-            if (data == null) {
-              setError("Could not set application commands");
-            }
-            else {
-              setSuccess(`Successfully reloaded ${data.length} application (/) commands.`, data);
-            }
+            const data = await rest.post(
+              Routes.applicationCommands(applicationId),
+              { body: commands },
+            );
+            setSuccess(`Successfully reloaded ${data.length} global application (/) commands.`, data);
           } catch (err) {
             setError(err);
           }
@@ -190,17 +200,17 @@ module.exports = function (RED) {
               setError(`msg.action has an incorrect value`)
           }
         }
+      });
 
-        node.on('close', function () {
-          discordBotManager.closeBot(bot);
-        });
+      node.on('close', function () {
+        discordBotManager.closeBot(botInstance);
       });
     }).catch(err => {
-      console.log(err);
+      node.error(err);
       node.status({
         fill: "red",
         shape: "dot",
-        text: err
+        text: err && err.message ? err.message : err
       });
     });
   }

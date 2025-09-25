@@ -3,7 +3,7 @@ module.exports = function (RED) {
     var discordInterationManager = require('./lib/interactionManager.js');
     var messagesFormatter = require('./lib/messagesFormatter.js');
     const { ModalBuilder } = require('discord.js');
-    const Flatted = require('flatted');
+    const { clone } = require('./lib/json-utils.js');
 
     const checkString = (field) => typeof field === 'string' ? field : false;
 
@@ -13,7 +13,9 @@ module.exports = function (RED) {
         var node = this;
 
         discordBotManager.getBot(configNode).then(function (bot) {
-            node.on('input', async (msg) => {
+            node.on('input', async (msg, send, done) => {
+                send = send || node.send.bind(node);
+                done = done || function (err) { if (err) { node.error(err, msg); } };
                 try {
                     const content = msg.payload?.content || checkString(msg.payload) || ' ';
                     const inputEmbeds = msg.payload?.embeds || msg.payload?.embed || msg.embeds || msg.embed;
@@ -25,12 +27,15 @@ module.exports = function (RED) {
                     const customId = msg.customId;
 
                     const setError = (error) => {
+                        const message = typeof error === 'string' ? error : (error && error.message) ? error.message : 'Unexpected error';
+                        const errObj = error instanceof Error ? error : new Error(message);
                         node.status({
                             fill: "red",
                             shape: "dot",
-                            text: error
+                            text: message
                         })
-                        node.error(error);
+                        node.error(errObj, msg);
+                        done(errObj);
                     }
 
                     const setSuccess = (succesMessage, data) => {
@@ -40,8 +45,9 @@ module.exports = function (RED) {
                             text: succesMessage
                         });
 
-                        msg.payload = Flatted.parse(Flatted.stringify(data));
-                        node.send(msg);
+                        msg.payload = clone(data);
+                        send(msg);
+                        done();
                     }
 
                     const editInteractionReply = async () => {
@@ -53,7 +59,7 @@ module.exports = function (RED) {
                         });
 
                         const newMsg = {
-                            interaction: Flatted.parse(Flatted.stringify(interaction))
+                            interaction: clone(interaction)
                         };
 
 
@@ -69,7 +75,7 @@ module.exports = function (RED) {
                         });
 
                         const newMsg = {
-                            interaction: Flatted.parse(Flatted.stringify(interaction))
+                            interaction: clone(interaction)
                         };
 
                         setSuccess(`interaction ${interactionId} replied`, newMsg);
@@ -80,13 +86,11 @@ module.exports = function (RED) {
                             .setCustomId(customId || 'myModal')
                             .setTitle(content || 'Modal');
                         
-                        console.log(`Modal ${customId}`);
-                        
                         modal.addComponents(components);                        
                         interaction.showModal(modal);
 
                         const newMsg = {
-                            interaction: Flatted.parse(Flatted.stringify(interaction))
+                            interaction: clone(interaction)
                         };
 
                         setSuccess(`interaction ${interactionId} modal showed`, newMsg);
@@ -99,13 +103,12 @@ module.exports = function (RED) {
                         }
 
                         const focusedValue = interaction.options.getFocused();
-                        console.log(`Search ${focusedValue}`);
                         const filtered = autoCompleteChoices.filter(choice => choice.startsWith(focusedValue));
 
                         await interaction.respond(filtered.map(choice => ({ name: choice, value: choice })));
 
                         const newMsg = {
-                            interaction: Flatted.parse(Flatted.stringify(interaction))
+                            interaction: clone(interaction)
                         };
 
 
@@ -113,6 +116,10 @@ module.exports = function (RED) {
                     }
 
                     let interaction = await discordInterationManager.getInteraction(interactionId);
+                    if (!interaction) {
+                        setError(`Could not find interaction '${interactionId}'. It may have expired.`);
+                        return;
+                    }
 
                     let attachments, embeds, components;
                     try {
@@ -120,12 +127,7 @@ module.exports = function (RED) {
                         embeds = messagesFormatter.formatEmbeds(inputEmbeds);                        
                         components = inputComponents;
                     } catch (error) {
-                        node.error(error);
-                        node.status({
-                            fill: "red",
-                            shape: "dot",
-                            text: error
-                        });
+                        setError(error);
                         return;
                     }
 
@@ -148,12 +150,14 @@ module.exports = function (RED) {
 
 
                 } catch (error) {
-                    node.error(error);
+                    const message = error && error.message ? error.message : 'Failed to process interaction';
                     node.status({
                         fill: "red",
                         shape: "dot",
-                        text: error
+                        text: message
                     });
+                    node.error(error, msg);
+                    done(error);
                 }
 
             });

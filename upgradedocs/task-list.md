@@ -1,52 +1,52 @@
 # Programming Task List
 
 ## Phase 0 – Preparation & Research
-- [ ] Capture Node-RED best-practice guidance (status updates, error handling, credentials, node help text) and note current gaps for each node.
+- [x] Capture Node-RED best-practice guidance (status updates, error handling, credentials, node help text) and note current gaps for each node.
   - Action plan: Review the latest Node-RED docs and style guides; build a checklist of required behaviours; audit each node file against the checklist; record discrepancies per node in project notes.
-- [ ] Record latest stable versions for `discord.js`, `flatted`, `node-red`, `mocha`, `sinon`, `should`, and `node-red-node-test-helper`.
+- [x] Record latest stable versions for `discord.js`, `flatted`, `node-red`, `mocha`, `sinon`, `should`, and `node-red-node-test-helper`.
   - Action plan: Use `npm show <pkg> version` (or official release notes) to capture versions; verify compatibility requirements; document chosen versions in prep notes.
-- [ ] Define supported Node.js matrix (minimum Node 20, optional Node 18) for documentation and CI.
+- [x] Define supported Node.js matrix (minimum Node 20, optional Node 18) for documentation and CI.
   - Action plan: Confirm Node-RED and discord.js minimum engine requirements; decide whether Node 18 remains in support; document decision for README/CI updates.
-- [ ] Plan CHANGELOG structure; add entries only as individual tasks complete.
+- [x] Plan CHANGELOG structure; add entries only as individual tasks complete.
   - Action plan: Review existing changelog format; outline upcoming sections (Breaking, Features, Fixes, Maintenance) without adding specific entries yet; ensure format supports incremental additions.
 
 ## Phase 1 – Upgrade & Stabilisation
 ### Dependency & Configuration Updates
-- [ ] Bump runtime dependencies in `package.json` and regenerate `package-lock.json` using Node 20/npm 9; log change in changelog.
+- [x] Bump runtime dependencies in `package.json` and regenerate `package-lock.json` using Node 20/npm 9; log change in changelog.
   - Action plan: Update dependency versions, run `npm install` under Node 20, inspect lockfile for intended updates, and queue changelog entry upon completion.
-- [ ] Update devDependencies (Node-RED 4.x, test stack) and adjust npm scripts/configs; log change in changelog.
+- [x] Update devDependencies (Node-RED 4.x, test stack) and adjust npm scripts/configs; log change in changelog.
   - Action plan: Modify devDependency versions, rerun install, update test scripts if APIs changed, and note adjustments for changelog once verified.
-- [ ] Set `engines.node` to `>=20` and confirm `.npmrc` enforces engine strictness; log change in changelog.
+- [x] Set `engines.node` to `>=20` and confirm `.npmrc` enforces engine strictness; log change in changelog.
   - Action plan: Edit `package.json` engines, verify `.npmrc` settings, run `npm install` to ensure engine check triggers correctly, then document.
-- [ ] Update `.github/workflows/npm-publish.yml` to use `actions/setup-node@v4`, Node 20 matrix (optionally Node 18), and npm cache; log change in changelog.
+- [x] Update `.github/workflows/npm-publish.yml` to use `actions/setup-node@v4`, Node 20 matrix (optionally Node 18), and npm cache; log change in changelog.
   - Action plan: Modify workflow YAML, run `act` or dry-run if possible, and record updates once validated.
-- [ ] Refresh README badges and supported-version text for Node 20/discord.js; log change in changelog.
+- [x] Refresh README badges and supported-version text for Node 20/discord.js; log change in changelog.
   - Action plan: Update badges and narrative text, cross-check for accuracy, capture screenshots if needed, and note change in changelog.
-- [ ] Rename package metadata to `node-red-contrib-discord-advancedplus` (package.json name, README badges, npm scripts, npm publish settings); log change in changelog.
+- [x] Rename package metadata to `node-red-contrib-discord-advancedplus` (package.json name, README badges, npm scripts, npm publish settings); log change in changelog.
   - Action plan: Update `package.json` name/description, adjust README references, revise CI/job names if required, ensure npm install instructions use the new name, and add migration guidance.
 
 ### Core Code Fixes & Best-Practice Alignment
-- [ ] Replace interaction cache with `Map` + eviction in `discord/lib/interactionManager.js`; add tests and changelog note.
+- [x] Replace interaction cache with `Map` + eviction in `discord/lib/interactionManager.js`; add tests and changelog note.
   - Action plan: Refactor cache implementation, introduce configurable eviction logic, update unit tests, and document change once tests pass.
-- [ ] Fix implicit globals in `discord/lib/discordFramework.js` and `discord/discordEventManager.js`; add tests and changelog note.
+- [x] Fix implicit globals in `discord/lib/discordFramework.js` and `discord/discordEventManager.js`; add tests and changelog note.
   - Action plan: Declare missing variables locally, add regression tests confirming isolation, and log fix after verification.
-- [ ] Introduce BigInt serialization helper and remove prototype mutation; add tests and changelog note.
+- [x] Introduce BigInt serialization helper and remove prototype mutation; add tests and changelog note.
   - Action plan: Create helper utility, update serialization callers, write unit tests for BigInt handling, and document change.
-- [ ] Update `discord/discordCommandManager.js` to handle void REST responses, guarantee application ID retrieval, and improve error propagation; add tests and changelog note.
+- [x] Update `discord/discordCommandManager.js` to handle void REST responses, guarantee application ID retrieval, and improve error propagation; add tests and changelog note.
   - Action plan: Adjust REST call handling, ensure application ID is fetched/cached, refine success/error messages, mock REST layer in tests, and log updates.
-- [ ] Harden `discord/lib/messagesFormatter.js` for attachment/component validation; add tests and changelog note.
+- [x] Harden `discord/lib/messagesFormatter.js` for attachment/component validation; add tests and changelog note.
   - Action plan: Implement validation checks, extend formatter tests for new scenarios, and record outcomes.
-- [ ] Audit every node (`discordMessage`, `discordMessageManager`, `discordPermissions`, `discordReactionManager`, `discordChannelName`, `discordMember`, `discordActivity`, `discordClient`, `discordInteraction`, `discordInteractionManager`, `discordTyping`, `discordGuildManager`, `discordEventManager`, `discordCommandManager`) for Node-RED best practices (status handling, `send/done`, credential safety, close handlers) and remediate issues; document each fix in changelog.
+- [x] Audit every node (`discordMessage`, `discordMessageManager`, `discordPermissions`, `discordReactionManager`, `discordChannelName`, `discordMember`, `discordActivity`, `discordClient`, `discordInteraction`, `discordInteractionManager`, `discordTyping`, `discordGuildManager`, `discordEventManager`, `discordCommandManager`) for Node-RED best practices (status handling, `send/done`, credential safety, close handlers) and remediate issues; document each fix in changelog.
   - Action plan: Apply the best-practice checklist node by node, refactor code where gaps exist, add targeted tests when behaviour changes, and log every remediation in the changelog incrementally.
-- [ ] Clarify configuration expectations (e.g., channel must be an ID) in node help/labels and README; log documentation change.
+- [x] Clarify configuration expectations (e.g., channel must be an ID) in node help/labels and README; log documentation change.
   - Action plan: Update `.html` help files and README sections to explicitly describe required IDs vs names, include examples, and note update in changelog.
 
 ### Testing & Verification
-- [ ] Upgrade Node-RED helper-based tests to the 4.x API (async setup/teardown).
+- [x] Upgrade Node-RED helper-based tests to the 4.x API (async setup/teardown).
   - Action plan: Update helper usage patterns, ensure tests await async operations, and run suite to confirm stability.
-- [ ] Expand unit tests: interaction cache, command manager CRUD (with REST mocks/application ID cases), event manager validation, BigInt helper, formatter edge cases, and role lookup utilities.
+- [x] Expand unit tests: interaction cache, command manager CRUD (with REST mocks/application ID cases), event manager validation, BigInt helper, formatter edge cases, and role lookup utilities.
   - Action plan: Create or extend test files covering each scenario, mock dependencies as needed, confirm coverage goals.
-- [ ] Run automated suite on Node 20 and Node 18, ensuring parity; capture results and note in changelog.
+- [ ] Run automated suite on Node 20 and Node 18, ensuring parity; capture results and note in changelog. *(Node 20 passing; Node 18 run pending.)*
   - Action plan: Execute test suites under both Node versions (via nvm or CI), compare outputs, and record any differences.
 - [ ] Execute Node-RED smoke flows (messages, interactions, permissions, events) against a Discord test guild; log outcome.
   - Action plan: Deploy sample flows, validate end-to-end behaviour manually, capture logs/screenshots, and document findings.

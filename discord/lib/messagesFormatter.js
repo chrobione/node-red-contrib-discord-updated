@@ -1,73 +1,110 @@
 const {
-    AttachmentBuilder,
-    ButtonBuilder,
-    ActionRowBuilder,
-    StringSelectMenuBuilder
-  } = require('discord.js');
+  AttachmentBuilder,
+  ButtonBuilder,
+  ActionRowBuilder,
+  StringSelectMenuBuilder
+} = require('discord.js');
 
-  const formatAttachments = (inputAttachments) => {
-    let attachments = [];
-    if (inputAttachments) {
-      if (typeof inputAttachments === 'string') {
-        attachments.push(new AttachmentBuilder(inputAttachments));
-      } else if (Array.isArray(inputAttachments)) {
-        inputAttachments.forEach(attachment => {
-          if (typeof attachment === 'string') {                
-            attachments.push(new AttachmentBuilder(attachment));
-          } else if (typeof attachment === 'object') {
-            attachments.push(new AttachmentBuilder(attachment.buffer, { name: attachment.name}));
-          } 
-        });
-      } else if (typeof inputAttachments === 'object') {
-        attachments.push(new AttachmentBuilder(inputAttachments.buffer, {name: inputAttachments.name}));
-      } else {
-        throw "msg.attachments isn't a string or array";
-      }
-    }
-    return attachments;
+const resolveAttachment = (attachment) => {
+  if (typeof attachment === 'string') {
+    return new AttachmentBuilder(attachment);
   }
 
-  const formatEmbeds = (inputEmbeds) => {
-    let embeds = [];
-    if (inputEmbeds) {
-      if (Array.isArray(inputEmbeds)) {
-        inputEmbeds.forEach(embed => {
-          embeds.push(embed);
-        });
-      } else if (typeof inputEmbeds === 'object') {
-        embeds.push(inputEmbeds);
-      } else {
-        throw "msg.embeds isn't a string or array";
-      }
+  if (attachment && typeof attachment === 'object') {
+    const {
+      buffer,
+      data,
+      attachment: file,
+      name,
+      description,
+      spoiler
+    } = attachment;
+
+    const resource = buffer ?? data ?? file;
+    if (!resource) {
+      throw new Error('Attachment objects must include a Buffer/Uint8Array in `buffer`, `data`, or `attachment`.');
     }
-    return embeds;
+
+    const options = {};
+    if (name) {
+      options.name = name;
+    }
+    if (typeof description === 'string') {
+      options.description = description;
+    }
+    if (spoiler === true) {
+      options.spoiler = true;
+    }
+
+    return new AttachmentBuilder(resource, options);
   }
+
+  throw new Error("msg.attachments contains an unsupported value; expected string or object with 'buffer', 'data', or 'attachment'.");
+};
+
+const formatAttachments = (inputAttachments) => {
+  if (!inputAttachments) {
+    return [];
+  }
+
+  if (Array.isArray(inputAttachments)) {
+    return inputAttachments.map(resolveAttachment);
+  }
+
+  return [resolveAttachment(inputAttachments)];
+};
+
+const formatEmbeds = (inputEmbeds) => {
+  if (!inputEmbeds) {
+    return [];
+  }
+
+  if (Array.isArray(inputEmbeds)) {
+    return [...inputEmbeds];
+  }
+
+  if (typeof inputEmbeds === 'object') {
+    return [inputEmbeds];
+  }
+
+  throw new Error("msg.embeds isn't an object or array");
+};
 
 const formatComponents = (inputComponents) => {
-    let components = [];
-    if (inputComponents) {
-      inputComponents.forEach(component => {
-        if (component.type == 1) {
-          var actionRow = new ActionRowBuilder();
-          component.components.forEach(subComponentData => {
-            switch (subComponentData.type) {
-              case 2:
-                actionRow.addComponents(new ButtonBuilder(subComponentData));
-                break;
-              case 3:
-                actionRow.addComponents(new StringSelectMenuBuilder(subComponentData));
-                break;
-            }
-          });
-          components.push(actionRow);
-        }
-      });
-    }
-    return components;
+  if (!inputComponents) {
+    return [];
   }
 
+  if (!Array.isArray(inputComponents)) {
+    throw new Error("msg.components must be an array of action rows");
+  }
+
+  return inputComponents.reduce((rows, component) => {
+    if (component?.type !== 1 || !Array.isArray(component.components)) {
+      throw new Error('Component rows must have type 1 and include a components array.');
+    }
+
+    const actionRow = new ActionRowBuilder();
+    component.components.forEach((subComponentData) => {
+      switch (subComponentData?.type) {
+        case 2:
+          actionRow.addComponents(new ButtonBuilder(subComponentData));
+          break;
+        case 3:
+          actionRow.addComponents(new StringSelectMenuBuilder(subComponentData));
+          break;
+        default:
+          throw new Error(`Unsupported component type '${subComponentData?.type}'.`);
+      }
+    });
+
+    rows.push(actionRow);
+    return rows;
+  }, []);
+};
+
 module.exports = {
-    formatComponents: formatComponents,
-    formatAttachments: formatAttachments,
-    formatEmbeds: formatEmbeds
-}
+  formatComponents,
+  formatAttachments,
+  formatEmbeds
+};

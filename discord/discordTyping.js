@@ -1,6 +1,5 @@
 module.exports = function (RED) {
   var discordBotManager = require('./lib/discordBotManager.js');
-  const Flatted = require('flatted');
 
   function discordTyping(config) {
     RED.nodes.createNode(this, config);
@@ -9,17 +8,22 @@ module.exports = function (RED) {
 
     discordBotManager.getBot(configNode).then(function (bot) {
       
-      node.on('input', async function (msg, done) {
+      node.on('input', async function (msg, send, done) {
+        send = send || node.send.bind(node);
+        done = done || function (err) { if (err) { node.error(err, msg); } };
 
         const channel = config.channel || msg.channel || null;
 
         const setError = (error) => {
+          const message = typeof error === 'string' ? error : (error && error.message) ? error.message : 'Unexpected error';
+          const errObj = error instanceof Error ? error : new Error(message);
           node.status({
             fill: "red",
             shape: "dot",
-            text: error
+            text: message
           })
-          done(error);
+          node.error(errObj, msg);
+          done(errObj);
         }
 
         const setSuccess = (succesMessage) => {
@@ -68,19 +72,19 @@ module.exports = function (RED) {
         if ( channelInstance != null ){
           await channelInstance.sendTyping();    
           setSuccess("Typing signal sent")
-
-          node.on('close', function () {
-            discordBotManager.closeBot(bot);
-          });
         }
 
       });
+
+      node.on('close', function () {
+        discordBotManager.closeBot(bot);
+      });
     }).catch(err => {
-      console.log(err);
+      node.error(err);
       node.status({
         fill: "red",
         shape: "dot",
-        text: err
+        text: err && err.message ? err.message : err
       });
     });
   }

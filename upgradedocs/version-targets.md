@@ -8,6 +8,6 @@
 | mocha (dev) | ^9.2.2 | ^10.4.0 | Node 14+ support; breaking changes in 10.x to address. |
 | sinon (dev) | ^13.0.2 | ^17.0.1 | Requires Node 14+; adjust import pattern if needed. |
 | should (dev) | ^13.2.3 | ^13.2.3 (latest) | No newer major; confirm patch status. |
-| node-red-node-test-helper (dev) | ^0.2.7 | ^0.4.0 | Supports Node-RED 4.x, async helper APIs. |
+| node-red-node-test-helper (dev) | ^0.2.7 | ^0.2.7 (latest available) | Monitor for a future 0.4.x release that formally supports Node-RED 4.x. |
 
 > **Note**: Verify all target versions via `npm info <pkg> version` once network access is available or prior to committing lockfile changes.

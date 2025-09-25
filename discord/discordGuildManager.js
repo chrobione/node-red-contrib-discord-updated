@@ -1,20 +1,18 @@
 module.exports = function (RED) {
-  var discordBotManager = require('node-red-contrib-discord-advanced/discord/lib/discordBotManager.js');
-  var messagesFormatter = require('node-red-contrib-discord-advanced/discord/lib/messagesFormatter.js');
-  const Flatted = require('flatted');
-  const {
-    ChannelType
-  } = require('discord.js');
+  var discordBotManager = require('./lib/discordBotManager.js');
+  const { clone } = require('./lib/json-utils.js');
 
-  const checkString = (field) => typeof field === 'string' ? field : false;
-
-  function discordMessageManager(config) {
+  function discordGuildManager(config) {
     RED.nodes.createNode(this, config);
     var node = this;
     var configNode = RED.nodes.getNode(config.token);
 
     discordBotManager.getBot(configNode).then(function (bot) {
+      node.status({ fill: "green", shape: "dot", text: "Ready" });
+
       node.on('input', async function (msg, send, done) {
+        send = send || node.send.bind(node);
+        done = done || function (err) { if (err) { node.error(err, msg); } };
         const _guild = config.guild || msg.guild || null;
         const _action = msg.action || 'info';
 
@@ -22,11 +20,13 @@ module.exports = function (RED) {
       
 
         const setError = (error) => {
+          const statusText = typeof error === 'string' ? error : (error && error.message) ? error.message : 'Unexpected error';
           node.status({
             fill: "red",
             shape: "dot",
-            text: error
+            text: statusText
           })
+          node.error(error, msg);
           done(error);
         }
 
@@ -37,7 +37,7 @@ module.exports = function (RED) {
             text: succesMessage
           });
 
-          msg.payload = Flatted.parse(Flatted.stringify(data));
+          msg.payload = clone(data);
           send(msg);
           done();
         }
@@ -66,7 +66,6 @@ module.exports = function (RED) {
           return await bot.guilds.fetch(guildId);
         }
 
-
         const infoGuild = async () => {
           try {
             let guild = await getGuild(_guild)
@@ -77,19 +76,17 @@ module.exports = function (RED) {
         }
 
         const setGuildName = async () => {
-
-          let guild = await getGuild(_guild)
-          let name = checkIdOrObject(_name)
-
-          if (!name) {
-            setError(`msg.name wasn't set correctly`);
-            return;
-          }
-
           try {
+            let guild = await getGuild(_guild)
+            const name = typeof _name === 'string' ? _name.trim() : null;
 
-            guild.setName(name).then(updated => setSuccess(`Updated guild name to ${updated.name}`,updated) )
+            if (!name) {
+              setError(`msg.name wasn't set correctly`);
+              return;
+            }
 
+            const updated = await guild.setName(name);
+            setSuccess(`Updated guild name to ${updated.name}`, updated);
           } catch (err) {
             setError(err);
           }
@@ -106,19 +103,19 @@ module.exports = function (RED) {
           default:
             setError(`msg.action has an incorrect value`)
         }
+      });
 
-        node.on('close', function () {
-          discordBotManager.closeBot(bot);
-        });
+      node.on('close', function () {
+        discordBotManager.closeBot(bot);
       });
     }).catch(err => {
-      console.log(err);
+      node.error(err);
       node.status({
         fill: "red",
         shape: "dot",
-        text: err
+        text: err && err.message ? err.message : err
       });
     });
   }
-  RED.nodes.registerType("discordGuildManager", discordMessageManager);
+  RED.nodes.registerType("discordGuildManager", discordGuildManager);
 };

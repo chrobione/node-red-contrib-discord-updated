@@ -48,9 +48,17 @@ describe('Discord Message Manager Node', function () {
             const nodeRedMsg = { payload: {}, _msgid: 'dd3be2d56799887c' };
 
             n1.receive(nodeRedMsg);
-            n1.on('call:error', call => {
-                call.should.be.calledWithExactly(`msg.user wasn't set correctly`, nodeRedMsg);
-                done();
+            setImmediate(() => {
+                try {
+                    n1.error.should.be.called();
+                    const args = n1.error.firstCall.args;
+                    args[0].should.be.instanceOf(Error);
+                    args[0].message.should.equal(`msg.user wasn't set correctly`);
+                    args[1].should.equal(nodeRedMsg);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             });
         });
     });
@@ -64,9 +72,17 @@ describe('Discord Message Manager Node', function () {
             const nodeRedMsg = { payload: {}, _msgid: 'dd3be2d56799887c', user: "99991231931" };
 
             n1.receive(nodeRedMsg);
-            n1.on('call:error', call => {
-                call.should.be.calledWithExactly(`msg.guild wasn't set correctly`, nodeRedMsg);
-                done();
+            setImmediate(() => {
+                try {
+                    n1.error.should.be.called();
+                    const args = n1.error.firstCall.args;
+                    args[0].should.be.instanceOf(Error);
+                    args[0].message.should.equal(`msg.guild wasn't set correctly`);
+                    args[1].should.equal(nodeRedMsg);
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             });
         });
     });
@@ -100,8 +116,12 @@ describe('Discord Message Manager Node', function () {
             let nodeRedMsg = { _msgid: 'dd3be2d56799887c', user: "99991231931", guild: "111111111", payload: "Hello there", channel: "1111111111", topic: "10" };
 
             n1.receive(nodeRedMsg);
-            n1.on('call:error', call => {
-                done(call);
+            setImmediate(() => {
+                try {
+                    n1.error.should.not.be.called();
+                } catch (err) {
+                    return done(err);
+                }
             });
             n2.on("input", function (msg) {
                 try {
@@ -110,6 +130,7 @@ describe('Discord Message Manager Node', function () {
                     msg.should.have.property('channel', nodeRedMsg.channel);
                     msg.should.have.property('topic', nodeRedMsg.topic);
                     msg.should.have.property('user', nodeRedMsg.user);
+                    msg.should.have.property('discordUser');
                     msg.should.have.property('guild', nodeRedMsg.guild);
                     done();
                 } catch (err) {
