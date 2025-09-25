@@ -134,7 +134,7 @@ Now all interactions are replied with discordInteractionManager node, so there a
 
 ## Support, issues and feature requests
 
-For support in setting up and feature requests you can contact me on [this](https://discord.gg/HPva4sjezt) discord.
+For support in setting up and feature requests you can contact me on [this](https://discord.gg/xTPfDnS4JG) Discord.
 Issues can also be reported there but prefferably via GitHub.
 
 ## Discord.js client sharing
