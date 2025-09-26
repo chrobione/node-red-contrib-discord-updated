@@ -1,0 +1,261 @@
+[
+  {
+    "id": "a1c2d3e4f5g6h7i8",
+    "type": "discordInteraction",
+    "z": "0000000000000000",
+    "name": "statusreport command",
+    "token": "",
+    "interactionType": "command",
+    "custom_id": "statusreport",
+    "commandResponse": "Gathering status...",
+    "interactionObject": true,
+    "ephemeral": true,
+    "x": 200,
+    "y": 120,
+    "wires": [
+      [
+        "c1b2a3d4e5f6g7h8"
+      ]
+    ]
+  },
+  {
+    "id": "c1b2a3d4e5f6g7h8",
+    "type": "function",
+    "z": "0000000000000000",
+    "name": "Initial reply",
+    "func": "msg.action = 'reply';\nmsg.payload = { content: 'Hang tight, running checks…' };\nmsg.ephemeral = true;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 470,
+    "y": 120,
+    "wires": [
+      [
+        "d1e2f3a4b5c6d7e8"
+      ]
+    ]
+  },
+  {
+    "id": "d1e2f3a4b5c6d7e8",
+    "type": "discordInteractionManager",
+    "z": "0000000000000000",
+    "name": "reply",
+    "token": "",
+    "x": 740,
+    "y": 120,
+    "wires": [
+      [
+        "f8e7d6c5b4a3f2e1"
+      ]
+    ]
+  },
+  {
+    "id": "f8e7d6c5b4a3f2e1",
+    "type": "delay",
+    "z": "0000000000000000",
+    "name": "Wait for follow-up",
+    "pauseType": "delay",
+    "timeout": "1",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "4",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "x": 1010,
+    "y": 120,
+    "wires": [
+      [
+        "e1f2g3h4i5j6k7l8"
+      ]
+    ]
+  },
+  {
+    "id": "e1f2g3h4i5j6k7l8",
+    "type": "function",
+    "z": "0000000000000000",
+    "name": "Send follow-up",
+    "func": "msg.action = 'followup';\nmsg.payload = { content: 'System check complete — everything looks good!' };\nmsg.ephemeral = true;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1270,
+    "y": 120,
+    "wires": [
+      [
+        "g1h2i3j4k5l6m7n8"
+      ]
+    ]
+  },
+  {
+    "id": "g1h2i3j4k5l6m7n8",
+    "type": "discordInteractionManager",
+    "z": "0000000000000000",
+    "name": "followup",
+    "token": "",
+    "x": 1530,
+    "y": 120,
+    "wires": [
+      [
+        "h8g7f6e5d4c3b2a1"
+      ]
+    ]
+  },
+  {
+    "id": "h8g7f6e5d4c3b2a1",
+    "type": "function",
+    "z": "0000000000000000",
+    "name": "Remember follow-up id",
+    "func": "const follow = msg.payload?.message;\nif (follow?.id) {\n  msg.followupMessageId = follow.id;\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1770,
+    "y": 120,
+    "wires": [
+      [
+        "i1j2k3l4m5n6o7p8"
+      ]
+    ]
+  },
+  {
+    "id": "i1j2k3l4m5n6o7p8",
+    "type": "delay",
+    "z": "0000000000000000",
+    "name": "Wait to edit",
+    "pauseType": "delay",
+    "timeout": "1",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "4",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "x": 200,
+    "y": 220,
+    "wires": [
+      [
+        "j1k2l3m4n5o6p7q8"
+      ]
+    ]
+  },
+  {
+    "id": "j1k2l3m4n5o6p7q8",
+    "type": "function",
+    "z": "0000000000000000",
+    "name": "Edit follow-up",
+    "func": "msg.action = 'editFollowup';\nmsg.messageId = msg.followupMessageId;\nmsg.payload = { content: 'Status updated — deployed successfully.' };\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 460,
+    "y": 220,
+    "wires": [
+      [
+        "k1l2m3n4o5p6q7r8"
+      ]
+    ]
+  },
+  {
+    "id": "k1l2m3n4o5p6q7r8",
+    "type": "discordInteractionManager",
+    "z": "0000000000000000",
+    "name": "edit followup",
+    "token": "",
+    "x": 720,
+    "y": 220,
+    "wires": [
+      [
+        "l8m7n6o5p4q3r2s1"
+      ]
+    ]
+  },
+  {
+    "id": "l8m7n6o5p4q3r2s1",
+    "type": "delay",
+    "z": "0000000000000000",
+    "name": "Wait to delete",
+    "pauseType": "delay",
+    "timeout": "1",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "4",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "x": 980,
+    "y": 220,
+    "wires": [
+      [
+        "m1n2o3p4q5r6s7t8"
+      ]
+    ]
+  },
+  {
+    "id": "m1n2o3p4q5r6s7t8",
+    "type": "function",
+    "z": "0000000000000000",
+    "name": "Delete follow-up",
+    "func": "msg.action = 'delete';\nmsg.messageId = msg.followupMessageId;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1240,
+    "y": 220,
+    "wires": [
+      [
+        "n1o2p3q4r5s6t7u8"
+      ]
+    ]
+  },
+  {
+    "id": "n1o2p3q4r5s6t7u8",
+    "type": "discordInteractionManager",
+    "z": "0000000000000000",
+    "name": "delete followup",
+    "token": "",
+    "x": 1500,
+    "y": 220,
+    "wires": [
+      [
+        "o8p7q6r5s4t3u2v1"
+      ]
+    ]
+  },
+  {
+    "id": "o8p7q6r5s4t3u2v1",
+    "type": "debug",
+    "z": "0000000000000000",
+    "name": "follow-up lifecycle",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1760,
+    "y": 220,
+    "wires": []
+  }
+]

@@ -42,6 +42,9 @@ As of this update, a lot of under-the-hood work has landed to stabilise the fork
 - Use **discordMessageManager** or **discordInteractionManager** as your primary “send a response back” nodes once you have confirmed connectivity.
 - The palette now lists groups as `discord · event intake`, `discord · responses`, `discord · guild control`, and `discord · advanced tools`; start in Event Intake, then wire Responses, Guild Control, and Advanced Tools nodes as your flow grows.
 
+## Example flows
+- `examples/interactionFollowupLifecycle.json` — shows an end-to-end slash-command response with an ephemeral initial reply, a follow-up message, an edit, and a final clean-up using the new interaction manager actions.
+
 ## Node groups at a glance (palette labels)
 - **discord · event intake** – `discordMessage`, `discordMember`, `discordReactionManager`, `discordInteraction`, `discordVoiceState`: entry points that emit flow messages when Discord activity happens, from text reactions to voice join/leave notifications.
 - **discord · responses** – `discordMessageManager`, `discordInteractionManager`, `discordTyping`: nodes that send, edit, or acknowledge activity back to Discord. Use `discordInteractionManager` for slash-command/button/select replies; keep `discordMessageManager` for channel/DM messages and follow-up edits.
