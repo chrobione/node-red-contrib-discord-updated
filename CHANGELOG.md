@@ -17,6 +17,7 @@
 - Feature - Added `discordRoleManager` node to list members with a given role (including pagination) or return quick counts.
 - Enhancement - Permissions node accepts `roleQuery` lookups so flows can fetch role members without switching nodes mid-upgrade.
 - Feature - Added `discordVoiceState` node to emit join/leave/update payloads when members move through voice channels.
+- Enhancement - Attachment formatter now honours description, spoiler, and duration metadata when uploading files via response nodes.
 - Enhancement - Discord palette regrouped into descriptive categories (`discord · event intake`, `discord · responses`, `discord · guild control`, `discord · advanced tools`) so related nodes sit together for newcomers.
 - Planning - Established Phase 1 scope to stabilise the fork, preserve previous contributors' credit, and prepare for broader Discord.js feature coverage.
 

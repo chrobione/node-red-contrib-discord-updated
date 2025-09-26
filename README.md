@@ -7,7 +7,7 @@ Currently the following actions are supported:
 * Send messages in a specific channel.
 * Send private messages to users.
 * Send and edit embed messages.
-* Add attachments to messages.
+* Add attachments to messages, including description/spoiler/audio-duration metadata.
 * Edit, reply, delete messages in a channel.
 * Publish messages to announcements channels.
 * React to messages with emojis.

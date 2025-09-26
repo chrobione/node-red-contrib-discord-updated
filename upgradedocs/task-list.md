@@ -89,7 +89,7 @@
   - Action plan: Implement role lookup function/node, mock guild/member data in tests, update docs, and log change.
 
 ### Attachment Metadata
-- [ ] Surface attachment metadata options (`description`, `spoiler`, duration, etc.) via formatter; add tests, docs, changelog entry.
+- [x] Surface attachment metadata options (`description`, `spoiler`, duration, etc.) via formatter; add tests, docs, changelog entry.
   - Action plan: Update formatter to accept metadata, ensure compatibility with discord.js API, add tests, revise docs, and record change.
 
 ### Node Icon & Categorisation Improvements
@@ -123,7 +123,7 @@
 - [x] Introduce emoji management helpers (create/update/delete guild emojis) and document image requirements.
 - [x] Provide role membership query utilities (list members for a role) with pagination handling.
 - [x] Emit voice state join/leave events via a dedicated node and update examples.
-- [ ] Support attachment metadata (description, spoiler, duration) in the formatter and response nodes.
+- [x] Support attachment metadata (description, spoiler, duration) in the formatter and response nodes.
 - [ ] Enhance interaction replies with better ephemeral handling and follow-up tools.
 - [ ] Update automated tests and documentation as each feature lands.
 

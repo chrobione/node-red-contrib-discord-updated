@@ -39,7 +39,7 @@
     <dt>embeds / components <span class="property-type">object | array</span></dt>
     <dd>Optional embed or component definitions to include with the response.</dd>
     <dt>attachments <span class="property-type">string | object | array</span></dt>
-    <dd>Files to upload with the interaction response.</dd>
+    <dd>Files to upload with the interaction response. Objects support <code>name</code>, <code>description</code>, <code>spoiler</code>, and audio clip <code>duration</code>/<code>durationMs</code>.</dd>
     <dt class="optional">suppressEmbeds / suppressNotifications <span class="property-type">boolean</span></dt>
     <dd>Set to <code>true</code> to hide link previews or send the message without pinging everyone.</dd>
     <dt>autoCompleteChoices <span class="property-type">array</span></dt>
@@ -58,5 +58,6 @@
     <li>Set the “Ephemeral” checkbox in <code>discordInteraction</code> if you want the response visible only to the user.</li>
     <li>Need multiple follow-ups? Use the <code>followup</code> action here; each call returns the created message so you can edit or delete it later.</li>
     <li>Set <code>msg.suppressEmbeds</code> or <code>msg.suppressNotifications</code> to control message flags on the reply.</li>
+    <li>Provide alt text or clip metadata through the attachment object when you need richer uploads.</li>
   </ul>
 </script>

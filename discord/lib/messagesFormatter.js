@@ -9,6 +9,29 @@ const {
   ChannelSelectMenuBuilder
 } = require('discord.js');
 
+const parseNumeric = (value, label) => {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+
+  if (typeof value === 'string' && value.trim().length > 0) {
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed)) {
+      throw new Error(`${label} must be a finite number.`);
+    }
+    return parsed;
+  }
+
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value)) {
+      throw new Error(`${label} must be a finite number.`);
+    }
+    return value;
+  }
+
+  throw new Error(`${label} must be a number or numeric string.`);
+};
+
 const resolveAttachment = (attachment) => {
   if (typeof attachment === 'string') {
     return new AttachmentBuilder(attachment);
@@ -21,7 +44,12 @@ const resolveAttachment = (attachment) => {
       attachment: file,
       name,
       description,
-      spoiler
+      spoiler,
+      duration,
+      durationSeconds,
+      durationSecs,
+      durationMs,
+      durationMillis
     } = attachment;
 
     const resource = buffer ?? data ?? file;
@@ -36,11 +64,36 @@ const resolveAttachment = (attachment) => {
     if (typeof description === 'string') {
       options.description = description;
     }
+    const builder = new AttachmentBuilder(resource, options);
+
     if (spoiler === true) {
-      options.spoiler = true;
+      if (!builder.name) {
+        builder.setName('attachment');
+      }
+      builder.setSpoiler(true);
     }
 
-    return new AttachmentBuilder(resource, options);
+    const durationValue = durationSeconds ?? durationSecs ?? duration;
+    const durationMsValue = durationMs ?? durationMillis;
+    if (durationMsValue !== undefined && durationValue !== undefined) {
+      throw new Error('Specify attachment duration in either seconds or milliseconds, not both.');
+    }
+
+    if (durationMsValue !== undefined) {
+      const ms = parseNumeric(durationMsValue, 'Attachment duration (ms)');
+      if (ms < 0) {
+        throw new Error('Attachment duration cannot be negative.');
+      }
+      builder.duration_secs = ms / 1000;
+    } else if (durationValue !== undefined) {
+      const seconds = parseNumeric(durationValue, 'Attachment duration');
+      if (seconds < 0) {
+        throw new Error('Attachment duration cannot be negative.');
+      }
+      builder.duration_secs = seconds;
+    }
+
+    return builder;
   }
 
   throw new Error("msg.attachments contains an unsupported value; expected string or object with 'buffer', 'data', or 'attachment'.");
