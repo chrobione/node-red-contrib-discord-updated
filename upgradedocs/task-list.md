@@ -117,7 +117,7 @@
 ## Phase 2 – Feature Upgrades: Interaction & Messaging Enhancements
 - [x] Add entity select menu support to `discordInteraction`/`discordInteractionManager` (builder inputs, help text, tests, docs).
 - [x] Expand scheduled event tooling for stage-channel events, including validation and docs.
-- [ ] Add localisation fields to slash-command definitions and interaction replies.
+- [x] Add localisation fields to slash-command definitions and interaction replies.
 - [ ] Surface message flag controls (suppress embeds, silent notifications) in `discordMessageManager` and `discordInteractionManager`.
 - [ ] Implement bulk fetch/delete actions in `discordMessageManager` with filters and safety checks.
 - [ ] Introduce emoji management helpers (create/update/delete guild emojis) and document image requirements.

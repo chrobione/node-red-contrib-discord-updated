@@ -9,6 +9,7 @@
 - Docs - Clarified that `discordInteractionManager` owns interaction replies and `discordMessageManager` is reserved for channel/DM/follow-up messages.
 - Docs - Rewrote every node help panel with clearer descriptions, inputs, and tips for new users.
 - Feature - Entity select menus (user, role, mentionable, channel) are now supported in interaction nodes and component formatting.
+- Feature - Command manager accepts `nameLocalizations`/`descriptionLocalizations` (and nested equivalents) and maps them to Discord’s localisation fields automatically.
 - Feature - Scheduled event manager now validates stage-channel events and surfaces proper errors when the channel type is incorrect.
 - Enhancement - Discord palette regrouped into descriptive categories (`discord · event intake`, `discord · responses`, `discord · guild control`, `discord · advanced tools`) so related nodes sit together for newcomers.
 - Planning - Established Phase 1 scope to stabilise the fork, preserve previous contributors' credit, and prepare for broader Discord.js feature coverage.

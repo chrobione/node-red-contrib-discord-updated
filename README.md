@@ -111,7 +111,7 @@ node-red-contrib-discord-updated gives you access to 13 nodes:
 * **discordTyping** creates a 'bot is typing...' message on a channel.
 * **discordEventManager** allows you to create, delete, and get info events (including stage and voice scheduled events).
 * **discordGuildManager** allows you to get info about guilds and change name of of guilds.
-* **discordCommandManager** allows you to create, update and delete global application commands and guild application commands.
+* **discordCommandManager** allows you to create, update and delete global application commands and guild application commands, including name/description localisations.
 
 ## Changelog
 

@@ -49,7 +49,7 @@ a<script type="text/javascript">
     <dt>action <span class="property-type">string</span></dt>
     <dd><code>set</code> to upload commands, <code>delete</code> to remove one or all commands.</dd>
     <dt>commands <span class="property-type">array</span></dt>
-    <dd>For <code>set</code>: an array of command definitions that match the Discord REST shape. Slash command builder output works perfectly.</dd>
+    <dd>For <code>set</code>: an array of command definitions that match the Discord REST shape. Slash command builder output works perfectly. Include <code>nameLocalizations</code>/<code>descriptionLocalizations</code> (and the same on options/choices) when you need translated text—the node converts them to the Discord API keys for you.</dd>
     <dt>commandId <span class="property-type">string</span></dt>
     <dd>For <code>delete</code>: the id of the command to remove. Leave blank to delete everything in the selected scope.</dd>
     <dt>guild <span class="property-type">object | string</span></dt>

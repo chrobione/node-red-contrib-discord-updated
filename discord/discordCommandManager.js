@@ -4,6 +4,43 @@ module.exports = function (RED) {
   const { clone } = require('./lib/json-utils.js');
   const { REST, Routes } = require('discord.js');
   
+  const remapLocalizationKeys = (input) => {
+    if (Array.isArray(input)) {
+      return input.map(item => remapLocalizationKeys(item));
+    }
+
+    if (!input || typeof input !== 'object') {
+      return input;
+    }
+
+    const target = { ...input };
+
+    if (target.nameLocalizations && target.name_localizations === undefined) {
+      target.name_localizations = target.nameLocalizations;
+      delete target.nameLocalizations;
+    }
+
+    if (target.descriptionLocalizations && target.description_localizations === undefined) {
+      target.description_localizations = target.descriptionLocalizations;
+      delete target.descriptionLocalizations;
+    }
+
+    if (target.valueLocalizations && target.value_localizations === undefined) {
+      target.value_localizations = target.valueLocalizations;
+      delete target.valueLocalizations;
+    }
+
+    if (target.options) {
+      target.options = target.options.map(option => remapLocalizationKeys(option));
+    }
+
+    if (target.choices) {
+      target.choices = target.choices.map(choice => remapLocalizationKeys(choice));
+    }
+
+    return target;
+  };
+  
 
   function discordCommandManager(config) {
     RED.nodes.createNode(this, config);
@@ -156,6 +193,8 @@ module.exports = function (RED) {
               commands = [commands];
             }
 
+            const normalizedCommands = commands.map(cmd => remapLocalizationKeys(clone(cmd)));
+
             const rest = new REST({ version: '10' }).setToken(botInstance.token);
             const guildId = checkIdOrObject(_guildId);
             const applicationId = await ensureApplicationId();
@@ -163,7 +202,7 @@ module.exports = function (RED) {
             if (guildId) {
               const data = await rest.post(
                 Routes.applicationGuildCommands(applicationId, guildId),
-                { body: commands },
+                { body: normalizedCommands },
               );
               setSuccess(`Successfully reloaded ${data.length} guild application (/) commands.`, data);
               return;
@@ -171,7 +210,7 @@ module.exports = function (RED) {
 
             const data = await rest.post(
               Routes.applicationCommands(applicationId),
-              { body: commands },
+              { body: normalizedCommands },
             );
             setSuccess(`Successfully reloaded ${data.length} global application (/) commands.`, data);
           } catch (err) {
