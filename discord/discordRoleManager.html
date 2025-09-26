@@ -1,0 +1,61 @@
+<script type="text/javascript">
+  RED.nodes.registerType('discordRoleManager', {
+    category: 'discord · guild control',
+    color: '#7289da',
+    defaults: {
+      name: { value: "", required: false },
+      guild: { value: null, required: false },
+      token: { value: "", required: true, type: "discord-token" }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "discord.png",
+    label: function () {
+      return this.name || "discordRoleManager";
+    }
+  });
+</script>
+<script type="text/x-red" data-template-name="discordRoleManager">
+  <div class="form-row">
+    <label for="node-input-token"><i class="icon-tag"></i> token</label>
+    <input type="text" id="node-input-token" placeholder="token">
+  </div>
+  <div class="form-row">
+    <label for="node-input-guild"><i class="icon-tag"></i> Guild</label>
+    <input type="text" id="node-input-guild" placeholder="Guild ID">
+    <p>(leave blank to use <code>msg.guild</code>)</p>
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+</script>
+<script type="text/x-red" data-help-name="discordRoleManager">
+  <p><strong>What it does</strong> — Lists or counts members tied to a specific role.</p>
+  <p><strong>When to use it</strong> — Build dashboards, run audits, or trigger flows when membership in a role changes.</p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt>action <span class="property-type">string</span></dt>
+    <dd><code>listMembers</code> (default) to page through members; <code>count</code> for a quick count.</dd>
+    <dt>guild <span class="property-type">object | string</span></dt>
+    <dd>Guild identifier (can be set on the node).</dd>
+    <dt>role <span class="property-type">object | string</span></dt>
+    <dd>The role to inspect. For <code>listMembers</code> this can be passed via <code>msg.role</code> or <code>msg.roleQuery.role</code>.</dd>
+    <dt class="optional">roleQuery <span class="property-type">object</span></dt>
+    <dd>Options for listing members: <code>{ role, limit?, pageLimit?, includePresences?, after? }</code>.</dd>
+  </dl>
+
+  <h3>Output</h3>
+  <dl class="message-properties">
+    <dt>payload <span class="property-type">array | object</span></dt>
+    <dd>Member array for <code>listMembers</code>; count summary for <code>count</code>.</dd>
+  </dl>
+
+  <h3>Tips</h3>
+  <ul>
+    <li>Avoid fetching more than you need—tune <code>limit</code> and <code>pageLimit</code> to reduce API load.</li>
+    <li>Use <code>after</code> to resume pagination if you store the last processed member id.</li>
+    <li>Combine with <code>discordMessageManager</code> to DM or log changes when role membership updates.</li>
+  </ul>
+</script>

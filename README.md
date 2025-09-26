@@ -40,7 +40,7 @@ As of this update, a lot of under-the-hood work has landed to stabilise the fork
 ## Node groups at a glance (palette labels)
 - **discord · event intake** – `discordMessage`, `discordMember`, `discordReactionManager`, `discordInteraction`: entry points that emit flow messages when Discord activity happens.
 - **discord · responses** – `discordMessageManager`, `discordInteractionManager`, `discordTyping`: nodes that send, edit, or acknowledge activity back to Discord. Use `discordInteractionManager` for slash-command/button/select replies; keep `discordMessageManager` for channel/DM messages and follow-up edits.
-- **discord · guild control** – `discordCommandManager`, `discordChannelName`, `discordGuildManager`, `discordEventManager`, `discordPermissions`, `discordEmojiManager`: management tooling for commands, guilds, channels, events, roles, and custom emojis.
+- **discord · guild control** – `discordCommandManager`, `discordChannelName`, `discordGuildManager`, `discordEventManager`, `discordPermissions`, `discordEmojiManager`, `discordRoleManager`: management tooling for commands, guilds, channels, events, roles, and custom emojis.
 - **discord · advanced tools** – `discordActivity`, `discordClient`: status updates and advanced access to the underlying Discord.js client.
 
 ## Installation and documentation
@@ -97,7 +97,7 @@ Within an hour or so, the Node-RED flow library will automatically index the new
 
 ## Nodes
 
-node-red-contrib-discord-updated gives you access to 14 nodes:
+node-red-contrib-discord-updated gives you access to 15 nodes:
 
 * **discordMessage** is a node with no inputs and one output allowing you to receive notifications of incoming messages.
 * **discordMessageManager** allows (embed) messages to be sent to either channels or privatly to user. It also allows for editing and deleting of (embed) messages, including suppressing embeds or notifications.
@@ -113,6 +113,7 @@ node-red-contrib-discord-updated gives you access to 14 nodes:
 * **discordGuildManager** allows you to get info about guilds and change name of of guilds.
 * **discordCommandManager** allows you to create, update and delete global application commands and guild application commands, including name/description localisations.
 * **discordEmojiManager** lets you create, update, list, and delete custom guild emojis.
+* **discordRoleManager** lists members for a role or returns a quick count with pagination support.
 
 ## Changelog
 

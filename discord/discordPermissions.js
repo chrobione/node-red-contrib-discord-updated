@@ -14,6 +14,7 @@ module.exports = function (RED) {
         const user = msg.user || null;
         const guild = msg.guild || null;
         const role = msg.role || null;
+        const roleQuery = msg.roleQuery || {};
 
         const setError = (error) => {
           const statusText = typeof error === 'string' ? error : (error && error.message) ? error.message : 'Unexpected error';
@@ -34,6 +35,62 @@ module.exports = function (RED) {
             text: succesMessage
           });
           done();
+        }
+
+        const fetchMembersByRole = async () => {
+          const guildID = checkIdOrObject(guild);
+          const roleID = checkIdOrObject(roleQuery.role || role);
+
+          if (!guildID) {
+            setError(`msg.guild wasn't set correctly`);
+            return;
+          }
+
+          if (!roleID) {
+            setError(`msg.role wasn't set correctly`);
+            return;
+          }
+
+          const limit = Math.min(Math.max(roleQuery.limit || 1000, 1), 5000);
+          const pageLimit = Math.min(Math.max(roleQuery.pageLimit || 10, 1), 100);
+          const includePresences = roleQuery.includePresences === true;
+
+          try {
+            const guildObject = await bot.guilds.fetch(guildID);
+            let fetched = [];
+            let after = roleQuery.after ? roleQuery.after.toString() : undefined;
+
+            for (let page = 0; page < pageLimit && fetched.length < limit; page++) {
+              const remaining = Math.min(limit - fetched.length, 1000);
+              const members = await guildObject.members.fetch({
+                limit: remaining,
+                after,
+                withPresences: includePresences,
+              });
+
+              if (!members.size) {
+                break;
+              }
+
+              members.each(member => {
+                if (member.roles.cache.has(roleID)) {
+                  fetched.push(clone(member));
+                }
+              });
+
+              if (members.size < remaining) {
+                break;
+              }
+
+              after = members.last().id;
+            }
+
+            msg.payload = fetched;
+            send(msg);
+            setSuccess(`members fetched for role ${roleID}`);
+          } catch (error) {
+            setError(error);
+          }
         }
 
         const checkIdOrObject = (check) => {
@@ -141,6 +198,9 @@ module.exports = function (RED) {
             break;
           case 'remove':
             await removeRole();
+            break;
+          case 'list':
+            await fetchMembersByRole();
             break;
           default:
             setError(`msg.action has an incorrect value`)
