@@ -6,7 +6,7 @@ Target version: **4.0.0** (to reflect Node 20 baseline & feature upgrades)
 - **Breaking Changes**
   - Node.js 20+ requirement; Node 16 support removed.
   - Any API adjustments (e.g., default behaviour changes in commanders/formatters).
-  - Stewardship moved to `chrobione/node-red-contrib-discord-updated`; document upgrade notes for users following earlier forks.
+  - Stewardship moved to `chrobione/node-red-contrib-discord-updated`; README and docs point to the new home and living plans.
 - **Features**
   - Entity select menu support.
   - Stage event enhancements.

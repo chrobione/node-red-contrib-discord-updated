@@ -28,11 +28,14 @@ Currently the following actions are supported:
 * Run bulk message fetch/delete flows with safety checks and notification controls.
 * Send, edit, and delete ephemeral interaction follow-ups without manual token handling.
 
-This project began as [node-red-contrib-discord](https://github.com/jorisvddonk/node-red-contrib-discord) by Joris vd Donk and was expanded by Mark Koudstaal in the [node-red-contrib-discord-advanced](https://github.com/Markoudstaal/node-red-contrib-discord-advanced) fork. The code, npm package, and credits from those earlier efforts are intentionally preserved here.
+This project began as [node-red-contrib-discord](https://github.com/jorisvddonk/node-red-contrib-discord) by Joris vd Donk and was expanded by Mark Koudstaal in the [node-red-contrib-discord-advanced](https://github.com/Markoudstaal/node-red-contrib-discord-advanced) fork. The stewardship now lives under [chrobione/node-red-contrib-discord-updated](https://github.com/chrobione/node-red-contrib-discord-updated); all of the earlier work and credits are intentionally preserved while the Discord.js feature set continues to expand.
 
-The repository now lives at [chrobione/node-red-contrib-discord-updated](https://github.com/chrobione/node-red-contrib-discord-updated) so the community, myself included, can push toward the remaining Discord.js functionality without losing any of the prior work.
+Living plans, migration notes, and changelog entries sit inside [`upgradedocs/`](upgradedocs/). Start with:
+- `upgradedocs/programming-spec.md` for the current roadmap across phases.
+- `upgradedocs/task-list.md` tracking day-to-day progress, upcoming features, and testing status.
+- [`CHANGELOG.md`](CHANGELOG.md) for user-facing updates in release order.
 
-As of this update, a lot of under-the-hood work has landed to stabilise the fork; you can review the living plans and notes under [`upgradedocs/`](upgradedocs/) alongside the latest changes captured in [`CHANGELOG.md`](CHANGELOG.md). The current major release is **4.0.0**, reflecting the breaking changes introduced by the palette regrouping, help rewrites, and Node 20 baseline.
+The current major release is **4.0.0**, reflecting the palette regrouping, help rewrites, Node 20 baseline, and the new interaction follow-up tooling.
 
 ## Quick start
 - Create a Discord application with a bot token and invite it to a test guild.
@@ -44,6 +47,14 @@ As of this update, a lot of under-the-hood work has landed to stabilise the fork
 
 ## Example flows
 - `examples/interactionFollowupLifecycle.json` — shows an end-to-end slash-command response with an ephemeral initial reply, a follow-up message, an edit, and a final clean-up using the new interaction manager actions.
+- `examples/commandWithEphemeral.json` — captures the classic “acknowledge publicly, DM privately” pattern using an ephemeral defer plus a direct message follow-up.
+- `examples/respondingToCommands.json` — demonstrates editing the original reply for message and context-menu interactions while keeping the interaction token alive.
+
+### Importing an example flow into Node-RED
+1. Open the JSON file in this repository and copy its contents to your clipboard.
+2. In Node-RED, choose *Menu → Import → Clipboard*.
+3. Paste the JSON, click *Import*, and drop the flow into your workspace.
+4. Update the `discord-token` config node with your bot token, then deploy to try the example.
 
 ## Node groups at a glance (palette labels)
 - **discord · event intake** – `discordMessage`, `discordMember`, `discordReactionManager`, `discordInteraction`, `discordVoiceState`: entry points that emit flow messages when Discord activity happens, from text reactions to voice join/leave notifications.
