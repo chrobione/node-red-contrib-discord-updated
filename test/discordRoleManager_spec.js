@@ -15,20 +15,21 @@ describe('discordRoleManager Node', function () {
   let guild;
 
   beforeEach(function () {
+    const makeCollection = (ids) => ({
+      size: ids.length,
+      each: (fn) => ids.forEach(id => fn({ id, roles: { cache: { has: () => true } } })),
+      last: () => (ids.length ? { id: ids[ids.length - 1] } : undefined),
+    });
+
     guild = {
       roles: {
         fetch: sinon.stub().withArgs('role123').resolves({ id: 'role123', members: { size: 3 } }),
       },
       members: {
         fetch: sinon.stub()
-          .onFirstCall().resolves(new Map([
-            ['1', { id: '1', roles: { cache: { has: () => true } } }],
-            ['2', { id: '2', roles: { cache: { has: () => true } } }],
-          ]))
-          .onSecondCall().resolves(new Map([
-            ['3', { id: '3', roles: { cache: { has: () => true } } }],
-          ]))
-          .onThirdCall().resolves(new Map()),
+          .onFirstCall().resolves(makeCollection(['1', '2']))
+          .onSecondCall().resolves(makeCollection(['3']))
+          .onThirdCall().resolves(makeCollection([])),
       },
     };
 

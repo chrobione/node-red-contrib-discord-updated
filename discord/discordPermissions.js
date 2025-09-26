@@ -62,15 +62,16 @@ module.exports = function (RED) {
 
             for (let page = 0; page < pageLimit && fetched.length < limit; page++) {
               const remaining = Math.min(limit - fetched.length, 1000);
-            const members = await guildObject.members.fetch({
-              limit: remaining,
-              after,
-              withPresences: includePresences,
-            });
+              const previousAfter = after;
+              const members = await guildObject.members.fetch({
+                limit: remaining,
+                after,
+                withPresences: includePresences,
+              });
 
-            if (!members || !members.size) {
-              break;
-            }
+              if (!members || !members.size) {
+                break;
+              }
 
               members.each(member => {
                 if (member.roles.cache.has(roleID)) {
@@ -78,11 +79,10 @@ module.exports = function (RED) {
                 }
               });
 
-              if (members.size < remaining) {
+              after = members.last()?.id;
+              if (!after || after === previousAfter) {
                 break;
               }
-
-              after = members.last().id;
             }
 
             msg.payload = fetched;

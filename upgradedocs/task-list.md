@@ -81,7 +81,7 @@
   - Action plan: Extend existing member node or add new voice-state node, subscribe to voiceStateUpdate, add tests, update docs, and log change.
 
 ### Ephemeral Interaction Replies
-- [ ] Enable interaction manager to reply to button/select interactions with ephemeral messages; add tests, docs, changelog entry.
+- [x] Enable interaction manager to reply to button/select interactions with ephemeral messages; add tests, docs, changelog entry.
   - Action plan: Surface ephemeral flag through config/msg, adjust reply logic, add tests, update docs, and log change.
 
 ### Role Membership Queries
@@ -124,7 +124,7 @@
 - [x] Provide role membership query utilities (list members for a role) with pagination handling.
 - [x] Emit voice state join/leave events via a dedicated node and update examples.
 - [x] Support attachment metadata (description, spoiler, duration) in the formatter and response nodes.
-- [ ] Enhance interaction replies with better ephemeral handling and follow-up tools.
+- [x] Enhance interaction replies with better ephemeral handling and follow-up tools.
 - [ ] Update automated tests and documentation as each feature lands.
 
 ## Release Preparation

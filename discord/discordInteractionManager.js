@@ -27,6 +27,7 @@ module.exports = function (RED) {
                    const customId = msg.customId;
                     const suppressEmbeds = msg.suppressEmbeds ?? msg.payload?.suppressEmbeds;
                     const suppressNotifications = msg.suppressNotifications ?? msg.payload?.suppressNotifications;
+                    const ephemeral = msg.ephemeral ?? msg.payload?.ephemeral;
 
                     const setError = (error) => {
                         const message = typeof error === 'string' ? error : (error && error.message) ? error.message : 'Unexpected error';
@@ -52,7 +53,7 @@ module.exports = function (RED) {
                         done();
                     }
 
-                    const buildFlags = () => {
+                    const buildFlags = (allowEphemeral = false) => {
                         const flags = [];
                         if (suppressEmbeds === true) {
                             flags.push('SuppressEmbeds');
@@ -60,10 +61,13 @@ module.exports = function (RED) {
                         if (suppressNotifications === true) {
                             flags.push('SuppressNotifications');
                         }
+                        if (allowEphemeral && ephemeral === true) {
+                            flags.push('Ephemeral');
+                        }
                         return flags;
                     };
 
-                    const editInteractionReply = async () => {
+                    const createPayload = (allowEphemeral = false) => {
                         const payload = {
                             embeds: embeds,
                             content: content,
@@ -71,41 +75,88 @@ module.exports = function (RED) {
                             components: components
                         };
 
-                        const flags = buildFlags();
+                        const flags = buildFlags(allowEphemeral);
                         if (flags.length) {
                             payload.flags = flags;
                         }
 
+                        if (allowEphemeral && ephemeral === true) {
+                            payload.ephemeral = true;
+                        }
+
+                        return payload;
+                    };
+
+                    const requeueInteraction = () => {
+                        // Keep the cached interaction alive for follow-up actions.
+                        discordInterationManager.registerInteraction(interaction);
+                    };
+
+                    const editInteractionReply = async () => {
+                        const payload = createPayload(false);
                         await interaction.editReply(payload);
 
                         const newMsg = {
                             interaction: clone(interaction)
                         };
 
-
+                        requeueInteraction();
                         setSuccess(`interaction ${interactionId} edited`, newMsg);
                     }
 
                     const replyInteraction = async () => {
-                        const payload = {
-                            embeds: embeds,
-                            content: content,
-                            files: attachments,
-                            components: components
-                        };
-
-                        const flags = buildFlags();
-                        if (flags.length) {
-                            payload.flags = flags;
-                        }
-
+                        const payload = createPayload(true);
                         await interaction.reply(payload);
 
                         const newMsg = {
                             interaction: clone(interaction)
                         };
 
+                        requeueInteraction();
                         setSuccess(`interaction ${interactionId} replied`, newMsg);
+                    }
+
+                    const followUpInteraction = async () => {
+                        const payload = createPayload(true);
+                        const message = await interaction.followUp(payload);
+
+                        const newMsg = {
+                            interaction: clone(interaction),
+                            message: clone(message)
+                        };
+
+                        requeueInteraction();
+                        setSuccess(`interaction ${interactionId} followup sent`, newMsg);
+                    }
+
+                    const editFollowUpInteraction = async () => {
+                        if (!followUpId) {
+                            throw new Error('msg.messageId (or msg.message.id) is required to edit a follow-up message.');
+                        }
+
+                        const payload = createPayload(false);
+                        const message = await interaction.editFollowUp(followUpId, payload);
+
+                        const newMsg = {
+                            interaction: clone(interaction),
+                            message: clone(message)
+                        };
+
+                        requeueInteraction();
+                        setSuccess(`interaction ${interactionId} followup edited`, newMsg);
+                    }
+
+                    const deleteInteractionReply = async () => {
+                        if (followUpId) {
+                            await interaction.deleteFollowUp(followUpId);
+                            requeueInteraction();
+                            setSuccess(`interaction ${interactionId} followup deleted`, { deleted: true, messageId: followUpId });
+                            return;
+                        }
+
+                        await interaction.deleteReply();
+                        requeueInteraction();
+                        setSuccess(`interaction ${interactionId} reply deleted`, { deleted: true });
                     }
 
                     const showModal = async () => {
@@ -139,6 +190,7 @@ module.exports = function (RED) {
                         };
 
 
+                        requeueInteraction();
                         setSuccess(`interaction ${interactionId} filtered`, newMsg);
                     }
 
@@ -147,6 +199,8 @@ module.exports = function (RED) {
                         setError(`Could not find interaction '${interactionId}'. It may have expired.`);
                         return;
                     }
+
+                    const followUpId = msg.messageId || msg.followupId || msg.message?.id || msg.payload?.messageId;
 
                     let attachments, embeds, components;
                     try {
@@ -164,6 +218,15 @@ module.exports = function (RED) {
                             break;
                         case 'edit':
                             await editInteractionReply();
+                            break;
+                        case 'followup':
+                            await followUpInteraction();
+                            break;
+                        case 'editfollowup':
+                            await editFollowUpInteraction();
+                            break;
+                        case 'delete':
+                            await deleteInteractionReply();
                             break;
                         case 'showmodal':
                             await showModal();

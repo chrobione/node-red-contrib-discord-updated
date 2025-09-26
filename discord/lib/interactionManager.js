@@ -38,7 +38,7 @@ const getInteraction = (interactionId) => {
         clearTimeout(entry.timeout);
     }
 
-    interactions.delete(interactionId);
+    entry.timeout = scheduleEviction(interactionId, INTERACTION_TTL_MS);
     return entry.interaction;
 };
 

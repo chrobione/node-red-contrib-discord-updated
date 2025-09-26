@@ -24,6 +24,7 @@ const fetchMembersByRole = async (guild, roleId, options = {}) => {
 
   for (let page = 0; page < pageLimit && fetched.length < limit; page++) {
     const remaining = Math.min(limit - fetched.length, 1000);
+    const previousAfter = after;
     const members = await guild.members.fetch({ limit: remaining, after, withPresences });
 
     if (!members || !members.size) {
@@ -36,10 +37,10 @@ const fetchMembersByRole = async (guild, roleId, options = {}) => {
       }
     });
 
-    if (members.size < remaining) {
+    after = members.last()?.id;
+    if (!after || after === previousAfter) {
       break;
     }
-    after = members.last().id;
   }
 
   return fetched;

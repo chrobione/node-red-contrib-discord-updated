@@ -26,6 +26,7 @@ Currently the following actions are supported:
 * Manage guild emojis with upload validation and safe deletes.
 * List or count members of a guild role with pagination helpers.
 * Run bulk message fetch/delete flows with safety checks and notification controls.
+* Send, edit, and delete ephemeral interaction follow-ups without manual token handling.
 
 This project began as [node-red-contrib-discord](https://github.com/jorisvddonk/node-red-contrib-discord) by Joris vd Donk and was expanded by Mark Koudstaal in the [node-red-contrib-discord-advanced](https://github.com/Markoudstaal/node-red-contrib-discord-advanced) fork. The code, npm package, and credits from those earlier efforts are intentionally preserved here.
 
