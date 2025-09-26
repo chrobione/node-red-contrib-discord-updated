@@ -93,7 +93,7 @@
   - Action plan: Update formatter to accept metadata, ensure compatibility with discord.js API, add tests, revise docs, and record change.
 
 ### Node Icon & Categorisation Improvements
-- [ ] Deliver distinct icons/categories for Discord nodes in the palette; log docs/assets update.
+- [x] Deliver distinct icons/categories for Discord nodes in the palette; log docs/assets update.
   - Action plan: **Categories regrouped via `discord: listen/respond/manage/utilities`.** Next steps: design refreshed icons, update palette definitions if further tweaks needed, adjust documentation/screenshots, and log change.
 
 ### discordClient Safety Net

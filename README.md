@@ -62,6 +62,8 @@ The current major release is **4.0.0**, reflecting the palette regrouping, help 
 - **discord · guild control** – `discordCommandManager`, `discordChannelName`, `discordGuildManager`, `discordEventManager`, `discordPermissions`, `discordEmojiManager`, `discordRoleManager`: management tooling for commands, guilds, channels, events, roles, and custom emojis.
 - **discord · advanced tools** – `discordActivity`, `discordClient`: status updates and advanced access to the underlying Discord.js client.
 
+Each palette group now ships with distinct Font Awesome icons (chat bubbles for events, paper planes for responses, locks/calendars for guild administration, etc.) to make it easier to spot the node you need at a glance.
+
 ## Installation and documentation
 
 The [Wiki](https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki) is still being written when it comes to documentation but you can find a guide on how to install and setup the nodes [here](https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki/Installation-and-setup).
