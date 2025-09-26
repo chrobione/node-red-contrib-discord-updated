@@ -27,7 +27,16 @@ module.exports = function (RED) {
           case "button":
             return interaction.isButton();
           case "selectMenu":
+          case "stringSelect":
             return interaction.isStringSelectMenu();
+          case "userSelect":
+            return interaction.isUserSelectMenu();
+          case "roleSelect":
+            return interaction.isRoleSelectMenu();
+          case "mentionableSelect":
+            return interaction.isMentionableSelectMenu();
+          case "channelSelect":
+            return interaction.isChannelSelectMenu();
           case "command":
             return interaction.isCommand();
           case "messageContextMenu":
@@ -116,6 +125,22 @@ module.exports = function (RED) {
           else {            
             message.payload.message = clone(interaction.message);
             message.payload.message.author = clone(interaction.message.author);
+          }
+
+          if (typeof interaction.isAnySelectMenu === 'function' && interaction.isAnySelectMenu()) {
+            message.payload.values = clone(interaction.values);
+            if (interaction.users?.size) {
+              message.payload.users = clone(Array.from(interaction.users.values()));
+            }
+            if (interaction.members?.size) {
+              message.payload.members = clone(Array.from(interaction.members.values()));
+            }
+            if (interaction.roles?.size) {
+              message.payload.roles = clone(Array.from(interaction.roles.values()));
+            }
+            if (interaction.channels?.size) {
+              message.payload.channels = clone(Array.from(interaction.channels.values()));
+            }
           }
 
           node.send(message);

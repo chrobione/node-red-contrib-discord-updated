@@ -7,13 +7,13 @@ const discordBotManager = require('../discord/lib/discordBotManager');
 
 helper.init(require.resolve('node-red'));
 const stubDiscord = sinon.createStubInstance(discord.Client);
+stubDiscord.login = sinon.stub().resolves();
 const noError = "";
 
 describe('Discord Message Manager Node', function () {
     let getBotStub;
 
     before(() => {
-        stubDiscord.login.resolves();
         getBotStub = sinon.stub(discordBotManager, 'getBot').resolves(stubDiscord);
     });
 

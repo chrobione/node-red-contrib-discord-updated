@@ -2,7 +2,11 @@ const {
   AttachmentBuilder,
   ButtonBuilder,
   ActionRowBuilder,
-  StringSelectMenuBuilder
+  StringSelectMenuBuilder,
+  UserSelectMenuBuilder,
+  RoleSelectMenuBuilder,
+  MentionableSelectMenuBuilder,
+  ChannelSelectMenuBuilder
 } = require('discord.js');
 
 const resolveAttachment = (attachment) => {
@@ -92,6 +96,18 @@ const formatComponents = (inputComponents) => {
           break;
         case 3:
           actionRow.addComponents(new StringSelectMenuBuilder(subComponentData));
+          break;
+        case 5:
+          actionRow.addComponents(new UserSelectMenuBuilder(subComponentData));
+          break;
+        case 6:
+          actionRow.addComponents(new RoleSelectMenuBuilder(subComponentData));
+          break;
+        case 7:
+          actionRow.addComponents(new MentionableSelectMenuBuilder(subComponentData));
+          break;
+        case 8:
+          actionRow.addComponents(new ChannelSelectMenuBuilder(subComponentData));
           break;
         default:
           throw new Error(`Unsupported component type '${subComponentData?.type}'.`);

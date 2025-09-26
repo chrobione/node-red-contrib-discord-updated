@@ -114,6 +114,19 @@
 - [ ] Perform manual regression covering new features with screenshots/logs for documentation.
   - Action plan: Execute live tests of new features, collect evidence for docs, and note results.
 
+## Phase 2 – Feature Upgrades: Interaction & Messaging Enhancements
+- [x] Add entity select menu support to `discordInteraction`/`discordInteractionManager` (builder inputs, help text, tests, docs).
+- [x] Expand scheduled event tooling for stage-channel events, including validation and docs.
+- [ ] Add localisation fields to slash-command definitions and interaction replies.
+- [ ] Surface message flag controls (suppress embeds, silent notifications) in `discordMessageManager` and `discordInteractionManager`.
+- [ ] Implement bulk fetch/delete actions in `discordMessageManager` with filters and safety checks.
+- [ ] Introduce emoji management helpers (create/update/delete guild emojis) and document image requirements.
+- [ ] Provide role membership query utilities (list members for a role) with pagination handling.
+- [ ] Emit voice state join/leave events via a dedicated node and update examples.
+- [ ] Support attachment metadata (description, spoiler, duration) in the formatter and response nodes.
+- [ ] Enhance interaction replies with better ephemeral handling and follow-up tools.
+- [ ] Update automated tests and documentation as each feature lands.
+
 ## Release Preparation
 - [ ] Review lockfile and dependency diffs for unintended drift prior to release.
   - Action plan: Inspect `package-lock.json` changes, verify no extraneous packages, and confirm consistency with dependency updates.

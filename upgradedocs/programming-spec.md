@@ -102,9 +102,9 @@
 9. Record each change in `CHANGELOG.md`, clearly labelling fixes, dependency upgrades, behaviour adjustments, and the package rename.
 
 ### Phase 2 – Feature Upgrades
-10. Implement entity select menu, stage event, localisation, attachment metadata, message flag, bulk delete/search, custom emoji management, role membership queries, voice event handling, and ephemeral interaction reply enhancements once the stabilisation tests pass.
+10. Implement the Phase 2 interaction/messaging enhancements (entity select menus, stage event tooling, localisation, message flags, bulk delete/search, emoji management, role membership queries, voice events, attachment metadata, enhanced interaction replies) following the detailed breakdown in `upgradedocs/task-list.md`.
 11. Conduct discovery work for auto-moderation and guild onboarding APIs, documenting findings and scoping follow-up tasks.
-12. Deliver node icon/categorisation improvements for better palette usability, grouping nodes into onboarding, messaging, administration, and utility categories inside the Node-RED palette (category split now published as `discord: listen/respond/manage/utilities`; icon refresh still pending).
+12. Deliver node icon/categorisation improvements for better palette usability, grouping nodes into onboarding, messaging, administration, and utility categories inside the Node-RED palette (category split now published as `discord · event intake/responses/guild control/advanced tools`; icon refresh still pending).
 13. Extend automated and manual tests to cover the new feature behaviour.
 14. Update documentation and changelog with newly supported features, usage examples (including channel ID guidance), and Node-RED best practice notes.
 15. Finalise release notes summarising breaking changes, the package rename, and new feature support; confirm `npm pack`/publish flow succeeds.

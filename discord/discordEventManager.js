@@ -5,6 +5,7 @@ module.exports = function (RED) {
   const {
     GuildScheduledEventEntityType,
     GuildScheduledEventPrivacyLevel,
+    ChannelType,
   } = require('discord.js');
 
 
@@ -104,63 +105,72 @@ module.exports = function (RED) {
 
             let eventManager = await discordFramework.getEventManager(bot, _guildID);
             const eventName = discordFramework.checkIdOrObject(_eventName);
-            const eventChannel = discordFramework.checkIdOrObject(_eventChannel);
-            
 
             if (!eventName) {
-              throw (`msg.eventName wasn't set correctly`);
+              throw new Error(`msg.eventName wasn't set correctly`);
             }
 
             if (_eventScheduledStartTime == null) {
-              throw (`msg.scheduledStartTime wasn't set correctly`);
+              throw new Error(`msg.scheduledStartTime wasn't set correctly`);
             }
 
-            if ( _eventEventType == "external" ){
+            const normalizedType = _eventEventType.toString().toLowerCase();
+            let entityType;
+            let eventMetadata = undefined;
+            let eventChannelId = null;
 
-              if ( _eventLocation == null ){
-
-                throw (`msg.eventLocation wasn't set correctly, is required when event type is set to external`);
-
+            if (normalizedType === 'external') {
+              if (_eventLocation == null) {
+                throw new Error(`msg.eventLocation wasn't set correctly, it is required when event type is set to external`);
               }
 
-              if ( _eventScheduledEndTime == null ){
-
-                throw (`msg.eventScheduledEndTime wasn't set correctly, is required when event type is set to external`);
-
+              if (_eventScheduledEndTime == null) {
+                throw new Error(`msg.eventScheduledEndTime wasn't set correctly, it is required when event type is set to external`);
               }
 
-            }
-            else if ( _eventEventType == "voice" ){
-
-              if ( !eventChannel ){
-
-                throw (`msg.channel wasn't set correctly, is required when event type is set to voice`);
-
+              entityType = GuildScheduledEventEntityType.External;
+              eventMetadata = { location: _eventLocation };
+            } else if (normalizedType === 'voice' || normalizedType === 'stage') {
+              const channel = await discordFramework.getChannel(bot, _eventChannel);
+              if (!channel) {
+                throw new Error(`msg.channel wasn't set correctly, it is required when event type is set to ${normalizedType}`);
               }
 
+              if (normalizedType === 'voice') {
+                if (channel.type !== ChannelType.GuildVoice) {
+                  throw new Error("msg.channel must reference a voice channel when event type is set to voice");
+                }
+                entityType = GuildScheduledEventEntityType.Voice;
+              } else {
+                if (channel.type !== ChannelType.GuildStageVoice) {
+                  throw new Error("msg.channel must reference a stage channel when event type is set to stage");
+                }
+                entityType = GuildScheduledEventEntityType.StageInstance;
+              }
+
+              eventChannelId = channel.id;
+            } else {
+              throw new Error(`msg.eventType wasn't set correctly, ${_eventEventType} is not a valid event type`);
             }
-            else {
 
-              throw (`msg.eventType wasn't set correctly, ${_eventEventType} is not a valid event type`)
-
-            }
-
-            const eventMetadata = {
-              location: _eventLocation
-            };
-            
             const eventScheduledEndTime = _eventScheduledEndTime ? new Date(_eventScheduledEndTime) : null;
             const eventPayload = {
               name: eventName,
               scheduledStartTime: new Date(_eventScheduledStartTime),
               privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
-              entityType: _eventEventType == "voice" ? GuildScheduledEventEntityType.Voice : GuildScheduledEventEntityType.External,
+              entityType,
               description: _eventDescription,
-              channel: _eventChannel,
               image: null,
               reason: _eventReason,
-              entityMetadata: eventMetadata
             };
+
+            if (eventChannelId) {
+              eventPayload.channel = eventChannelId;
+            }
+
+            if (eventMetadata) {
+              eventPayload.entityMetadata = eventMetadata;
+            }
 
             if (eventScheduledEndTime) {
               eventPayload.scheduledEndTime = eventScheduledEndTime;

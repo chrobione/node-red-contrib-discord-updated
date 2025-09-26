@@ -104,12 +104,12 @@ node-red-contrib-discord-updated gives you access to 13 nodes:
 * **discordReactionManager** that allows you to listen to reactions on a message.
 * **discordPermissions** allows you to check the permissions of a specifc user. This is useful when you get the user from another source than the discordMessage node. discorPermissions lets you to add role to an user and to remove role.
 * **discordClient** is an advanced deprecated node with one input and one output allowing you to inject a references to a [Discord.js Client](https://discord.js.org/#/docs/main/stable/class/Client) into a message. This node can cause node-red to crash if you use it improperly, so take caution. Messages containing a Discord.js Client reference can *not* be forked (e.g. sent to two nodes), so you'll have to manually remove the reference to the Client via a function node using `delete msg.discord`.
-* **discordInteraction** allows you to listen to commands, buttons and select menu interactions and to decide how to respond to them.
+* **discordInteraction** allows you to listen to commands, buttons, select menus (string, user, role, channel, mentionable) and decide how to respond to them.
 * **discordInteractionManager** allows you to edit interactions by id.
 * **discordChannelName** allows you to change a channel's name.
 * **discordMember** listens when a user joins or leaves a guild.
 * **discordTyping** creates a 'bot is typing...' message on a channel.
-* **discordEventManager** allows you to create, delete, and get info events.
+* **discordEventManager** allows you to create, delete, and get info events (including stage and voice scheduled events).
 * **discordGuildManager** allows you to get info about guilds and change name of of guilds.
 * **discordCommandManager** allows you to create, update and delete global application commands and guild application commands.
 
