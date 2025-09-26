@@ -1,0 +1,38 @@
+<script type="text/javascript">
+  RED.nodes.registerType('discordVoiceState', {
+    category: 'discord · event intake',
+    color: '#7289da',
+    defaults: {
+      name: { value: "", required: false },
+      token: { value: "", required: true, type: "discord-token" }
+    },
+    inputs: 0,
+    outputs: 1,
+    icon: "discord.png",
+    label: function () {
+      return this.name || "discordVoiceState";
+    }
+  });
+</script>
+<script type="text/x-red" data-help-name="discordVoiceState">
+  <p><strong>What it does</strong> — Emits a message whenever a user joins, leaves, or moves between voice channels.</p>
+  <p><strong>When to use it</strong> — Track activity in support lounges, trigger automations when someone jumps into a staff call, or log quiet hours.</p>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+    <dt>payload.type <span class="property-type">string</span></dt>
+    <dd><code>join</code>, <code>leave</code>, or <code>update</code>.</dd>
+    <dt>payload.guildId / channelId / userId <span class="property-type">string</span></dt>
+    <dd>Identifiers for the guild, channel, and member.</dd>
+    <dt>payload.member <span class="property-type">object</span></dt>
+    <dd>Cloned guild member data for convenience.</dd>
+    <dt>payload.selfMute / selfDeaf / streaming / suppress <span class="property-type">boolean</span></dt>
+    <dd>Voice state toggles reported by Discord.</dd>
+  </dl>
+
+  <h3>Tips</h3>
+  <ul>
+    <li>Use a switch node on <code>payload.type</code> to branch between join and leave automations.</li>
+    <li>If you only care about a specific channel, add a switch filter on <code>payload.channelId</code>.</li>
+  </ul>
+</script>

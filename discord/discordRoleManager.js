@@ -26,7 +26,7 @@ const fetchMembersByRole = async (guild, roleId, options = {}) => {
     const remaining = Math.min(limit - fetched.length, 1000);
     const members = await guild.members.fetch({ limit: remaining, after, withPresences });
 
-    if (!members.size) {
+    if (!members || !members.size) {
       break;
     }
 

@@ -17,11 +17,15 @@ Currently the following actions are supported:
 * Submit modals.
 * Set Status text of the Bot
 * Get permissions of a specific user. Add and remove roles. Listen when a user joins or leaves a guild.
+* Track voice channel joins, leaves, and state updates for guild members.
 * Change channel's name.
 * Allow full control over the BOT by access to the DiscordJS client.
 * Create, update, delete and get Application commands.
-* Create, delete and get events.
+* Create, delete and get events, including stage-channel scheduling safeguards.
 * Obtain info and change name of a guild.
+* Manage guild emojis with upload validation and safe deletes.
+* List or count members of a guild role with pagination helpers.
+* Run bulk message fetch/delete flows with safety checks and notification controls.
 
 This project began as [node-red-contrib-discord](https://github.com/jorisvddonk/node-red-contrib-discord) by Joris vd Donk and was expanded by Mark Koudstaal in the [node-red-contrib-discord-advanced](https://github.com/Markoudstaal/node-red-contrib-discord-advanced) fork. The code, npm package, and credits from those earlier efforts are intentionally preserved here.
 
@@ -38,7 +42,7 @@ As of this update, a lot of under-the-hood work has landed to stabilise the fork
 - The palette now lists groups as `discord · event intake`, `discord · responses`, `discord · guild control`, and `discord · advanced tools`; start in Event Intake, then wire Responses, Guild Control, and Advanced Tools nodes as your flow grows.
 
 ## Node groups at a glance (palette labels)
-- **discord · event intake** – `discordMessage`, `discordMember`, `discordReactionManager`, `discordInteraction`: entry points that emit flow messages when Discord activity happens.
+- **discord · event intake** – `discordMessage`, `discordMember`, `discordReactionManager`, `discordInteraction`, `discordVoiceState`: entry points that emit flow messages when Discord activity happens, from text reactions to voice join/leave notifications.
 - **discord · responses** – `discordMessageManager`, `discordInteractionManager`, `discordTyping`: nodes that send, edit, or acknowledge activity back to Discord. Use `discordInteractionManager` for slash-command/button/select replies; keep `discordMessageManager` for channel/DM messages and follow-up edits.
 - **discord · guild control** – `discordCommandManager`, `discordChannelName`, `discordGuildManager`, `discordEventManager`, `discordPermissions`, `discordEmojiManager`, `discordRoleManager`: management tooling for commands, guilds, channels, events, roles, and custom emojis.
 - **discord · advanced tools** – `discordActivity`, `discordClient`: status updates and advanced access to the underlying Discord.js client.

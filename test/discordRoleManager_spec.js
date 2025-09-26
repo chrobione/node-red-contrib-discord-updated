@@ -52,7 +52,7 @@ describe('discordRoleManager Node', function () {
       const node = helper.getNode('n1');
       const helperNode = helper.getNode('n2');
 
-      helperNode.on('input', function (msg) {
+      helperNode.once('input', function (msg) {
         try {
           msg.payload.should.be.Array().and.have.length(3);
           done();

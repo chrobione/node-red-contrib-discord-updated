@@ -46,7 +46,8 @@
       "discordEventManager": "discord/discordEventManager.js",
       "discordCommandManager": "discord/discordCommandManager.js",
       "discordEmojiManager": "discord/discordEmojiManager.js",
-      "discordRoleManager": "discord/discordRoleManager.js"
+      "discordRoleManager": "discord/discordRoleManager.js",
+      "discordVoiceState": "discord/discordVoiceState.js"
     }
   },
   "devDependencies": {

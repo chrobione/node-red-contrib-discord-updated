@@ -18,15 +18,18 @@ describe('discordPermissions role membership', function () {
       roles: { cache: { has: (roleId) => roleId === 'role123' } },
     });
 
+    const makeCollection = (ids) => ({
+      size: ids.length,
+      each: (fn) => ids.forEach(id => fn(memberFactory(id))),
+      last: () => (ids.length ? { id: ids[ids.length - 1] } : undefined),
+    });
+
     guild = {
       members: {
         fetch: sinon.stub()
-          .onCall(0).resolves(new Map([
-            ['1', memberFactory('1')],
-            ['2', memberFactory('2')],
-            ['3', memberFactory('3')],
-          ]))
-          .onCall(1).resolves(new Map()),
+          .onCall(0).resolves(makeCollection(['1', '2']))
+          .onCall(1).resolves(makeCollection(['3']))
+          .onCall(2).resolves(makeCollection([])),
       },
     };
 
@@ -49,7 +52,7 @@ describe('discordPermissions role membership', function () {
       const node = helper.getNode('n1');
       const helperNode = helper.getNode('n2');
 
-      helperNode.on('input', function (msg) {
+      helperNode.once('input', function (msg) {
         try {
           msg.payload.should.be.Array().and.have.length(3);
           guild.members.fetch.called.should.be.true();

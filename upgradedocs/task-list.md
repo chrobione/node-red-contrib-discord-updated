@@ -53,31 +53,31 @@
 
 ## Phase 2 – Feature Upgrades
 ### Entity Select Menus
-- [ ] Extend component formatter to cover entity select builders (types 5-9) and expose config; add tests, docs, changelog entry.
+- [x] Extend component formatter to cover entity select builders (types 5-9) and expose config; add tests, docs, changelog entry.
   - Action plan: Implement new component mapping, update documentation/examples, add tests covering each select type, and log feature.
 
 ### Scheduled Event Enhancements
-- [ ] Support stage instance events, stage channel validation, and optional image uploads in event manager; add tests, docs, changelog entry.
+- [x] Support stage instance events, stage channel validation, and optional image uploads in event manager; add tests, docs, changelog entry.
   - Action plan: Expand event manager options, handle validations, test new paths, update docs, and record change.
 
 ### Command Localisation
-- [ ] Add localisation fields to command manager inputs and ensure REST payloads include them; add tests, docs, changelog entry.
+- [x] Add localisation fields to command manager inputs and ensure REST payloads include them; add tests, docs, changelog entry.
   - Action plan: Extend node configuration schema, adjust payload builder, write tests verifying localisation data, update docs, and log in changelog.
 
 ### Message Flags & Notifications
-- [ ] Allow message send/edit to set Discord flags (suppress embeds/notifications); add tests, docs, changelog entry.
+- [x] Allow message send/edit to set Discord flags (suppress embeds/notifications); add tests, docs, changelog entry.
   - Action plan: Extend message manager inputs, integrate with discord.js flag API, add tests validating behaviour, update docs, and log change.
 
 ### Bulk Message Search & Delete
-- [ ] Provide actions to fetch recent messages and delete in bulk with filters; add tests, docs, changelog entry.
+- [x] Provide actions to fetch recent messages and delete in bulk with filters; add tests, docs, changelog entry.
   - Action plan: Implement new actions in message manager, support limit/filter props, add tests for pinned/date scenarios, update docs/examples, log change.
 
 ### Custom Emoji Management
-- [ ] Implement nodes or enhancements for creating, fetching, updating, and deleting guild emojis; add tests, docs, changelog entry.
+- [x] Implement nodes or enhancements for creating, fetching, updating, and deleting guild emojis; add tests, docs, changelog entry.
   - Action plan: Design emoji management interface (new node or extensions), integrate with discord.js `GuildEmojiManager`, enforce validation, and cover feature with unit/integration tests before documenting and logging.
 
 ### Voice Channel Join/Leave Events
-- [ ] Emit events when members join/leave voice channels; add tests, docs, changelog entry.
+- [x] Emit events when members join/leave voice channels; add tests, docs, changelog entry.
   - Action plan: Extend existing member node or add new voice-state node, subscribe to voiceStateUpdate, add tests, update docs, and log change.
 
 ### Ephemeral Interaction Replies
@@ -85,7 +85,7 @@
   - Action plan: Surface ephemeral flag through config/msg, adjust reply logic, add tests, update docs, and log change.
 
 ### Role Membership Queries
-- [ ] Provide utilities to list member IDs for a given role; add tests, docs, changelog entry.
+- [x] Provide utilities to list member IDs for a given role; add tests, docs, changelog entry.
   - Action plan: Implement role lookup function/node, mock guild/member data in tests, update docs, and log change.
 
 ### Attachment Metadata
@@ -121,8 +121,8 @@
 - [x] Surface message flag controls (suppress embeds, silent notifications) in `discordMessageManager` and `discordInteractionManager`.
 - [x] Implement bulk fetch/delete actions in `discordMessageManager` with filters and safety checks.
 - [x] Introduce emoji management helpers (create/update/delete guild emojis) and document image requirements.
-- [ ] Provide role membership query utilities (list members for a role) with pagination handling.
-- [ ] Emit voice state join/leave events via a dedicated node and update examples.
+- [x] Provide role membership query utilities (list members for a role) with pagination handling.
+- [x] Emit voice state join/leave events via a dedicated node and update examples.
 - [ ] Support attachment metadata (description, spoiler, duration) in the formatter and response nodes.
 - [ ] Enhance interaction replies with better ephemeral handling and follow-up tools.
 - [ ] Update automated tests and documentation as each feature lands.
