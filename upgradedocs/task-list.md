@@ -119,9 +119,8 @@
 - [x] Expand scheduled event tooling for stage-channel events, including validation and docs.
 - [x] Add localisation fields to slash-command definitions and interaction replies.
 - [x] Surface message flag controls (suppress embeds, silent notifications) in `discordMessageManager` and `discordInteractionManager`.
-- [ ] Surface message flag controls (suppress embeds, silent notifications) in `discordMessageManager` and `discordInteractionManager`.
 - [ ] Implement bulk fetch/delete actions in `discordMessageManager` with filters and safety checks.
-- [ ] Introduce emoji management helpers (create/update/delete guild emojis) and document image requirements.
+- [x] Introduce emoji management helpers (create/update/delete guild emojis) and document image requirements.
 - [ ] Provide role membership query utilities (list members for a role) with pagination handling.
 - [ ] Emit voice state join/leave events via a dedicated node and update examples.
 - [ ] Support attachment metadata (description, spoiler, duration) in the formatter and response nodes.

@@ -44,7 +44,8 @@
       "discordTyping": "discord/discordTyping.js",
       "discordGuildManager": "discord/discordGuildManager.js",
       "discordEventManager": "discord/discordEventManager.js",
-      "discordCommandManager": "discord/discordCommandManager.js"
+      "discordCommandManager": "discord/discordCommandManager.js",
+      "discordEmojiManager": "discord/discordEmojiManager.js"
     }
   },
   "devDependencies": {

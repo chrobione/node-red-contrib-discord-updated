@@ -1,0 +1,73 @@
+<script type="text/javascript">
+  RED.nodes.registerType('discordEmojiManager', {
+    category: 'discord · guild control',
+    color: '#7289da',
+    defaults: {
+      name: {
+        value: "",
+        required: false,
+      },
+      guild: {
+        value: null,
+        required: false,
+      },
+      token: {
+        value: "",
+        required: true,
+        type: "discord-token",
+      },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "discord.png",
+    label: function () {
+      return this.name || "discordEmojiManager";
+    },
+  });
+</script>
+<script type="text/x-red" data-template-name="discordEmojiManager">
+  <div class="form-row">
+    <label for="node-input-token"><i class="icon-tag"></i> token</label>
+    <input type="text" id="node-input-token" placeholder="token" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-guild"><i class="icon-tag"></i> Guild</label>
+    <input type="text" id="node-input-guild" placeholder="Guild ID" />
+    <p>(leave blank to use <code>msg.guild</code>)</p>
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+</script>
+<script type="text/x-red" data-help-name="discordEmojiManager">
+  <p><strong>What it does</strong> — Creates, updates, lists, or deletes custom guild emojis.</p>
+  <p><strong>When to use it</strong> — Automate emoji uploads during deployments, rotate seasonal artwork, or clean up unused emojis.</p>
+
+  <h3>Key inputs</h3>
+  <dl class="message-properties">
+    <dt>action <span class="property-type">string</span></dt>
+    <dd><code>create</code>, <code>update</code>, <code>delete</code>, or <code>list</code>. Defaults to <code>list</code>.</dd>
+    <dt>guild <span class="property-type">object | string</span></dt>
+    <dd>Guild ID or object (can also be set on the node).</dd>
+    <dt>emoji <span class="property-type">object</span></dt>
+    <dd>For create/update: supply <code>{ name, image, roles?, reason? }</code>. The <code>image</code> can be a Buffer, data URI, HTTP(S) URL, or file path (max 256KB).</dd>
+    <dt>emojiId <span class="property-type">string</span></dt>
+    <dd>For update/delete: the emoji ID (or provide <code>emoji.id</code>).</dd>
+    <dt>deleteConfirm <span class="property-type">boolean</span></dt>
+    <dd>Required for <code>action="delete"</code>. Helps avoid accidental removals.</dd>
+  </dl>
+
+  <h3>Output</h3>
+  <dl class="message-properties">
+    <dt>payload <span class="property-type">object | array | null</span></dt>
+    <dd>The created/updated emoji, the deleted response, or an array of emojis when listing.</dd>
+  </dl>
+
+  <h3>Tips</h3>
+  <ul>
+    <li>Emoji images must be under 256KB and square for best quality.</li>
+    <li>Use <code>msg.emoji.roles</code> to restrict usage to specific roles.</li>
+    <li>Keep backups of source images in case Discord rejects an upload.</li>
+  </ul>
+</script>
