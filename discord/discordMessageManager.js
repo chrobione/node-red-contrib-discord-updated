@@ -26,9 +26,14 @@ module.exports = function (RED) {
         const inputEmbeds = msg.payload?.embeds || msg.payload?.embed || msg.embeds || msg.embed;
         const inputAttachments = msg.payload?.attachments || msg.payload?.attachment || msg.attachments || msg.attachment;
         const inputComponents = msg.payload?.components || msg.components;
+        const suppressEmbeds = msg.suppressEmbeds ?? msg.payload?.suppressEmbeds;
+        const suppressNotifications = msg.suppressNotifications ?? msg.payload?.suppressNotifications;
         const crosspost = msg.crosspost || false;
         const _author = msg.author || false;
-        const _searchLimit = msg.searchLimit || 64;
+        const _searchLimit = Number.isInteger(msg.searchLimit) ? msg.searchLimit : 64;
+        const _bulkDelete = msg.bulkDelete === true;
+        const _deleteFilter = msg.deleteFilter || {};
+        const _deleteConfirm = msg.deleteConfirm === true;
 
         const setError = (error) => {
           const message = typeof error === 'string' ? error : (error && error.message) ? error.message : 'Unexpected error';
@@ -56,6 +61,17 @@ module.exports = function (RED) {
 
         
 
+        const buildFlags = () => {
+          const flags = [];
+          if (suppressEmbeds === true) {
+            flags.push('SuppressEmbeds');
+          }
+          if (suppressNotifications === true) {
+            flags.push('SuppressNotifications');
+          }
+          return flags;
+        };
+
         const createPrivateMessage = async () => {
           const userID = discordFramework.checkIdOrObject(user);
           if (!userID) {
@@ -68,7 +84,8 @@ module.exports = function (RED) {
               embeds: embeds,
               content: content,
               files: attachments,
-              components: components
+              components: components,
+              flags: buildFlags()
             };
             let resultMessage = await user.send(messageObject);
             setSuccess(`message sent to ${resultMessage.channel.recipient.username}`, resultMessage);
@@ -84,7 +101,8 @@ module.exports = function (RED) {
               embeds: embeds,
               content: content,
               files: attachments,
-              components: components
+              components: components,
+              flags: buildFlags()
             };
             let resultMessage = await channelInstance.send(messageObject);
             let resultCrossPosting = "";
@@ -120,7 +138,8 @@ module.exports = function (RED) {
               embeds: embeds,
               content: content,
               files: attachments,
-              components: components
+              components: components,
+              flags: buildFlags()
             };
             message = await message.edit(messageObject);
             setSuccess(`message ${message.id} edited`, message);
@@ -175,6 +194,62 @@ module.exports = function (RED) {
           }
         }
 
+        const bulkDeleteMessages = async () => {
+          try {
+            if (!_deleteConfirm) {
+              setError('Bulk delete aborted: set msg.deleteConfirm = true to acknowledge the destructive action.');
+              return;
+            }
+
+            const channelInstance = await bot.channels.fetch(channel);
+            const author = discordFramework.checkIdOrObject(_deleteFilter.author);
+            const includePinned = _deleteFilter.includePinned === true;
+            const olderThan = _deleteFilter.olderThan ? new Date(_deleteFilter.olderThan) : null;
+            const youngerThan = _deleteFilter.youngerThan ? new Date(_deleteFilter.youngerThan) : null;
+            const limit = Math.min(Math.max(_deleteFilter.limit || 100, 1), 500);
+
+            const messages = await channelInstance.messages.fetch({ limit });
+            const candidates = [];
+
+            messages.forEach(message => {
+              if (!includePinned && message.pinned) {
+                return;
+              }
+              if (author && message.author.id !== author) {
+                return;
+              }
+              if (olderThan && message.createdAt >= olderThan) {
+                return;
+              }
+              if (youngerThan && message.createdAt <= youngerThan) {
+                return;
+              }
+              candidates.push(message);
+            });
+
+            const deletable = candidates.filter(msg => Date.now() - msg.createdTimestamp < 14 * 24 * 60 * 60 * 1000);
+            const manual = candidates.filter(msg => !deletable.includes(msg));
+
+            if (deletable.length > 1) {
+              await channelInstance.bulkDelete(deletable, true);
+            } else if (deletable.length === 1) {
+              await deletable[0].delete();
+            }
+
+            for (const message of manual) {
+              await message.delete();
+            }
+
+            setSuccess(`Bulk delete removed ${candidates.length} messages (${deletable.length} via bulk delete, ${manual.length} individually).`, {
+              deleted: candidates.length,
+              bulkDeleted: deletable.length,
+              individuallyDeleted: manual.length,
+            });
+          } catch (err) {
+            setError(err);
+          }
+        };
+
         const deleteMessage = async () => {
           try {
             let message = await discordFramework.getMessage(bot, channel, messageId);
@@ -192,7 +267,8 @@ module.exports = function (RED) {
               embeds: embeds,
               content: content,
               files: attachments,
-              components: components
+              components: components,
+              flags: buildFlags()
             };
             message = await message.reply(messageObject);
             setSuccess(`message ${message.id} replied`, message);
@@ -256,6 +332,9 @@ module.exports = function (RED) {
             break;
           case 'delete':
             await deleteMessage();
+            break;
+          case 'bulkdelete':
+            await bulkDeleteMessages();
             break;
           case 'reply':
             await replyMessage();

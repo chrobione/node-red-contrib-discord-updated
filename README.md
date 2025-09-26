@@ -100,7 +100,7 @@ Within an hour or so, the Node-RED flow library will automatically index the new
 node-red-contrib-discord-updated gives you access to 13 nodes:
 
 * **discordMessage** is a node with no inputs and one output allowing you to receive notifications of incoming messages.
-* **discordMessageManager** allows (embed) messages to be sent to either channels or privatly to user. It also allows for editing and deleting of (embed) messages.
+* **discordMessageManager** allows (embed) messages to be sent to either channels or privatly to user. It also allows for editing and deleting of (embed) messages, including suppressing embeds or notifications.
 * **discordReactionManager** that allows you to listen to reactions on a message.
 * **discordPermissions** allows you to check the permissions of a specifc user. This is useful when you get the user from another source than the discordMessage node. discorPermissions lets you to add role to an user and to remove role.
 * **discordClient** is an advanced deprecated node with one input and one output allowing you to inject a references to a [Discord.js Client](https://discord.js.org/#/docs/main/stable/class/Client) into a message. This node can cause node-red to crash if you use it improperly, so take caution. Messages containing a Discord.js Client reference can *not* be forked (e.g. sent to two nodes), so you'll have to manually remove the reference to the Client via a function node using `delete msg.discord`.

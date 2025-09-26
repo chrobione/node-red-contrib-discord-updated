@@ -20,11 +20,13 @@ module.exports = function (RED) {
                     const content = msg.payload?.content || checkString(msg.payload) || ' ';
                     const inputEmbeds = msg.payload?.embeds || msg.payload?.embed || msg.embeds || msg.embed;
                     const inputAttachments = msg.payload?.attachments || msg.payload?.attachment || msg.attachments || msg.attachment;
-                    const inputComponents = msg.payload?.components || msg.components;
-                    const interactionId = msg.interactionId;
-                    const action = msg.action || 'edit';
-                    const autoCompleteChoices = msg.autoCompleteChoices || [];
-                    const customId = msg.customId;
+                   const inputComponents = msg.payload?.components || msg.components;
+                   const interactionId = msg.interactionId;
+                   const action = msg.action || 'edit';
+                   const autoCompleteChoices = msg.autoCompleteChoices || [];
+                   const customId = msg.customId;
+                    const suppressEmbeds = msg.suppressEmbeds ?? msg.payload?.suppressEmbeds;
+                    const suppressNotifications = msg.suppressNotifications ?? msg.payload?.suppressNotifications;
 
                     const setError = (error) => {
                         const message = typeof error === 'string' ? error : (error && error.message) ? error.message : 'Unexpected error';
@@ -50,13 +52,31 @@ module.exports = function (RED) {
                         done();
                     }
 
+                    const buildFlags = () => {
+                        const flags = [];
+                        if (suppressEmbeds === true) {
+                            flags.push('SuppressEmbeds');
+                        }
+                        if (suppressNotifications === true) {
+                            flags.push('SuppressNotifications');
+                        }
+                        return flags;
+                    };
+
                     const editInteractionReply = async () => {
-                        await interaction.editReply({
+                        const payload = {
                             embeds: embeds,
                             content: content,
                             files: attachments,
                             components: components
-                        });
+                        };
+
+                        const flags = buildFlags();
+                        if (flags.length) {
+                            payload.flags = flags;
+                        }
+
+                        await interaction.editReply(payload);
 
                         const newMsg = {
                             interaction: clone(interaction)
@@ -67,12 +87,19 @@ module.exports = function (RED) {
                     }
 
                     const replyInteraction = async () => {
-                        await interaction.reply({
+                        const payload = {
                             embeds: embeds,
                             content: content,
                             files: attachments,
                             components: components
-                        });
+                        };
+
+                        const flags = buildFlags();
+                        if (flags.length) {
+                            payload.flags = flags;
+                        }
+
+                        await interaction.reply(payload);
 
                         const newMsg = {
                             interaction: clone(interaction)
