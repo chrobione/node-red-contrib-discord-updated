@@ -6,11 +6,14 @@
   "scripts": {
     "test": "mocha \"test/**/*_spec.js\""
   },
-  "author": "Mark Koudstaal",
+  "author": "chrobione",
   "contributors": [
     {
-      "name": "Javier Colombera",
-      "email": "jcolombera@gmail.com"
+      "name": "chrobione",
+      "email": "chrobione@gmail.com"
+    },
+    {
+      "name": "OPENAIcodex"
     }
   ],
   "license": "MIT",
@@ -24,7 +27,10 @@
   "bugs": {
     "url": "https://github.com/chrobione/node-red-contrib-discord-updated/issues"
   },
-  "repository": "chrobione/node-red-contrib-discord-updated",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrobione/node-red-contrib-discord-updated.git"
+  },
   "keywords": [
     "node-red"
   ],
@@ -37,7 +43,7 @@
       "discordReactionManager": "discord/discordReactionManager.js",
       "discordChannelName": "discord/discordChannelName.js",
       "discordMember": "discord/discordMember.js",
-      "discordActivity":"discord/discordActivity.js",
+      "discordActivity": "discord/discordActivity.js",
       "discordClient": "discord/discordClient.js",
       "discordInteraction": "discord/discordInteraction.js",
       "discordInteractionManager": "discord/discordInteractionManager.js",
