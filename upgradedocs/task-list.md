@@ -109,6 +109,7 @@
 ### Testing & Docs for New Features
 - [ ] Extend automated tests to cover new feature behaviour (entity selects, stage events, localisation, message flags, bulk delete/search, emoji management, voice events, role queries, attachment metadata, ephemeral replies).
   - Action plan: Add targeted tests for each new feature, ensure coverage thresholds met, and run suite.
+  - Notes: Coverage audit captured in `upgradedocs/tests-docs-audit.md`; remaining work focuses on message flag/bulk action specs and future `discordClient` regression tests once helper allows multi-wire flows.
 - [ ] Update README/examples/help text for new features and best-practice adjustments; log in changelog.
   - Action plan: Revise documentation, example flows, inline help (including channel ID guidance and message search examples); validate accuracy; log updates.
 - [ ] Perform manual regression covering new features with screenshots/logs for documentation.
@@ -133,7 +134,7 @@
   - Notes: `npm ls --depth=0` completed under Node 20; lockfile has no outstanding diffs and dependency tree matches expected packages.
 - [x] Confirm `npm pack` and publish workflow succeed with updated package.
   - Action plan: Run `npm pack`, inspect output tarball, optionally dry-run publish, and ensure CI workflow passes.
-  - Notes: `npm pack --cache /tmp/npm-cache` succeeds; tarball excludes cache artifacts after cleaning up generated `.tgz` files. Publish workflow still pending.
+  - Notes: `npm pack --cache /tmp/npm-cache` succeeds; `npm publish --dry-run --cache /tmp/npm-cache` completes (repository field auto-normalised — run `npm pkg fix` before real publish).
 - [x] Finalise `CHANGELOG.md` with all fixes, upgrades, and new features enumerated chronologically.
   - Action plan: Consolidate incremental changelog notes, ensure clarity/formatting, and tag release section.
   - Notes: Reorganised 4.0.0 entry into Breaking/Features/Enhancements/Fixes/Docs/Maintenance/Tests sections for quick scanning.
