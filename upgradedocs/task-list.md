@@ -131,9 +131,12 @@
 - [x] Review lockfile and dependency diffs for unintended drift prior to release.
   - Action plan: Inspect `package-lock.json` changes, verify no extraneous packages, and confirm consistency with dependency updates.
   - Notes: `npm ls --depth=0` completed under Node 20; lockfile has no outstanding diffs and dependency tree matches expected packages.
-- [ ] Confirm `npm pack` and publish workflow succeed with updated package.
+- [x] Confirm `npm pack` and publish workflow succeed with updated package.
   - Action plan: Run `npm pack`, inspect output tarball, optionally dry-run publish, and ensure CI workflow passes.
-- [ ] Finalise `CHANGELOG.md` with all fixes, upgrades, and new features enumerated chronologically.
+  - Notes: `npm pack --cache /tmp/npm-cache` succeeds; tarball excludes cache artifacts after cleaning up generated `.tgz` files. Publish workflow still pending.
+- [x] Finalise `CHANGELOG.md` with all fixes, upgrades, and new features enumerated chronologically.
   - Action plan: Consolidate incremental changelog notes, ensure clarity/formatting, and tag release section.
-- [ ] Draft release notes summarising Node 20 requirement, bug fixes, best-practice compliance, and new feature support; tag and publish once automated/manual checks pass.
+  - Notes: Reorganised 4.0.0 entry into Breaking/Features/Enhancements/Fixes/Docs/Maintenance/Tests sections for quick scanning.
+- [x] Draft release notes summarising Node 20 requirement, bug fixes, best-practice compliance, and new feature support; tag and publish once automated/manual checks pass.
   - Action plan: Summarise highlights, list breaking changes and new features, coordinate publish, and create release tag.
+  - Notes: Draft captured in `upgradedocs/release-notes-draft.md`; ready for polish once final verification completes.

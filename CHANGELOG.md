@@ -2,40 +2,46 @@
 
 ## 4.0.0 (unreleased)
 
-### Phase 1 - Takeover refresh
-- Maintenance - Stewardship moved to `chrobione/node-red-contrib-discord-updated`, keeping the history from `node-red-contrib-discord` and `node-red-contrib-discord-advanced` intact.
-- Docs - README and changelog updated to reflect the new home of the project and outline the Discord.js parity roadmap for the community.
-- Docs - Added onboarding quick start and node grouping guidance to help new Node-RED users find the right nodes.
-- Docs - Clarified that `discordInteractionManager` owns interaction replies and `discordMessageManager` is reserved for channel/DM/follow-up messages.
-- Docs - Rewrote every node help panel with clearer descriptions, inputs, and tips for new users.
-- Feature - Entity select menus (user, role, mentionable, channel) are now supported in interaction nodes and component formatting.
-- Feature - Command manager accepts `nameLocalizations`/`descriptionLocalizations` (and nested equivalents) and maps them to Discord’s localisation fields automatically.
-- Feature - Scheduled event manager now validates stage-channel events and surfaces proper errors when the channel type is incorrect.
-- Feature - Message manager and interaction manager accept `suppressEmbeds` / `suppressNotifications` flags to control Discord message behaviour.
-- Feature - Message manager adds `bulkdelete`/`bulkfetch` actions with author, pin, and age filters plus confirmation requirements for destructive flows.
-- Feature - Added `discordEmojiManager` node for creating, updating, listing, and deleting guild emojis with image safety checks.
-- Feature - Added `discordRoleManager` node to list members with a given role (including pagination) or return quick counts.
-- Enhancement - Permissions node accepts `roleQuery` lookups so flows can fetch role members without switching nodes mid-upgrade.
-- Feature - Added `discordVoiceState` node to emit join/leave/update payloads when members move through voice channels.
-- Enhancement - Attachment formatter now honours description, spoiler, and duration metadata when uploading files via response nodes.
-- Enhancement - Interaction manager now supports ephemeral replies, follow-ups, and follow-up edit/delete tooling.
-- Docs - Added `interactionFollowupLifecycle` example flow to showcase ephemeral replies, follow-ups, edits, and deletes.
-- Enhancement - All Discord nodes now use distinct Font Awesome palette icons to emphasise their listen/respond/manage/advanced roles.
-- Fix - `discordClient` now issues per-message tokens (`msg.discord.get()/drop()`, `msg.discordClient`) instead of sharing the raw client directly, refuses overwrites, and cleans up handles on close to prevent Node-RED crashes.
-- Enhancement - Discord palette regrouped into descriptive categories (`discord · event intake`, `discord · responses`, `discord · guild control`, `discord · advanced tools`) so related nodes sit together for newcomers.
-- Planning - Established Phase 1 scope to stabilise the fork, preserve previous contributors' credit, and prepare for broader Discord.js feature coverage.
+### Breaking Changes
+- Raised the minimum Node.js version to 20 and refreshed core dependencies (`discord.js` 14.15.3, `node-red` 4.0.x, mocha/sinon, flatted) to match the new baseline.
 
-### Advancedplus plan carry-over
-- Breaking - Raised minimum Node.js version to 20 and updated core dependencies (`discord.js` 14.15.3, `node-red` 4.0.2, test stack).
-- Maintenance - `node-red-node-test-helper` remains at ^0.2.7 pending a 4.x compatible release from the upstream project.
-- Fix - Replaced the global BigInt JSON patch with a scoped helper (`discord/lib/json-utils.js`) and migrated all nodes to use it for safe cloning.
-- Fix - Interaction cache now uses an auto-evicting `Map` to prevent memory leaks between flows.
-- Fix - `discord/lib/discordFramework.js` no longer leaks implicit globals when resolving scheduled event managers.
-- Fix - Command manager guarantees application ID resolution, handles REST responses without payloads, and surfaces richer errors via Node-RED status/error APIs.
-- Fix - Message/event/permissions/channel-name/member/typing/activity/client nodes now follow Node-RED async best practices (`send/done`, status clearing, credential safety) and provide clearer error messages.
-- Enhancement - Attachments and components are validated against the latest discord.js builders with improved error reporting.
-- Tests - Updated mocha specs to align with the new error-handling pattern and attachment validation changes.
-- Docs - README, help text, and examples updated for the Node 20 baseline and ID (snowflake) requirements.
+### Features
+- Added entity select menu support (user, role, mentionable, channel) across interaction nodes and component formatting.
+- Extended the command manager to accept `nameLocalizations` / `descriptionLocalizations` (and nested equivalents) and forward them to Discord automatically.
+- Hardened scheduled event handling with stage-channel validation and clearer errors when the channel type is incorrect.
+- Added message flag controls (`suppressEmbeds`, `suppressNotifications`) to the message and interaction manager nodes.
+- Introduced bulk message `bulkDelete` / `bulkFetch` actions with age/pin/author filters plus safety confirmations.
+- Added dedicated nodes for guild emoji management (`discordEmojiManager`), role membership queries (`discordRoleManager`), and voice-state events (`discordVoiceState`).
+- Delivered per-message attachment metadata (description, spoiler, duration) through the formatter and response nodes.
+- Expanded interaction tooling to cover ephemeral replies, follow-up creation, edits, and deletions.
+
+### Enhancements & UX
+- Enabled the permissions node to fetch role members via `roleQuery` lookups without swapping nodes mid-flow.
+- Refreshed palette organisation and icons so listen/respond/manage/advanced nodes are visually distinct in the Node-RED editor.
+- Reworked the `discordClient` node to hand out lightweight tokens (`msg.discord.get()/drop()`, `msg.discordClient`) instead of the raw client, prevent overwrites, and clean up handles automatically.
+- Validated attachments/components against the latest discord.js builders with improved error reporting.
+
+### Fixes
+- Replaced the global BigInt JSON patch with a scoped helper (`discord/lib/json-utils.js`) and migrated every caller for safe cloning.
+- Swapped the interaction cache to an auto-evicting `Map` to avoid memory leaks across deployments.
+- Stopped `discord/lib/discordFramework.js` from leaking implicit globals when resolving scheduled event managers.
+- Guaranteed application ID resolution in the command manager, improved handling of void REST responses, and surfaced richer errors via Node-RED status/error APIs.
+- Audited message/event/permissions/channel-name/member/typing/activity/client nodes to follow Node-RED async best practices (`send/done`, status updates, credential safety) with clearer errors.
+
+### Documentation
+- Updated the README/changelog to reflect the new project home (`chrobione/node-red-contrib-discord-updated`) and outline the Discord.js parity roadmap.
+- Added onboarding quick-start guidance, palette grouping explanations, and clarified which manager owns Discord interaction replies.
+- Rewrote every node help panel with clearer descriptions, inputs, and tips for new users.
+- Added the `interactionFollowupLifecycle` example flow demonstrating ephemeral replies and follow-up management.
+- Documented Node 20 requirements, snowflake/ID expectations, and other best-practice adjustments across README, help text, and examples.
+
+### Maintenance & Planning
+- Preserved history from `node-red-contrib-discord` and `node-red-contrib-discord-advanced` while moving stewardship to the new repository.
+- Kept `node-red-node-test-helper` at ^0.2.7 pending a 4.x compatible upstream release.
+- Established the Phase 1 scope to stabilise the fork, acknowledge prior contributors, and chart upcoming Discord.js coverage.
+
+### Tests
+- Updated mocha specs to reflect the new error-handling pattern, attachment validation rules, and interaction tooling.
 
 ## 3.6.0
 * Feature - Added DiscordCommandManager
