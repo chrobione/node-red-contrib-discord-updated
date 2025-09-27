@@ -26,11 +26,13 @@
 </script>
 <script type="text/x-red" data-help-name="discordClient">
     <div class="alert alert-danger"><strong>ADVANCED ONLY.</strong> This exposes the raw Discord.js client. Mistakes can crash Node-RED or leak memory.</div>
-    <p><strong>What it does</strong> — Attaches <code>msg.discord</code> to the message, giving you full access to the underlying Discord.js client.</p>
+    <p><strong>What it does</strong> — Registers the Discord.js client for the current message and exposes a lightweight handle under <code>msg.discord</code>.</p>
     <p><strong>When to use it</strong> — Only if the other nodes cannot do what you need (for example, experimental APIs). You must write JavaScript in a Function node afterwards to call the client safely.</p>
     <h3>Tips</h3>
     <ul>
-      <li>Never fork the message (send it to multiple outputs) while the client reference is attached. Instead, use a single Function node and call <code>delete msg.discord</code> before wiring to other nodes.</li>
+      <li>Use <code>const client = msg.discord.get()</code> (or <code>msg.discordClient</code>) inside a Function node to obtain the live Discord.js client. The plain reference never rides on <code>msg</code>, so cloned branches can resolve it safely.</li>
+      <li>When you are done, call <code>msg.discord.drop()</code> to release the cached reference sooner; the <code>msg.discordClient</code> getter is read-only.</li>
+      <li>The node still requires a single downstream branch; fan-out after you have removed the discord handle.</li>
       <li>Wrap your client calls in try/catch blocks and call <code>done(err)</code> to avoid hanging flows.</li>
     </ul>
 </script>

@@ -21,6 +21,7 @@
 - Enhancement - Interaction manager now supports ephemeral replies, follow-ups, and follow-up edit/delete tooling.
 - Docs - Added `interactionFollowupLifecycle` example flow to showcase ephemeral replies, follow-ups, edits, and deletes.
 - Enhancement - All Discord nodes now use distinct Font Awesome palette icons to emphasise their listen/respond/manage/advanced roles.
+- Fix - `discordClient` now issues per-message tokens (`msg.discord.get()/drop()`, `msg.discordClient`) instead of sharing the raw client directly, refuses overwrites, and cleans up handles on close to prevent Node-RED crashes.
 - Enhancement - Discord palette regrouped into descriptive categories (`discord · event intake`, `discord · responses`, `discord · guild control`, `discord · advanced tools`) so related nodes sit together for newcomers.
 - Planning - Established Phase 1 scope to stabilise the fork, preserve previous contributors' credit, and prepare for broader Discord.js feature coverage.
 

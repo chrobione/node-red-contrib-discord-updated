@@ -64,6 +64,8 @@ The current major release is **4.0.0**, reflecting the palette regrouping, help 
 
 Each palette group now ships with distinct Font Awesome icons (chat bubbles for events, paper planes for responses, locks/calendars for guild administration, etc.) to make it easier to spot the node you need at a glance.
 
+Need direct access to Discord.js? `discordClient` now hands you a lightweight handle (`msg.discord.get()` / `msg.discord.drop()`) instead of the raw instance so branching flows stay stable—still recommended only when the higher-level nodes can’t cover your use case.
+
 ## Installation and documentation
 
 The [Wiki](https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki) is still being written when it comes to documentation but you can find a guide on how to install and setup the nodes [here](https://github.com/Markoudstaal/node-red-contrib-discord-advanced/wiki/Installation-and-setup).

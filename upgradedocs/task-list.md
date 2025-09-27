@@ -97,7 +97,7 @@
   - Action plan: **Categories regrouped via `discord: listen/respond/manage/utilities`.** Next steps: design refreshed icons, update palette definitions if further tweaks needed, adjust documentation/screenshots, and log change.
 
 ### discordClient Safety Net
-- [ ] Refactor `discordClient` so it fails safely (no Node-RED crashes) when flows misuse the raw client.
+- [x] Refactor `discordClient` so it fails safely (no Node-RED crashes) when flows misuse the raw client.
   - Action plan: Wrap client injection in protective checks, enforce single-use semantics, surface errors via `node.error`, document the safe usage pattern, and add tests that simulate misuse.
 
 ### Discovery & Documentation Tasks
