@@ -128,8 +128,9 @@
 - [ ] Update automated tests and documentation as each feature lands.
 
 ## Release Preparation
-- [ ] Review lockfile and dependency diffs for unintended drift prior to release.
+- [x] Review lockfile and dependency diffs for unintended drift prior to release.
   - Action plan: Inspect `package-lock.json` changes, verify no extraneous packages, and confirm consistency with dependency updates.
+  - Notes: `npm ls --depth=0` completed under Node 20; lockfile has no outstanding diffs and dependency tree matches expected packages.
 - [ ] Confirm `npm pack` and publish workflow succeed with updated package.
   - Action plan: Run `npm pack`, inspect output tarball, optionally dry-run publish, and ensure CI workflow passes.
 - [ ] Finalise `CHANGELOG.md` with all fixes, upgrades, and new features enumerated chronologically.
