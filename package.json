@@ -1,6 +1,7 @@
 {
   "name": "node-red-contrib-discord-updated",
   "version": "4.0.1",
+  "private": false,
   "description": "Receive, send, edit, reply, react to and delete Discord messages, handle interactions and much more in Node-RED.",
   "main": "discord/discord.js",
   "scripts": {
@@ -8,10 +9,6 @@
   },
   "author": "chrobione",
   "contributors": [
-    {
-      "name": "chrobione",
-      "email": "chrobione@gmail.com"
-    },
     {
       "name": "OPENAIcodex"
     }
