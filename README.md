@@ -35,7 +35,7 @@ Living plans, migration notes, and changelog entries sit inside [`upgradedocs/`]
 - `upgradedocs/task-list.md` tracking day-to-day progress, upcoming features, and testing status.
 - [`CHANGELOG.md`](CHANGELOG.md) for user-facing updates in release order.
 
-The current major release is **4.0.0**, reflecting the palette regrouping, help rewrites, Node 20 baseline, and the new interaction follow-up tooling.
+The current major release is **4.0.1**, reflecting the palette regrouping, help rewrites, Node 20 baseline, and the new interaction follow-up tooling.
 
 ## Quick start
 - Create a Discord application with a bot token and invite it to a test guild.
@@ -142,10 +142,10 @@ node-red-contrib-discord-updated gives you access to 15 nodes:
 
 See `CHANGELOG.md` for more info, including information regarding breaking changes per version.
 
-## Key migration points for 4.0.0
+## Key migration points for 4.0.1
 - **Palette regrouping** – Nodes now appear under `discord · event intake`, `discord · responses`, `discord · guild control`, and `discord · advanced tools`. Update any screenshots or onboarding guides and look for the new names in editor search.
 - **Node help refresh** – Every node panel documents inputs/outputs and recommended usage. Spend a minute skimming the help for nodes you rely on if you need a refresher.
-- **Node.js baseline** – 4.0.0 requires Node.js 20 or newer and Node-RED 4.x, matching the new engine constraints in `package.json`.
+- **Node.js baseline** – 4.0.1 requires Node.js 20 or newer and Node-RED 4.x, matching the new engine constraints in `package.json`.
 - **Interaction replies** – Interactions (slash commands, buttons, selects, modals) must be answered with `discordInteractionManager` so the interaction token stays valid. `discordMessageManager` remains available for regular channel messages, DMs, and follow-up edits, but should not be wired directly to interaction events.
 
 ### Carryover from 3.5.x

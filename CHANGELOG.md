@@ -1,6 +1,6 @@
 # Changelog\
 
-## 4.0.0 (unreleased)
+## 4.0.1 (unreleased)
 
 ### Breaking Changes
 - Raised the minimum Node.js version to 20 and refreshed core dependencies (`discord.js` 14.15.3, `node-red` 4.0.x, mocha/sinon, flatted) to match the new baseline.
