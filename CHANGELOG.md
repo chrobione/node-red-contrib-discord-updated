@@ -1,6 +1,6 @@
 # Changelog\
 
-## 4.0.1 (unreleased)
+## 4.1.0
 
 ### Breaking Changes
 - Raised the minimum Node.js version to 20 and refreshed core dependencies (`discord.js` 14.15.3, `node-red` 4.0.x, mocha/sinon, flatted) to match the new baseline.
@@ -27,6 +27,9 @@
 - Stopped `discord/lib/discordFramework.js` from leaking implicit globals when resolving scheduled event managers.
 - Guaranteed application ID resolution in the command manager, improved handling of void REST responses, and surfaced richer errors via Node-RED status/error APIs.
 - Audited message/event/permissions/channel-name/member/typing/activity/client nodes to follow Node-RED async best practices (`send/done`, status updates, credential safety) with clearer errors.
+- Added `node-red.version` (>=4.0.0) to `package.json` so the Flow Library scorecard recognises supported Node-RED versions.
+- Declared examples path in `package.json` and clarified import steps in README so examples are visible under Import → Examples.
+- Updated README compatibility matrix and version banner.
 
 ### Documentation
 - Updated the README/changelog to reflect the new project home (`chrobione/node-red-contrib-discord-updated`) and outline the Discord.js parity roadmap.
@@ -34,6 +37,7 @@
 - Rewrote every node help panel with clearer descriptions, inputs, and tips for new users.
 - Added the `interactionFollowupLifecycle` example flow demonstrating ephemeral replies and follow-up management.
 - Documented Node 20 requirements, snowflake/ID expectations, and other best-practice adjustments across README, help text, and examples.
+- Ensured every node has an example flow and consolidated overlapping into two umbrella examples covering guild/admin and member/reaction/typing/voice/client nodes.
 
 ### Maintenance & Planning
 - Preserved history from `node-red-contrib-discord` and `node-red-contrib-discord-advanced` while moving stewardship to the new repository.

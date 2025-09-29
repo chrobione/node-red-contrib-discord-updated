@@ -1,0 +1,13 @@
+[
+  { "id": "tab-ga", "type": "tab", "label": "Guild and Admin Tools", "disabled": false, "info": "Minimal examples covering guild/admin nodes." },
+
+  { "id": "guildmgr", "type": "discordGuildManager", "z": "tab-ga", "name": "", "token": "", "x": 180, "y": 80, "wires": [["ga-debug"]] },
+  { "id": "channelname", "type": "discordChannelName", "z": "tab-ga", "name": "", "token": "", "x": 180, "y": 140, "wires": [["ga-debug"]] },
+  { "id": "cmdmgr", "type": "discordCommandManager", "z": "tab-ga", "name": "", "token": "", "x": 180, "y": 200, "wires": [["ga-debug"]] },
+  { "id": "eventmgr", "type": "discordEventManager", "z": "tab-ga", "name": "", "token": "", "x": 180, "y": 260, "wires": [["ga-debug"]] },
+  { "id": "emojimgr", "type": "discordEmojiManager", "z": "tab-ga", "name": "", "token": "", "x": 180, "y": 320, "wires": [["ga-debug"]] },
+  { "id": "rolemgr", "type": "discordRoleManager", "z": "tab-ga", "name": "", "token": "", "x": 180, "y": 380, "wires": [["ga-debug"]] },
+
+  { "id": "ga-debug", "type": "debug", "z": "tab-ga", "name": "Guild/Admin Output", "active": true, "tosidebar": true, "console": false, "tostatus": false, "complete": "payload", "statusVal": "", "statusType": "auto", "x": 520, "y": 220, "wires": [] }
+]
+

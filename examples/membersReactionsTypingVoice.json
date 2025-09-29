@@ -1,0 +1,12 @@
+[
+  { "id": "tab-mr", "type": "tab", "label": "Members/Reactions/Typing/Voice", "disabled": false, "info": "Minimal examples covering member, reactions, typing, voice state and client nodes." },
+
+  { "id": "member", "type": "discordMember", "z": "tab-mr", "name": "", "token": "", "x": 190, "y": 80, "wires": [["mr-debug"]] },
+  { "id": "reactionmgr", "type": "discordReactionManager", "z": "tab-mr", "name": "", "token": "", "x": 200, "y": 140, "wires": [["mr-debug"]] },
+  { "id": "typing", "type": "discordTyping", "z": "tab-mr", "name": "", "token": "", "x": 190, "y": 200 },
+  { "id": "voicestate", "type": "discordVoiceState", "z": "tab-mr", "name": "", "token": "", "x": 200, "y": 260, "wires": [["mr-debug"]] },
+  { "id": "client", "type": "discordClient", "z": "tab-mr", "name": "", "token": "", "x": 180, "y": 320, "wires": [["mr-debug"]] },
+
+  { "id": "mr-debug", "type": "debug", "z": "tab-mr", "name": "Member/Reaction/Voice Output", "active": true, "tosidebar": true, "console": false, "tostatus": false, "complete": "payload", "statusVal": "", "statusType": "auto", "x": 560, "y": 180, "wires": [] }
+]
+

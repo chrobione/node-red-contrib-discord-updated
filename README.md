@@ -35,7 +35,14 @@ Living plans, migration notes, and changelog entries sit inside [`upgradedocs/`]
 - `upgradedocs/task-list.md` tracking day-to-day progress, upcoming features, and testing status.
 - [`CHANGELOG.md`](CHANGELOG.md) for user-facing updates in release order.
 
-The current major release is **4.0.1**, reflecting the palette regrouping, help rewrites, Node 20 baseline, and the new interaction follow-up tooling.
+The current major release is **4.1.0**, reflecting the palette regrouping, help rewrites, Node 20 baseline, the new interaction follow-up tooling, and metadata/doc fixes for the Flow Library scorecard.
+
+## Compatibility
+- Node-RED: >= 4.0.0
+- Node.js: >= 20.0.0
+- discord.js: 14.x (tested with 14.15.3)
+
+Examples are bundled under `examples/` and are available from the editor via Menu → Import → Examples → node-red-contrib-discord-updated.
 
 ## Quick start
 - Create a Discord application with a bot token and invite it to a test guild.
