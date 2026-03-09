@@ -200,7 +200,7 @@ module.exports = function (RED) {
             const applicationId = await ensureApplicationId();
 
             if (guildId) {
-              const data = await rest.post(
+              const data = await rest.put(
                 Routes.applicationGuildCommands(applicationId, guildId),
                 { body: normalizedCommands },
               );
@@ -208,7 +208,7 @@ module.exports = function (RED) {
               return;
             }
 
-            const data = await rest.post(
+            const data = await rest.put(
               Routes.applicationCommands(applicationId),
               { body: normalizedCommands },
             );
