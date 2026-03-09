@@ -6,6 +6,8 @@ const discordFramework = require('./lib/discordFramework.js');
 
 const DATA_URI_REGEX = /^data:(?<mime>.+);base64,(?<data>.*)$/;
 const MAX_EMOJI_SIZE = 256 * 1024; // 256 KB
+const FETCH_TIMEOUT_MS = 10000;
+const PRIVATE_IP_REGEX = /^(127\.|10\.|172\.(1[6-9]|2\d|3[01])\.|192\.168\.|169\.254\.|::1|fc00:|fe80:)/i;
 
 const resolveImage = async (image) => {
   if (!image) {
@@ -30,7 +32,18 @@ const resolveImage = async (image) => {
     }
 
     if (/^https?:\/\//i.test(image)) {
-      const response = await fetch(image);
+      const parsedUrl = new URL(image);
+      if (PRIVATE_IP_REGEX.test(parsedUrl.hostname)) {
+        throw new Error('emoji.image URL must not point to a private or internal network address');
+      }
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+      let response;
+      try {
+        response = await fetch(image, { signal: controller.signal });
+      } finally {
+        clearTimeout(timeout);
+      }
       if (!response.ok) {
         throw new Error(`Unable to download emoji image (${response.status})`);
       }
