@@ -42,7 +42,11 @@ const resolveImage = async (image) => {
       return buffer;
     }
 
-    const filePath = path.resolve(image);
+    const normalized = path.normalize(image);
+    if (normalized.split(path.sep).includes('..')) {
+      throw new Error('emoji.image file path must not contain directory traversal sequences');
+    }
+    const filePath = path.resolve(normalized);
     const buffer = await fs.readFile(filePath);
     if (buffer.length > MAX_EMOJI_SIZE) {
       throw new Error('emoji.image exceeds Discord\'s 256KB size limit');

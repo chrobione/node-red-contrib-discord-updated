@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-discord-updated",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "description": "Receive, send, edit, reply, react to and delete Discord messages, handle interactions and much more in Node-RED.",
   "main": "discord/discord.js",
   "scripts": {
